@@ -1,10 +1,12 @@
 package com.timsedam.buildingmanagement.model;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+@Entity
 public class OfferedAnswer {
 	
 	@Id
@@ -12,13 +14,16 @@ public class OfferedAnswer {
 	private long id;
 	private String content;
 	@ManyToOne
-	private ChoiceQuestion questionAsked;
+	private ChoiceQuestion questionAnswered;
 	
-	public OfferedAnswer() {}
+	public OfferedAnswer() {
+		super();
+	}
 
-	public OfferedAnswer(String content, ChoiceQuestion questionAsked) {
+	public OfferedAnswer(String content, ChoiceQuestion questionAnswered) {
+		super();
 		this.content = content;
-		this.questionAsked = questionAsked;
+		this.questionAnswered = questionAnswered;
 	}
 
 	public long getId() {
@@ -37,17 +42,17 @@ public class OfferedAnswer {
 		this.content = content;
 	}
 
-	public ChoiceQuestion getquestionAsked() {
-		return questionAsked;
+	public ChoiceQuestion getQuestionAnswered() {
+		return questionAnswered;
 	}
 
-	public void setquestionAsked(ChoiceQuestion questionAsked) {
-		this.questionAsked = questionAsked;
+	public void setQuestionAnswered(ChoiceQuestion questionAnswered) {
+		this.questionAnswered = questionAnswered;
 	}
 
 	@Override
 	public String toString() {
-		return "OfferedAnswer [id=" + id + ", content=" + content + ", questionAsked=" + questionAsked + "]";
-	}	
+		return "OfferedAnswer [id=" + id + ", content=" + content + ", questionAnswered=" + questionAnswered + "]";
+	}
 
 }

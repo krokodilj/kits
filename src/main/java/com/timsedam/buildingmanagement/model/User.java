@@ -1,14 +1,21 @@
 package com.timsedam.buildingmanagement.model;
 
-import java.util.Collection;
+import java.util.List;
 
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
 public class User {
 
 	@Id
@@ -18,21 +25,23 @@ public class User {
 	private String password;
 	private String email;
 	private String picture;   
-    @ManyToOne
-    private Role role;
-    @ManyToOne
-    private Collection<Comment> comments;
+    @ManyToMany
+    private List<Role> roles;
+    @OneToMany(mappedBy = "reportCommented")
+    private List<Comment> comments;
+    
+	public User() {
+		super();
+	}
 
-    public User() {}
-
-	public User(String username, String password, String email, String picture, Role role,
-			Collection<Comment> comments) {
+	public User(String username, String password, String email, String picture, List<Role> roles,
+			List<Comment> comments) {
 		super();
 		this.username = username;
 		this.password = password;
 		this.email = email;
 		this.picture = picture;
-		this.role = role;
+		this.roles = roles;
 		this.comments = comments;
 	}
 
@@ -76,26 +85,32 @@ public class User {
 		this.picture = picture;
 	}
 
-	public Role getRole() {
-		return role;
+	public List<Role> getRoles() {
+		return roles;
 	}
 
-	public void setRole(Role role) {
-		this.role = role;
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
 	}
 
-	public Collection<Comment> getComments() {
+	public List<Comment> getComments() {
 		return comments;
 	}
 
-	public void setComments(Collection<Comment> comments) {
+	public void setComments(List<Comment> comments) {
 		this.comments = comments;
 	}
 
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", password=" + password + ", email=" + email
-				+ ", picture=" + picture + ", role=" + role + ", comments=" + comments + "]";
+	public User(Long id, String username, String password, String email, String picture, List<Role> roles,
+			List<Comment> comments) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.email = email;
+		this.picture = picture;
+		this.roles = roles;
+		this.comments = comments;
 	}
-
+    
 }

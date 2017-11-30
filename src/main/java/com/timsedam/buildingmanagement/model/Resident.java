@@ -1,56 +1,38 @@
 package com.timsedam.buildingmanagement.model;
 
-import java.util.Collection;
+import java.util.List;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 
 @Entity
+@DiscriminatorValue("resident")
 public class Resident extends User {
 	
-	private Building residence;
-	private int floorNumber;
-	private int apartmentNumber;
+	@ManyToMany(mappedBy = "residents")
+	private List<Residence> residences;
     
 	public Resident() {
 		super();
 	}
 
-	public Resident(String username, String password, String email, String picture, Role role,
-			Collection<Comment> comments, Building residence, int floorNumber, int apartmentNumber) {
-		super(username, password, email, picture, role, comments);
-		this.residence = residence;
-		this.floorNumber = floorNumber;
-		this.apartmentNumber = apartmentNumber;
+	public Resident(List<Residence> residences) {
+		super();
+		this.residences = residences;
 	}
 
-	public Building getResidence() {
-		return residence;
+	public List<Residence> getResidences() {
+		return residences;
 	}
 
-	public void setResidence(Building residence) {
-		this.residence = residence;
-	}
-
-	public int getFloorNumber() {
-		return floorNumber;
-	}
-
-	public void setFloorNumber(int floorNumber) {
-		this.floorNumber = floorNumber;
-	}
-
-	public int getApartmentNumber() {
-		return apartmentNumber;
-	}
-
-	public void setApartmentNumber(int apartmentNumber) {
-		this.apartmentNumber = apartmentNumber;
+	public void setResidences(List<Residence> residences) {
+		this.residences = residences;
 	}
 
 	@Override
 	public String toString() {
-		return "Resident [residence=" + residence + ", floorNumber=" + floorNumber + ", apartmentNumber="
-				+ apartmentNumber + "]";
+		return "Resident [residences=" + residences + "]";
 	}
     
 }

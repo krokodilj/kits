@@ -13,18 +13,23 @@ public class Comment {
 	@Id
 	@GeneratedValue
 	private long id;
+	private String data;
 	@ManyToOne
 	private User commenter;
 	@ManyToOne
-	private Object targetElement;
-	private LocalDateTime postTime;
+	private Report reportCommented;
+	private LocalDateTime postedAt;
 	
-	public Comment() {}
-	
-	public Comment(User commenter, LocalDateTime postTime, Object targetElement) {
+	public Comment() {
+		super();
+	}
+
+	public Comment(String data, User commenter, Report reportCommented, LocalDateTime postedAt) {
+		super();
+		this.data = data;
 		this.commenter = commenter;
-		this.postTime = postTime;
-		this.targetElement = targetElement;
+		this.reportCommented = reportCommented;
+		this.postedAt = postedAt;
 	}
 
 	public long getId() {
@@ -35,6 +40,14 @@ public class Comment {
 		this.id = id;
 	}
 
+	public String getData() {
+		return data;
+	}
+
+	public void setData(String data) {
+		this.data = data;
+	}
+
 	public User getCommenter() {
 		return commenter;
 	}
@@ -43,26 +56,26 @@ public class Comment {
 		this.commenter = commenter;
 	}
 
-	public Object getTargetElement() {
-		return targetElement;
+	public Report getReportCommented() {
+		return reportCommented;
 	}
 
-	public void setTargetElement(Object targetElement) {
-		this.targetElement = targetElement;
+	public void setReportCommented(Report reportCommented) {
+		this.reportCommented = reportCommented;
 	}
 
-	public LocalDateTime getPostTime() {
-		return postTime;
+	public LocalDateTime getPostedAt() {
+		return postedAt;
 	}
 
-	public void setPostTime(LocalDateTime postTime) {
-		this.postTime = postTime;
+	public void setPostedAt(LocalDateTime postedAt) {
+		this.postedAt = postedAt;
 	}
 
 	@Override
 	public String toString() {
-		return "Comment [id=" + id + ", commenter=" + commenter + ", postTime=" + postTime + ", targetElement="
-				+ targetElement + "]";
+		return "Comment [id=" + id + ", data=" + data + ", commenter=" + commenter + ", reportCommented="
+				+ reportCommented + ", postedAt=" + postedAt + "]";
 	}
 	
 }

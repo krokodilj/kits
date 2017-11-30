@@ -2,24 +2,22 @@ package com.timsedam.buildingmanagement.model;
 
 import java.util.List;
 
+import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
+@Entity
 public class ChoiceQuestion extends Question {
 	
-	@OneToMany
+	@OneToMany(mappedBy = "questionAnswered")
 	private List<OfferedAnswer> offeredAnswers;
-	@OneToMany
-	private List<PickedAnswer> pickedAnswer;
 	
 	public ChoiceQuestion() {
 		super();
 	}
 
-	public ChoiceQuestion(String questionText, QuestionForm questionForm, List<OfferedAnswer> offeredAnswers,
-			List<PickedAnswer> pickedAnswer) {
-		super(questionText, questionForm);
+	public ChoiceQuestion(List<OfferedAnswer> offeredAnswers) {
+		super();
 		this.offeredAnswers = offeredAnswers;
-		this.pickedAnswer = pickedAnswer;
 	}
 
 	public List<OfferedAnswer> getOfferedAnswers() {
@@ -30,17 +28,9 @@ public class ChoiceQuestion extends Question {
 		this.offeredAnswers = offeredAnswers;
 	}
 
-	public List<PickedAnswer> getPickedAnswer() {
-		return pickedAnswer;
-	}
-
-	public void setPickedAnswer(List<PickedAnswer> pickedAnswer) {
-		this.pickedAnswer = pickedAnswer;
-	}
-
 	@Override
 	public String toString() {
-		return "ChoiceQuestion [offeredAnswers=" + offeredAnswers + ", pickedAnswer=" + pickedAnswer + "]";
+		return "ChoiceQuestion [offeredAnswers=" + offeredAnswers + "]";
 	}
-	
+		
 }

@@ -3,9 +3,12 @@ package com.timsedam.buildingmanagement.model;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -14,51 +17,60 @@ public class Report {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
-	private Manager originalReceiver;
-	private Manager currentHolder;
+	@ManyToOne
+	private User sender;
+	@OneToMany
+	private List<Manager> receiver;
+	@Enumerated(EnumType.STRING)
 	private ReportStatus status;
 	private String description;
+	@ManyToOne
 	private Building location;
 	private String photo;
-	@OneToMany
+	@OneToMany(mappedBy = "reportCommented")
 	private List<Comment> comments;
+	@OneToMany(mappedBy = "forwardedReport")
+	private List<Forward> forwards;
 	
-	public Report() {}
-
-	public Report(Manager originalReceiver, Manager currentHolder, ReportStatus status, String description,
-			Building location, String photo, List<Comment> comments) {
+	public Report() {
 		super();
-		this.originalReceiver = originalReceiver;
-		this.currentHolder = currentHolder;
+	}
+
+	public Report(User sender, List<Manager> receiver, ReportStatus status, String description, Building location,
+			String photo, List<Comment> comments, List<Forward> forwards) {
+		super();
+		this.sender = sender;
+		this.receiver = receiver;
 		this.status = status;
 		this.description = description;
 		this.location = location;
 		this.photo = photo;
 		this.comments = comments;
+		this.forwards = forwards;
 	}
 
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
-	public Manager getOriginalReceiver() {
-		return originalReceiver;
+	public User getSender() {
+		return sender;
 	}
 
-	public void setOriginalReceiver(Manager originalReceiver) {
-		this.originalReceiver = originalReceiver;
+	public void setSender(User sender) {
+		this.sender = sender;
 	}
 
-	public Manager getCurrentHolder() {
-		return currentHolder;
+	public List<Manager> getReceiver() {
+		return receiver;
 	}
 
-	public void setCurrentHolder(Manager currentHolder) {
-		this.currentHolder = currentHolder;
+	public void setReceiver(List<Manager> receiver) {
+		this.receiver = receiver;
 	}
 
 	public ReportStatus getStatus() {
@@ -101,11 +113,19 @@ public class Report {
 		this.comments = comments;
 	}
 
+	public List<Forward> getForwards() {
+		return forwards;
+	}
+
+	public void setForwards(List<Forward> forwards) {
+		this.forwards = forwards;
+	}
+
 	@Override
 	public String toString() {
-		return "Report [id=" + id + ", originalReceiver=" + originalReceiver + ", currentHolder=" + currentHolder
-				+ ", status=" + status + ", description=" + description + ", location=" + location + ", photo=" + photo
-				+ ", comments=" + comments + "]";
+		return "Report [id=" + id + ", sender=" + sender + ", receiver=" + receiver + ", status=" + status
+				+ ", description=" + description + ", location=" + location + ", photo=" + photo + ", comments="
+				+ comments + ", forwards=" + forwards + "]";
 	}
-	
+
 }

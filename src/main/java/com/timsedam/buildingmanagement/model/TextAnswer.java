@@ -1,6 +1,7 @@
 package com.timsedam.buildingmanagement.model;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class TextAnswer extends Answer {
@@ -11,8 +12,8 @@ public class TextAnswer extends Answer {
 		super();
 	}
 
-	public TextAnswer(User respondant, Question questionBeingAnswered, String content) {
-		super(respondant, questionBeingAnswered);
+	public TextAnswer(String content, OpenEndedQuestion questionAnswered) {
+		super();
 		this.content = content;
 	}
 

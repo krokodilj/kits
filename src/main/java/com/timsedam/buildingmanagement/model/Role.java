@@ -1,7 +1,6 @@
 package com.timsedam.buildingmanagement.model;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 
 @Entity
 public class Role {
@@ -20,20 +18,18 @@ public class Role {
 
     @Column(unique = true)
     private String name;
-
-    @OneToMany(mappedBy = "role")
-    private Collection<User> users;
-
     @ManyToMany
-    private Collection<Permission> permissions;
+    private List<Permission> permissions;
+    
+	public Role() {
+		super();
+	}
 
-    public Role() {}
-
-    public Role(String name) {
-        this.name = name;
-        this.users = new ArrayList<>();
-        this.permissions = new ArrayList<>();
-    }
+	public Role(String name, List<Permission> permissions) {
+		super();
+		this.name = name;
+		this.permissions = permissions;
+	}
 
 	public Long getId() {
 		return id;
@@ -51,25 +47,17 @@ public class Role {
 		this.name = name;
 	}
 
-	public Collection<User> getUsers() {
-		return users;
-	}
-
-	public void setUsers(Collection<User> users) {
-		this.users = users;
-	}
-
-	public Collection<Permission> getPermissions() {
+	public List<Permission> getPermissions() {
 		return permissions;
 	}
 
-	public void setPermissions(Collection<Permission> permissions) {
+	public void setPermissions(List<Permission> permissions) {
 		this.permissions = permissions;
 	}
 
 	@Override
 	public String toString() {
 		return "Role [id=" + id + ", name=" + name + ", permissions=" + permissions + "]";
-	}
+	}    
     
 }

@@ -15,14 +15,16 @@ public class Answer {
 	@ManyToOne
 	private User respondant;
 	@ManyToOne
-	private Question questionBeingAnswered;
+	private Question questionAnswered;
 	
-	public Answer() {}
+	public Answer() {
+		super();
+	}
 
-	public Answer(User respondant, Question questionBeingAnswered) {
+	public Answer(User respondant, Question questionAnswered) {
 		super();
 		this.respondant = respondant;
-		this.questionBeingAnswered = questionBeingAnswered;
+		this.questionAnswered = questionAnswered;
 	}
 
 	public long getId() {
@@ -41,18 +43,17 @@ public class Answer {
 		this.respondant = respondant;
 	}
 
-	public Question getQuestionBeingAnswered() {
-		return questionBeingAnswered;
+	public Question getQuestionAnswered() {
+		return questionAnswered;
 	}
 
-	public void setQuestionBeingAnswered(Question questionBeingAnswered) {
-		this.questionBeingAnswered = questionBeingAnswered;
+	public void setQuestionAnswered(Question questionAnswered) {
+		this.questionAnswered = questionAnswered;
 	}
 
 	@Override
 	public String toString() {
-		return "Answer [id=" + id + ", respondant=" + respondant + ", questionBeingAnswered=" + questionBeingAnswered
-				+ "]";
+		return "Answer [id=" + id + ", respondant=" + respondant + ", questionAnswered=" + questionAnswered + "]";
 	}
-
+	
 }

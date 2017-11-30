@@ -1,22 +1,28 @@
 package com.timsedam.buildingmanagement.model;
 
-import java.util.Collection;
 import java.util.List;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 
 @Entity
+@DiscriminatorValue("manager")
 public class Manager extends User {
 
-	@OneToMany
+	@ManyToMany
+	@JoinTable(name = "manager_building", joinColumns = @JoinColumn(name = "manager_id"), inverseJoinColumns = @JoinColumn(name = "building_id"))
 	private List<Building> managedBuildings;
 
-	public Manager() {}
+	public Manager() {
+		super();
+	}
 
-	public Manager(String username, String password, String email, String picture, Role role,
-			Collection<Comment> comments, List<Building> managedBuildings) {
-		super(username, password, email, picture, role, comments);
+	public Manager(String username, String password, String email, String picture, List<Role> roles,
+			List<Comment> comments, List<Building> managedBuildings) {
+		super(username, password, email, picture, roles, comments);
 		this.managedBuildings = managedBuildings;
 	}
 

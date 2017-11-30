@@ -1,9 +1,12 @@
 package com.timsedam.buildingmanagement.model;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 @Entity
@@ -18,20 +21,23 @@ public class Building {
 	private int apartmentCount;
 	private String description;
 	private String picture;
-	@ManyToOne
-	private Manager manager;
+	@ManyToMany(mappedBy = "managedBuildings")
+	private List<Manager> managers;
 	
-	public Building() {}
+	public Building() {
+		super();
+	}
 
 	public Building(String city, String address, String country, int apartmentCount, String description, String picture,
-			Manager manager) {
+			List<Manager> managers) {
+		super();
 		this.city = city;
 		this.address = address;
 		this.country = country;
 		this.apartmentCount = apartmentCount;
 		this.description = description;
 		this.picture = picture;
-		this.manager = manager;
+		this.managers = managers;
 	}
 
 	public long getId() {
@@ -90,19 +96,19 @@ public class Building {
 		this.picture = picture;
 	}
 
-	public Manager getManager() {
-		return manager;
+	public List<Manager> getManagers() {
+		return managers;
 	}
 
-	public void setManager(Manager manager) {
-		this.manager = manager;
+	public void setManagers(List<Manager> managers) {
+		this.managers = managers;
 	}
 
 	@Override
 	public String toString() {
 		return "Building [id=" + id + ", city=" + city + ", address=" + address + ", country=" + country
 				+ ", apartmentCount=" + apartmentCount + ", description=" + description + ", picture=" + picture
-				+ ", manager=" + manager + "]";
+				+ ", managers=" + managers + "]";
 	}
 
 }

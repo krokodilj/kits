@@ -1,10 +1,15 @@
 package com.timsedam.buildingmanagement.model;
 
+import java.util.List;
+
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
+@Entity
 public class Question {
 	
 	@Id
@@ -13,12 +18,18 @@ public class Question {
 	private String questionText;
 	@ManyToOne
 	private QuestionForm questionForm;
-	
-	public Question() {}
+	@OneToMany(mappedBy = "questionAnswered")
+	private List<Answer> usersAnswers;
 
-	public Question(String questionText, QuestionForm questionForm) {
+	public Question() {
+		super();
+	}
+
+	public Question(String questionText, QuestionForm questionForm, List<Answer> usersAnswers) {
+		super();
 		this.questionText = questionText;
 		this.questionForm = questionForm;
+		this.usersAnswers = usersAnswers;
 	}
 
 	public long getId() {
@@ -45,9 +56,18 @@ public class Question {
 		this.questionForm = questionForm;
 	}
 
+	public List<Answer> getUsersAnswers() {
+		return usersAnswers;
+	}
+
+	public void setUsersAnswers(List<Answer> usersAnswers) {
+		this.usersAnswers = usersAnswers;
+	}
+
 	@Override
 	public String toString() {
-		return "Question [id=" + id + ", questionText=" + questionText + ", questionForm=" + questionForm + "]";
+		return "Question [id=" + id + ", questionText=" + questionText + ", questionForm=" + questionForm
+				+ ", usersAnswers=" + usersAnswers + "]";
 	}
 
 }

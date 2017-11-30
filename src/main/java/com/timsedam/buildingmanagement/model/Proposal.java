@@ -4,9 +4,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 public class Proposal {
@@ -15,25 +20,28 @@ public class Proposal {
 	@GeneratedValue
 	private Long id;
 	private String content;
+	@Enumerated(EnumType.STRING)
 	private ProposalStatus status;
 	@ManyToOne
 	private User proposer;
 	@ManyToOne
 	private Meeting meeting;
-	private LocalDateTime suggestionTime;
-	@ManyToOne
+	private LocalDateTime suggestedAt;
+	@OneToMany(mappedBy = "proposal")
 	private List<ProposalVote> votes;
 	
-	public Proposal() {}
+	public Proposal() {
+		super();
+	}
 
-	public Proposal(String content, ProposalStatus status, User proposer, Meeting meeting, LocalDateTime suggestionTime,
+	public Proposal(String content, ProposalStatus status, User proposer, Meeting meeting, LocalDateTime suggestedAt,
 			List<ProposalVote> votes) {
 		super();
 		this.content = content;
 		this.status = status;
 		this.proposer = proposer;
 		this.meeting = meeting;
-		this.suggestionTime = suggestionTime;
+		this.suggestedAt = suggestedAt;
 		this.votes = votes;
 	}
 
@@ -77,12 +85,12 @@ public class Proposal {
 		this.meeting = meeting;
 	}
 
-	public LocalDateTime getSuggestionTime() {
-		return suggestionTime;
+	public LocalDateTime getSuggestedAt() {
+		return suggestedAt;
 	}
 
-	public void setSuggestionTime(LocalDateTime suggestionTime) {
-		this.suggestionTime = suggestionTime;
+	public void setSuggestedAt(LocalDateTime suggestedAt) {
+		this.suggestedAt = suggestedAt;
 	}
 
 	public List<ProposalVote> getVotes() {
@@ -96,7 +104,7 @@ public class Proposal {
 	@Override
 	public String toString() {
 		return "Proposal [id=" + id + ", content=" + content + ", status=" + status + ", proposer=" + proposer
-				+ ", meeting=" + meeting + ", suggestionTime=" + suggestionTime + ", votes=" + votes + "]";
+				+ ", meeting=" + meeting + ", suggestedAt=" + suggestedAt + ", votes=" + votes + "]";
 	}
 
 }

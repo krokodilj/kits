@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class QuestionForm {
@@ -14,22 +16,28 @@ public class QuestionForm {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
+	@OneToMany(mappedBy = "questionForm")
 	private List<Question> questions;
+	@ManyToOne
+	private User creator;
 	private QuestionFormStatus status;
-	private LocalDateTime openDate;
-	private LocalDateTime startDate;
-	private LocalDateTime closeDate;
+	private LocalDateTime openedAt;
+	private LocalDateTime startedAt;
+	private LocalDateTime closedAt;
 	
-	public QuestionForm() {}
+	public QuestionForm() {
+		super();
+	}
 
-	public QuestionForm(List<Question> questions, QuestionFormStatus status, LocalDateTime openDate,
-			LocalDateTime startDate, LocalDateTime closeDate) {
+	public QuestionForm(List<Question> questions, User creator, QuestionFormStatus status, LocalDateTime openedAt,
+			LocalDateTime startedAt, LocalDateTime closedAt) {
 		super();
 		this.questions = questions;
+		this.creator = creator;
 		this.status = status;
-		this.openDate = openDate;
-		this.startDate = startDate;
-		this.closeDate = closeDate;
+		this.openedAt = openedAt;
+		this.startedAt = startedAt;
+		this.closedAt = closedAt;
 	}
 
 	public long getId() {
@@ -48,6 +56,14 @@ public class QuestionForm {
 		this.questions = questions;
 	}
 
+	public User getCreator() {
+		return creator;
+	}
+
+	public void setCreator(User creator) {
+		this.creator = creator;
+	}
+
 	public QuestionFormStatus getStatus() {
 		return status;
 	}
@@ -56,34 +72,34 @@ public class QuestionForm {
 		this.status = status;
 	}
 
-	public LocalDateTime getOpenDate() {
-		return openDate;
+	public LocalDateTime getOpenedAt() {
+		return openedAt;
 	}
 
-	public void setOpenDate(LocalDateTime openDate) {
-		this.openDate = openDate;
+	public void setOpenedAt(LocalDateTime openedAt) {
+		this.openedAt = openedAt;
 	}
 
-	public LocalDateTime getStartDate() {
-		return startDate;
+	public LocalDateTime getStartedAt() {
+		return startedAt;
 	}
 
-	public void setStartDate(LocalDateTime startDate) {
-		this.startDate = startDate;
+	public void setStartedAt(LocalDateTime startedAt) {
+		this.startedAt = startedAt;
 	}
 
-	public LocalDateTime getCloseDate() {
-		return closeDate;
+	public LocalDateTime getClosedAt() {
+		return closedAt;
 	}
 
-	public void setCloseDate(LocalDateTime closeDate) {
-		this.closeDate = closeDate;
+	public void setClosedAt(LocalDateTime closedAt) {
+		this.closedAt = closedAt;
 	}
 
 	@Override
 	public String toString() {
-		return "QuestionForm [id=" + id + ", questions=" + questions + ", status=" + status + ", openDate=" + openDate
-				+ ", startDate=" + startDate + ", closeDate=" + closeDate + "]";
+		return "QuestionForm [id=" + id + ", questions=" + questions + ", creator=" + creator + ", status=" + status
+				+ ", openedAt=" + openedAt + ", startedAt=" + startedAt + ", closedAt=" + closedAt + "]";
 	}
 
 }

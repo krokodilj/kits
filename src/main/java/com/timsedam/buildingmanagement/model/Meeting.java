@@ -6,6 +6,8 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Meeting {
@@ -13,18 +15,29 @@ public class Meeting {
 	@Id
 	@GeneratedValue
 	private Long id;
+	@OneToMany(mappedBy = "meeting")
 	private List<Proposal> agenda;
-	private LocalDateTime startTime;
+	@ManyToOne
+	private Manager scheduledBy;
+	private LocalDateTime startsAt;
 	private String record;
+	@ManyToOne
+	private Building building;
+	private String location;
 	
-	public Meeting() {}
-
-	public Meeting(Long id, List<Proposal> agenda, LocalDateTime startTime, String record) {
+	public Meeting() {
 		super();
-		this.id = id;
+	}
+
+	public Meeting(List<Proposal> agenda, Manager scheduledBy, LocalDateTime startsAt, String record, Building building,
+			String location) {
+		super();
 		this.agenda = agenda;
-		this.startTime = startTime;
+		this.scheduledBy = scheduledBy;
+		this.startsAt = startsAt;
 		this.record = record;
+		this.building = building;
+		this.location = location;
 	}
 
 	public Long getId() {
@@ -43,12 +56,20 @@ public class Meeting {
 		this.agenda = agenda;
 	}
 
-	public LocalDateTime getStartTime() {
-		return startTime;
+	public Manager getScheduledBy() {
+		return scheduledBy;
 	}
 
-	public void setStartTime(LocalDateTime startTime) {
-		this.startTime = startTime;
+	public void setScheduledBy(Manager scheduledBy) {
+		this.scheduledBy = scheduledBy;
+	}
+
+	public LocalDateTime getStartsAt() {
+		return startsAt;
+	}
+
+	public void setStartsAt(LocalDateTime startsAt) {
+		this.startsAt = startsAt;
 	}
 
 	public String getRecord() {
@@ -59,9 +80,26 @@ public class Meeting {
 		this.record = record;
 	}
 
+	public Building getBuilding() {
+		return building;
+	}
+
+	public void setBuilding(Building building) {
+		this.building = building;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
 	@Override
 	public String toString() {
-		return "Meeting [id=" + id + ", agenda=" + agenda + ", startTime=" + startTime + ", record=" + record + "]";
+		return "Meeting [id=" + id + ", agenda=" + agenda + ", scheduledBy=" + scheduledBy + ", startsAt=" + startsAt
+				+ ", record=" + record + ", building=" + building + ", location=" + location + "]";
 	}
 	
 }

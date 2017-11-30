@@ -1,6 +1,8 @@
 package com.timsedam.buildingmanagement.model;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,6 +18,7 @@ public class ProposalVote {
 	private User voter;
 	@ManyToOne
 	private Proposal proposal;
+	@Enumerated(EnumType.STRING)
 	private ProposalVoteValue vote;
 	
 	public ProposalVote() {}

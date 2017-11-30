@@ -4,15 +4,13 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class PickedAnswer {
+public class PickedAnswer extends Answer {
 	
 	@ManyToOne
 	private OfferedAnswer content;
 
-	public PickedAnswer() {
-		super();
-	}
-
+	public PickedAnswer() {}
+	
 	public PickedAnswer(OfferedAnswer content) {
 		super();
 		this.content = content;
