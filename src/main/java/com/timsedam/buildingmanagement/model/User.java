@@ -101,16 +101,10 @@ public class User {
 		this.comments = comments;
 	}
 
-	public User(Long id, String username, String password, String email, String picture, List<Role> roles,
-			List<Comment> comments) {
-		super();
-		this.id = id;
-		this.username = username;
-		this.password = password;
-		this.email = email;
-		this.picture = picture;
-		this.roles = roles;
-		this.comments = comments;
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", username=" + username + ", password=" + password + ", email=" + email
+				+ ", picture=" + picture + ", roles=" + roles + ", comments=" + comments + "]";
 	}
     
 }
