@@ -37,10 +37,10 @@ public class UserController {
 	
 	@PostMapping(value = "/{userType}", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<String> register(@PathVariable String userType,
-			@Valid @RequestBody UserRegisterDTO userRegisterDTO, BindingResult bindingResult) throws ClassNotFoundException {
+			@Valid @RequestBody UserRegisterDTO userRegisterDTO, BindingResult validationResult) throws ClassNotFoundException {
 		
-		if (bindingResult.hasErrors()) {
-			return new ResponseEntity<String>(bindingResult.getAllErrors().toString(), HttpStatus.UNPROCESSABLE_ENTITY);
+		if (validationResult.hasErrors()) {
+			return new ResponseEntity<String>(validationResult.getAllErrors().toString(), HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 		else if (!userTypeValidator.isValid(userType)) {
 			return new ResponseEntity<String>("invalid PathVariable 'userType'", HttpStatus.UNPROCESSABLE_ENTITY);
