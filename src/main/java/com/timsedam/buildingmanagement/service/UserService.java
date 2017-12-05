@@ -13,7 +13,6 @@ public class UserService {
 	private UserRepository userRepository;
 	
 	public void save(User user) {
-		System.out.println("savin");
 		userRepository.save(user);
 	}
 	

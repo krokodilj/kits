@@ -20,9 +20,9 @@ public class Manager extends User {
 		super();
 	}
 
-	public Manager(String username, String password, String email, String picture, List<Role> roles,
+	public Manager(String username, String password, String email, String picture, Role role,
 			List<Comment> comments, List<Building> managedBuildings) {
-		super(username, password, email, picture, roles, comments);
+		super(username, password, email, picture, role, comments);
 		this.managedBuildings = managedBuildings;
 	}
 
