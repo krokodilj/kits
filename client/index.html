@@ -1,24 +1,30 @@
 <!DOCTYPE html>
 <html ng-app="kits">
 	<head>
+		<title>kits</title>
 	</head>
 
-	<body ng-view>
+	<body ng-controller="AppController as ctrl">
+
 		<div ng-view></div>
 
 
-		<!--SCRIPTS-->
-
-	    
+		<!--SCRIPTS-->	    
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.js"></script>
 	    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-route.js"></script>
+   		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-cookies.js"></script>
 
 	    
 	    
+	    <script type="text/javascript" src="models/userService.js"></script>	
+
 	    <script type="text/javascript" src="services/authService.js"></script>	    
 	    <script type="text/javascript" src="services/sessionService.js"></script>
+
 	    <script type="text/javascript" src="app/login/login.ctrl.js"></script>
+	    <script type="text/javascript" src="app/register/register.ctrl.js"></script>
 	    <script type="text/javascript" src="app.js"></script>
+
 	</body>
 
 </html>
