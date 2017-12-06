@@ -1,14 +1,15 @@
 (function(){
-	angular.module('kits.login',['service.auth'])
+	angular
+		.module('kits.login',['service.auth'])
 		.config(['$routeProvider',function($routeProvider){
 			$routeProvider
 			.when('/login',{
 					templateUrl:"./app/login/login.html",
-					controller:"loginController",
-					controllerAs:"ctrl"								
+					controller:"LoginController",
+					controllerAs:"vm"								
 				})
 		}])
-		.controller('loginController',['authService',function(authService){
+		.controller('LoginController',['authService',function(authService){
 			var vm = this;
 
 			vm.user={
@@ -21,7 +22,17 @@
 				message:""
 			}
 
-			vm.login=authService
+			vm.login=login;
+
+				
+			function login(user){
+				authService.login(user).then
+					(function(success){
+						console.log("success")
+					},function(error){
+						console.log("error")
+					})
+			}
 
 		}])
 })();

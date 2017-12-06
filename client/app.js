@@ -1,10 +1,20 @@
 (function(){
-	angular.module('kits',['ngRoute','kits.login'])
+	angular
+		.module('kits',[
+			'ngRoute',
+			'ngCookies',
+			'kits.login',
+			'kits.register'
+		])
 		.config(['$routeProvider',function($routeProvider){
 			$routeProvider
 				.when('/',{
 					redirectTo:'/login'
 				})
-				.otherwise('/')
+		}])
+		.controller('AppController',[function(){
+			
+			
+			
 		}])
 })();
