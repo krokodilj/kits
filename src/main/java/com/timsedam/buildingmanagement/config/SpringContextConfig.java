@@ -7,7 +7,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.timsedam.buildingmanagement.service.UserDetailsServiceImpl;
 import com.timsedam.buildingmanagement.transformator.UserTypeStringToClass;
 import com.timsedam.buildingmanagement.validator.UserTypeValidator;
 
@@ -27,11 +26,6 @@ public class SpringContextConfig {
     @Bean 
     public UserTypeStringToClass userTypeStringToClass() {
     	return new UserTypeStringToClass();
-    }
-    
-    @Bean 
-    public UserDetailsService userDetailsService() {
-    	return new UserDetailsServiceImpl();
     }
     
     @Bean

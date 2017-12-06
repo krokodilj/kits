@@ -15,7 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 
-import com.timsedam.buildingmanagement.service.UserDetailsServiceImpl;
+import com.timsedam.buildingmanagement.service.UserService;
 
 public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -23,7 +23,7 @@ public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFil
     private JsonWebToken jsonWebToken;
 
     @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+    private UserService userService;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -33,7 +33,7 @@ public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFil
         String username = jsonWebToken.getUsernameFromToken(authToken);
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            UserDetails userDetails = userService.loadUserByUsername(username);
             if (jsonWebToken.validateToken(authToken, userDetails)) {
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
