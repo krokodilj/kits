@@ -24,13 +24,15 @@ public class Meeting {
 	@ManyToOne
 	private Building building;
 	private String location;
+	@OneToMany
+	private List<Proposal> acceptedProposals;
 	
 	public Meeting() {
 		super();
 	}
 
 	public Meeting(List<Proposal> agenda, Manager scheduledBy, LocalDateTime startsAt, String record, Building building,
-			String location) {
+			String location, List<Proposal> acceptedProposals) {
 		super();
 		this.agenda = agenda;
 		this.scheduledBy = scheduledBy;
@@ -38,6 +40,7 @@ public class Meeting {
 		this.record = record;
 		this.building = building;
 		this.location = location;
+		this.acceptedProposals = acceptedProposals;
 	}
 
 	public Long getId() {
@@ -96,10 +99,19 @@ public class Meeting {
 		this.location = location;
 	}
 
+	public List<Proposal> getAcceptedProposals() {
+		return acceptedProposals;
+	}
+
+	public void setAcceptedProposals(List<Proposal> acceptedProposals) {
+		this.acceptedProposals = acceptedProposals;
+	}
+
 	@Override
 	public String toString() {
 		return "Meeting [id=" + id + ", agenda=" + agenda + ", scheduledBy=" + scheduledBy + ", startsAt=" + startsAt
-				+ ", record=" + record + ", building=" + building + ", location=" + location + "]";
+				+ ", record=" + record + ", building=" + building + ", location=" + location + ", acceptedProposals="
+				+ acceptedProposals + "]";
 	}
 	
 }
