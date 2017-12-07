@@ -27,6 +27,8 @@ public class Residence {
 		inverseJoinColumns = @JoinColumn(name="resident_id")
 	) 
 	private List<Resident> residents;
+	@ManyToOne
+	private Resident apartmentOwner;
 	
 	public Residence() {
 		super();
