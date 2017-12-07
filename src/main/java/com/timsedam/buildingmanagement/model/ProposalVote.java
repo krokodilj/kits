@@ -15,18 +15,17 @@ public class ProposalVote {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	@ManyToOne
-	private User voter;
-	@ManyToOne
-	private Proposal proposal;
+	private User voter;;
 	@Enumerated(EnumType.STRING)
 	private ProposalVoteValue vote;
 	
-	public ProposalVote() {}
+	public ProposalVote() {
+		super();
+	}
 
-	public ProposalVote(User voter, Proposal proposal, ProposalVoteValue vote) {
+	public ProposalVote(User voter, ProposalVoteValue vote) {
 		super();
 		this.voter = voter;
-		this.proposal = proposal;
 		this.vote = vote;
 	}
 
@@ -46,14 +45,6 @@ public class ProposalVote {
 		this.voter = voter;
 	}
 
-	public Proposal getProposal() {
-		return proposal;
-	}
-
-	public void setProposal(Proposal proposal) {
-		this.proposal = proposal;
-	}
-
 	public ProposalVoteValue getVote() {
 		return vote;
 	}
@@ -64,7 +55,7 @@ public class ProposalVote {
 
 	@Override
 	public String toString() {
-		return "ProposalVote [id=" + id + ", voter=" + voter + ", proposal=" + proposal + ", vote=" + vote + "]";
+		return "ProposalVote [id=" + id + ", voter=" + voter + ", vote=" + vote + "]";
 	}
-
+	
 }
