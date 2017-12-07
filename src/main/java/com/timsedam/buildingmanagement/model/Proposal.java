@@ -10,8 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @Entity
 public class Proposal {
@@ -27,22 +25,28 @@ public class Proposal {
 	@ManyToOne
 	private Meeting meeting;
 	private LocalDateTime suggestedAt;
-	@OneToMany(mappedBy = "proposal")
-	private List<ProposalVote> votes;
+	@OneToMany
+	private List<ProposalVote> discussOnMeetingVotes;
+	@OneToMany
+	private List<ProposalVote> onMeetingVotes;
+	@ManyToOne
+	private Report attachedReport;
 	
 	public Proposal() {
 		super();
 	}
 
 	public Proposal(String content, ProposalStatus status, User proposer, Meeting meeting, LocalDateTime suggestedAt,
-			List<ProposalVote> votes) {
+			List<ProposalVote> discussOnMeetingVotes, List<ProposalVote> onMeetingVotes, Report attachedReport) {
 		super();
 		this.content = content;
 		this.status = status;
 		this.proposer = proposer;
 		this.meeting = meeting;
 		this.suggestedAt = suggestedAt;
-		this.votes = votes;
+		this.discussOnMeetingVotes = discussOnMeetingVotes;
+		this.onMeetingVotes = onMeetingVotes;
+		this.attachedReport = attachedReport;
 	}
 
 	public Long getId() {
@@ -93,18 +97,36 @@ public class Proposal {
 		this.suggestedAt = suggestedAt;
 	}
 
-	public List<ProposalVote> getVotes() {
-		return votes;
+	public List<ProposalVote> getDiscussOnMeetingVotes() {
+		return discussOnMeetingVotes;
 	}
 
-	public void setVotes(List<ProposalVote> votes) {
-		this.votes = votes;
+	public void setDiscussOnMeetingVotes(List<ProposalVote> discussOnMeetingVotes) {
+		this.discussOnMeetingVotes = discussOnMeetingVotes;
+	}
+
+	public List<ProposalVote> getOnMeetingVotes() {
+		return onMeetingVotes;
+	}
+
+	public void setOnMeetingVotes(List<ProposalVote> onMeetingVotes) {
+		this.onMeetingVotes = onMeetingVotes;
+	}
+
+	public Report getAttachedReport() {
+		return attachedReport;
+	}
+
+	public void setAttachedReport(Report attachedReport) {
+		this.attachedReport = attachedReport;
 	}
 
 	@Override
 	public String toString() {
 		return "Proposal [id=" + id + ", content=" + content + ", status=" + status + ", proposer=" + proposer
-				+ ", meeting=" + meeting + ", suggestedAt=" + suggestedAt + ", votes=" + votes + "]";
+				+ ", meeting=" + meeting + ", suggestedAt=" + suggestedAt + ", discussOnMeetingVotes="
+				+ discussOnMeetingVotes + ", onMeetingVotes=" + onMeetingVotes + ", attachedReport=" + attachedReport
+				+ "]";
 	}
-
+	
 }
