@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.timsedam.buildingmanagement.dto.UserLoginDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -56,6 +57,17 @@ public class JsonWebToken {
 		}
 		return expirationDate;
 	}
+
+	public String getRoleFromToken(String token){
+		String role;
+		try {
+			Claims claims = getClaimsFromToken(token);
+			role = (String) claims.get("role");
+		} catch (Exception e) {
+			role = null;
+		}
+		return role;
+	}
 	
 	private boolean isTokenExpired(String token) {
 	    Date expirationDate = getExpirationDateFromToken(token);
@@ -71,6 +83,16 @@ public class JsonWebToken {
 		Map<String, Object> claims = new HashMap<String, Object>();
 		claims.put("sub", userDetails.getUsername());
 		claims.put("created", new Date(System.currentTimeMillis()));
+		return Jwts.builder().setClaims(claims)
+				.setExpiration(new Date(System.currentTimeMillis() + expiration * 1000))
+				.signWith(SignatureAlgorithm.HS512, signingKey).compact();
+	}
+
+	public String generateToken(String username,String role){
+		Map<String, Object> claims = new HashMap<String, Object>();
+		claims.put("sub", username);
+		claims.put("created", new Date(System.currentTimeMillis()));
+		claims.put("role",role);
 		return Jwts.builder().setClaims(claims)
 				.setExpiration(new Date(System.currentTimeMillis() + expiration * 1000))
 				.signWith(SignatureAlgorithm.HS512, signingKey).compact();
