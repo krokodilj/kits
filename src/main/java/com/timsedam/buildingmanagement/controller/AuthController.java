@@ -2,7 +2,6 @@ package com.timsedam.buildingmanagement.controller;
 
 import com.timsedam.buildingmanagement.dto.UserLoginDTO;
 import com.timsedam.buildingmanagement.service.AuthService;
-import org.json.HTTP;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
