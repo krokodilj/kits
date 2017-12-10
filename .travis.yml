@@ -1,13 +1,31 @@
 language: java
+
 jdk: 
     - oraclejdk8
+
 services: 
     - mysql
+
 test:
   adapter: mysql2
   database: kts_test
   username: root
   encoding: utf8
+
 before_install:
   - mysql -u root -e "CREATE DATABASE kts_test"
   - mysql -u root -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('root');"
+
+addons:
+  sonarcloud:
+    organization: "krokodilj/kits"
+    token:
+      secure: "N+hyvAdnWE1lQ4r+dP9jIE2pAQ9zktuuuZMO3ycP0JNn5WGknhNit/LylfXSRt5CN6L9Gl1/bra/LGdM1XfrMMxrzbX1yV6ReEwYGByO5wxBpi6RvFoGg8GOEPf1RgFWbH8watB02O35Sy1ijRD6f/pqh3vhQUOBpGBgmDb3ZeGAWOswOXbv2b2cWuduaN4FwBj4CcC9bTmb00FZwx7DGB8x86qP9tQ7br5kWaYI2zwHjnwqQsonFmQnMGxuM2V/kWIJqAqmFWiQeOesX1M+p61yDlP+MZ2aKBheUUd9Nmuv2/kegpuY2k9cvuv3/oyzrolvNR3VIu9DDsH4YqIEC3NwfGXvTgYHJDz1IimaqfEnm1GtraTaNMJihE8WQmIXymChg1XDNq32iLhKYZcPi4PycOQry8iUZBGWIjhDzPHxzXrbQDBPWXPgQJfCL5jVtax40Xk+W5GCpJnOFCZN69EOBlE1Ef8GT0jpQD1lwCey7Uo5fjRf+PIJgMzsKjI5NZMEunBRlfuDoFExh+QqaHSMP5gT1ZnvsDSdoTP+k4oPtKSb4t582TMSTLGCtA3zWqrDz4mwS2Ret41jhe9Mbo8LcT4LDrRB4Hqw2mbTSfuwzWyRhL0nZvfqomTU4+oMj/x7mLo4Pl9F6BHIwPIQlJK7ErLaCj04KJQO6i+5Jj0="
+
+script:
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar
+
+cache:
+  directories:
+    - '$HOME/.m2/repository'
+    - '$HOME/.sonar/cache'
