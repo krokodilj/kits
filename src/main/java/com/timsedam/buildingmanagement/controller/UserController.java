@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.timsedam.buildingmanagement.dto.UserDTO;
 import com.timsedam.buildingmanagement.dto.UserRegisterDTO;
+import com.timsedam.buildingmanagement.model.Role;
 import com.timsedam.buildingmanagement.model.User;
+import com.timsedam.buildingmanagement.service.RoleService;
 import com.timsedam.buildingmanagement.service.UserService;
 import com.timsedam.buildingmanagement.transformator.UserTypeStringToClass;
 import com.timsedam.buildingmanagement.validator.UserTypeValidator;
@@ -27,6 +30,9 @@ public class UserController {
 	private UserService userService;
 	
 	@Autowired
+	private RoleService roleService;
+	
+	@Autowired
 	private ModelMapper modelMapper;
 	
 	@Autowired
@@ -36,20 +42,28 @@ public class UserController {
 	private UserTypeStringToClass userTypeStringToClass;
 	
 	@PostMapping(value = "/{userType}", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<String> register(@PathVariable String userType,
+	public ResponseEntity<UserDTO> register(@PathVariable String userType,
 			@Valid @RequestBody UserRegisterDTO userRegisterDTO, BindingResult validationResult) throws ClassNotFoundException {
 		
 		if (validationResult.hasErrors()) {
-			return new ResponseEntity<String>(validationResult.getAllErrors().toString(), HttpStatus.UNPROCESSABLE_ENTITY);
+			return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 		else if (!userTypeValidator.isValid(userType)) {
-			return new ResponseEntity<String>("invalid PathVariable 'userType'", HttpStatus.UNPROCESSABLE_ENTITY);
+			return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+		else if(userService.exists(userRegisterDTO.getUsername())) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		else {
 			Class<?> destinationClass = userTypeStringToClass.transform(userType);
  			User user = (User) modelMapper.map(userRegisterDTO, destinationClass);
+ 			
+ 			Role role = roleService.findOneByName(userType);
+ 			user.setRole(role);
 			userService.save(user);
-			return new ResponseEntity<>(HttpStatus.OK);
+			
+			UserDTO responseData = modelMapper.map(user, UserDTO.class);
+			return new ResponseEntity<UserDTO>(responseData, HttpStatus.CREATED);
 		}
 		
 	}
