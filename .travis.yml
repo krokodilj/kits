@@ -10,4 +10,5 @@ test:
   encoding: utf8
 before_install:
   - mysql -u root -e "CREATE DATABASE kts_test"
+  - mysql -u root -e "CREATE DATABASE kts_prod"
   - mysql -u root -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('root');"

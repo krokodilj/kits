@@ -15,7 +15,7 @@ public class ProposalVote {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	@ManyToOne
-	private User voter;;
+	private User voter;
 	@Enumerated(EnumType.STRING)
 	private ProposalVoteValue vote;
 	

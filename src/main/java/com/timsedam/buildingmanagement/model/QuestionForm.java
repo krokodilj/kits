@@ -20,6 +20,8 @@ public class QuestionForm {
 	private List<Question> questions;
 	@ManyToOne
 	private User creator;
+	@ManyToOne
+	private Building building;
 	private QuestionFormStatus status;
 	private LocalDateTime openedAt;
 	private LocalDateTime startedAt;

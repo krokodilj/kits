@@ -8,8 +8,11 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import org.apache.catalina.Manager;
 
 @Entity
 public class Report {
@@ -19,8 +22,6 @@ public class Report {
 	private long id;
 	@ManyToOne
 	private User sender;
-	@OneToMany
-	private List<Manager> receiver;
 	@Enumerated(EnumType.STRING)
 	private ReportStatus status;
 	private String description;
@@ -31,22 +32,24 @@ public class Report {
 	private List<Comment> comments;
 	@OneToMany(mappedBy = "forwardedReport")
 	private List<Forward> forwards;
+	@ManyToOne
+	private User currentHolder;
 	
 	public Report() {
 		super();
 	}
 
-	public Report(User sender, List<Manager> receiver, ReportStatus status, String description, Building location,
-			String photo, List<Comment> comments, List<Forward> forwards) {
+	public Report(User sender, ReportStatus status, String description, Building location, String photo,
+			List<Comment> comments, List<Forward> forwards, User currentHolder) {
 		super();
 		this.sender = sender;
-		this.receiver = receiver;
 		this.status = status;
 		this.description = description;
 		this.location = location;
 		this.photo = photo;
 		this.comments = comments;
 		this.forwards = forwards;
+		this.currentHolder = currentHolder;
 	}
 
 	public long getId() {
@@ -63,14 +66,6 @@ public class Report {
 
 	public void setSender(User sender) {
 		this.sender = sender;
-	}
-
-	public List<Manager> getReceiver() {
-		return receiver;
-	}
-
-	public void setReceiver(List<Manager> receiver) {
-		this.receiver = receiver;
 	}
 
 	public ReportStatus getStatus() {
@@ -121,11 +116,20 @@ public class Report {
 		this.forwards = forwards;
 	}
 
-	@Override
-	public String toString() {
-		return "Report [id=" + id + ", sender=" + sender + ", receiver=" + receiver + ", status=" + status
-				+ ", description=" + description + ", location=" + location + ", photo=" + photo + ", comments="
-				+ comments + ", forwards=" + forwards + "]";
+	public User getCurrentHolder() {
+		return currentHolder;
 	}
 
+	public void setCurrentHolder(User currentHolder) {
+		this.currentHolder = currentHolder;
+	}
+
+	@Override
+	public String toString() {
+		return "Report [id=" + id + ", sender=" + sender + ", status=" + status + ", description=" + description
+				+ ", location=" + location + ", photo=" + photo + ", comments=" + comments + ", forwards=" + forwards
+				+ ", currentHolder=" + currentHolder + "]";
+	}
+	
+	
 }

@@ -15,10 +15,6 @@ public class Meeting {
 	@Id
 	@GeneratedValue
 	private Long id;
-	@OneToMany(mappedBy = "meeting")
-	private List<Proposal> agenda;
-	@ManyToOne
-	private Manager scheduledBy;
 	private LocalDateTime startsAt;
 	private String record;
 	@ManyToOne
@@ -31,11 +27,9 @@ public class Meeting {
 		super();
 	}
 
-	public Meeting(List<Proposal> agenda, Manager scheduledBy, LocalDateTime startsAt, String record, Building building,
-			String location, List<Proposal> acceptedProposals) {
+	public Meeting(LocalDateTime startsAt, String record, Building building, String location,
+			List<Proposal> acceptedProposals) {
 		super();
-		this.agenda = agenda;
-		this.scheduledBy = scheduledBy;
 		this.startsAt = startsAt;
 		this.record = record;
 		this.building = building;
@@ -49,22 +43,6 @@ public class Meeting {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public List<Proposal> getAgenda() {
-		return agenda;
-	}
-
-	public void setAgenda(List<Proposal> agenda) {
-		this.agenda = agenda;
-	}
-
-	public Manager getScheduledBy() {
-		return scheduledBy;
-	}
-
-	public void setScheduledBy(Manager scheduledBy) {
-		this.scheduledBy = scheduledBy;
 	}
 
 	public LocalDateTime getStartsAt() {
@@ -109,9 +87,8 @@ public class Meeting {
 
 	@Override
 	public String toString() {
-		return "Meeting [id=" + id + ", agenda=" + agenda + ", scheduledBy=" + scheduledBy + ", startsAt=" + startsAt
-				+ ", record=" + record + ", building=" + building + ", location=" + location + ", acceptedProposals="
-				+ acceptedProposals + "]";
+		return "Meeting [id=" + id + ", startsAt=" + startsAt + ", record=" + record + ", building=" + building
+				+ ", location=" + location + ", acceptedProposals=" + acceptedProposals + "]";
 	}
 	
 }
