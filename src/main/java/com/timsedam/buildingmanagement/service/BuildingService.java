@@ -14,12 +14,11 @@ public class BuildingService {
     @Autowired
     BuildingRepository buildingRepository;
 
-    public boolean createBuilding(Building building){
+    public Building createBuilding(Building building){
         try{
-            buildingRepository.save(building);
-            return true;
+            return buildingRepository.save(building);
         }catch(Exception e){
-            return false;
+            return null;
         }
 
     }

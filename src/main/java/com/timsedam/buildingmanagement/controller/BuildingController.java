@@ -15,9 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-/**
- * Created by sirko on 12/7/17.
- */
 @RestController
 @RequestMapping(value = "api/building")
 public class BuildingController {
@@ -29,19 +26,20 @@ public class BuildingController {
     private ModelMapper modelMapper;
 
     @PostMapping(consumes = "application/json")
-    public ResponseEntity<String> create(
+    public ResponseEntity create(
             @Valid @RequestBody CreateBuildingDTO createBuildingDTO, BindingResult validationResult){
 
         if (validationResult.hasErrors()) {
-            return new ResponseEntity<String>(validationResult.getAllErrors().toString(), HttpStatus.UNPROCESSABLE_ENTITY);
+            return new ResponseEntity(validationResult.getAllErrors().toString(), HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         Building building = modelMapper.map(createBuildingDTO,Building.class);
+        building=buildingService.createBuilding(building);
 
-        if(!buildingService.createBuilding(building)){
-            return new ResponseEntity<String>("nes nevalja buildingService.createBuilding",HttpStatus.INTERNAL_SERVER_ERROR);
+        if(building==null){
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return new ResponseEntity<String>("ok",HttpStatus.OK);
+        return new ResponseEntity(building,HttpStatus.OK);
     }
 }
