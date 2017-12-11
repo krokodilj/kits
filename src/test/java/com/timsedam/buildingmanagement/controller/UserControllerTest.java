@@ -10,7 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.timsedam.buildingmanagement.dto.UserRegisterDTO;
@@ -39,7 +38,7 @@ public class UserControllerTest {
 	public void registerManager() throws Exception {
 		
 		ResponseEntity<User> responseEntity = 
-				restTemplate.postForEntity(URL_PREFIX + "manager", validUserRegisterDTO, User.class);
+				restTemplate.postForEntity(URL_PREFIX + "admin", validUserRegisterDTO, User.class);
 		
 		User userFromResponse = responseEntity.getBody();
 		assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
@@ -58,19 +57,19 @@ public class UserControllerTest {
 	public void registerDuplicate() throws Exception {
 		
 		ResponseEntity<User> responseEntity = 
-				restTemplate.postForEntity(URL_PREFIX + "manager", validUserRegisterDTO, User.class);
+				restTemplate.postForEntity(URL_PREFIX + "admin", validUserRegisterDTO, User.class);
 		assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
 		User userFromResponse = responseEntity.getBody();
 		
 		responseEntity = 
-				restTemplate.postForEntity(URL_PREFIX + "manager", validUserRegisterDTO, User.class);
+				restTemplate.postForEntity(URL_PREFIX + "admin", validUserRegisterDTO, User.class);
 		assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
 		
 		userRepository.delete(userFromResponse.getId());
     }
 	
 	/**
-	 * POST request to "/api/users/manager" with invalid UserDTO parameter - username too short
+	 * POST request to "/api/users/admin" with invalid UserDTO parameter - username too short
 	 * Expected: no User is returned, HTTP Status 422
 	 */
 	@Test
@@ -80,7 +79,7 @@ public class UserControllerTest {
 		requestObject.setUsername("123");
 		
 		ResponseEntity<User> responseEntity = 
-				restTemplate.postForEntity(URL_PREFIX + "manager", requestObject, User.class);
+				restTemplate.postForEntity(URL_PREFIX + "admin", requestObject, User.class);
 		
 		assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
 		assertEquals(responseEntity.getBody(), null);
@@ -88,7 +87,7 @@ public class UserControllerTest {
     }
 	
 	/**
-	 * POST request to "/api/users/manager" with invalid UserDTO parameter - password too short
+	 * POST request to "/api/users/admin" with invalid UserDTO parameter - password too short
 	 * Expected: no User is returned, HTTP Status 422
 	 */
 	@Test
@@ -98,14 +97,14 @@ public class UserControllerTest {
 		requestObject.setPassword("123");
 		
 		ResponseEntity<User> responseEntity = 
-				restTemplate.postForEntity(URL_PREFIX + "manager", requestObject, User.class);
+				restTemplate.postForEntity(URL_PREFIX + "admin", requestObject, User.class);
 		
 		assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
 		assertEquals(responseEntity.getBody(), null);
     }
 	
 	/**
-	 * POST request to "/api/users/manager" with invalid UserDTO parameter - email of invalid format
+	 * POST request to "/api/users/admin" with invalid UserDTO parameter - email of invalid format
 	 * Expected: no User is returned, HTTP Status 422
 	 */
 	@Test
@@ -114,7 +113,7 @@ public class UserControllerTest {
 		requestObject.setEmail("INVALID_EMAIL_FORMAT");
 		
 		ResponseEntity<User> responseEntity = 
-				restTemplate.postForEntity(URL_PREFIX + "manager", requestObject, User.class);
+				restTemplate.postForEntity(URL_PREFIX + "admin", requestObject, User.class);
 		
 		assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
 		assertEquals(responseEntity.getBody(), null);

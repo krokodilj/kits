@@ -6,8 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Building {
@@ -21,15 +21,17 @@ public class Building {
 	private int apartmentCount;
 	private String description;
 	private String picture;
-	@ManyToMany(mappedBy = "managedBuildings")
-	private List<Manager> managers;
+	@ManyToOne
+	private User manager;
+	@OneToMany(mappedBy = "building")
+	private List<Residence> residences;
 	
 	public Building() {
 		super();
 	}
 
 	public Building(String city, String address, String country, int apartmentCount, String description, String picture,
-			List<Manager> managers) {
+			User manager, List<Residence> residences) {
 		super();
 		this.city = city;
 		this.address = address;
@@ -37,7 +39,8 @@ public class Building {
 		this.apartmentCount = apartmentCount;
 		this.description = description;
 		this.picture = picture;
-		this.managers = managers;
+		this.manager = manager;
+		this.residences = residences;
 	}
 
 	public long getId() {
@@ -96,19 +99,27 @@ public class Building {
 		this.picture = picture;
 	}
 
-	public List<Manager> getManagers() {
-		return managers;
+	public User getManager() {
+		return manager;
 	}
 
-	public void setManagers(List<Manager> managers) {
-		this.managers = managers;
+	public void setManager(User manager) {
+		this.manager = manager;
+	}
+
+	public List<Residence> getResidences() {
+		return residences;
+	}
+
+	public void setResidences(List<Residence> residences) {
+		this.residences = residences;
 	}
 
 	@Override
 	public String toString() {
 		return "Building [id=" + id + ", city=" + city + ", address=" + address + ", country=" + country
 				+ ", apartmentCount=" + apartmentCount + ", description=" + description + ", picture=" + picture
-				+ ", managers=" + managers + "]";
+				+ ", manager=" + manager + ", residences=" + residences + "]";
 	}
 
 }
