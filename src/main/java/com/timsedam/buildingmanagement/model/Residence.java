@@ -82,6 +82,14 @@ public class Residence {
 		this.residents = residents;
 	}
 
+	public Resident getApartmentOwner() {
+		return apartmentOwner;
+	}
+
+	public void setApartmentOwner(Resident apartmentOwner) {
+		this.apartmentOwner = apartmentOwner;
+	}
+
 	@Override
 	public String toString() {
 		return "Residence [id=" + id + ", building=" + building + ", floorNumber=" + floorNumber + ", apartmentNumber="

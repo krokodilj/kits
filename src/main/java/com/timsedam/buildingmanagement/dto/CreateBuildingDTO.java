@@ -3,9 +3,6 @@ package com.timsedam.buildingmanagement.dto;
 
 import javax.validation.constraints.NotNull;
 
-/**
- * Created by sirko on 12/7/17.
- */
 public class CreateBuildingDTO {
 
     @NotNull
@@ -16,7 +13,6 @@ public class CreateBuildingDTO {
     private String country;
     @NotNull
     private int apartmentCount;
-
     @NotNull
     private String description;
 

@@ -5,9 +5,8 @@ import com.timsedam.buildingmanagement.repository.BuildingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/**
- * Created by sirko on 12/7/17.
- */
+import java.util.List;
+
 @Service
 public class BuildingService {
 
@@ -21,6 +20,24 @@ public class BuildingService {
             return null;
         }
 
+    }
+
+    public Building findOneById(long id){
+        try{
+            return buildingRepository.findOne(id);
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<Building> getAll(){
+        try{
+            return buildingRepository.findAll();
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }
