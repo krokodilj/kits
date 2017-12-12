@@ -34,6 +34,7 @@ public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFil
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userService.loadUserByUsername(username);
+            
             if (jsonWebToken.validateToken(authToken, userDetails)) {
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());

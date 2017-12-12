@@ -4,13 +4,13 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 @Entity
-@DiscriminatorValue("company")
+@DiscriminatorValue("COMPANY")
 public class Company extends User {
 	
-	String name;
-	String locaton;
-	String PIB;
-	String phoneNumber;
+	private String name;
+	private String locaton;
+	private String PIB;
+	private String phoneNumber;
 	
 	public Company() {
 		super();
