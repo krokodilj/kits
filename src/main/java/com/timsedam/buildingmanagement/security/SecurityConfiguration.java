@@ -55,11 +55,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity
 			.csrf().disable()
+			
 			.sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-				.and()
+			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			.and()
+				
 			.authorizeRequests()
-				.antMatchers("/index.html").permitAll();
+			.antMatchers("/index.html").permitAll()
+			
+			.antMatchers("/api/auth/**").permitAll()
+			
+			.antMatchers("/api/admins/**", "/api/users/**", "/api/companies/**")
+			.hasAuthority("REGISTER");
 				 
 		httpSecurity.addFilterBefore(authenticationTokenFilterBean(),
 				UsernamePasswordAuthenticationFilter.class);

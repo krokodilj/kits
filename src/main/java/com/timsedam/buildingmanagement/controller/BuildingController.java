@@ -1,8 +1,7 @@
 package com.timsedam.buildingmanagement.controller;
 
-import com.timsedam.buildingmanagement.dto.CreateBuildingDTO;
-import com.timsedam.buildingmanagement.model.Building;
-import com.timsedam.buildingmanagement.service.BuildingService;
+import javax.validation.Valid;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
+import com.timsedam.buildingmanagement.dto.CreateBuildingDTO;
+import com.timsedam.buildingmanagement.model.Building;
+import com.timsedam.buildingmanagement.service.BuildingService;
 
 @RestController
 @RequestMapping(value = "api/building")
