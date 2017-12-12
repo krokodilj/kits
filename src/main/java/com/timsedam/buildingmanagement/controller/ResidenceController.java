@@ -15,6 +15,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/residence")
@@ -59,5 +61,23 @@ public class ResidenceController {
         ResidenceDTO residenceDTO = residenceMapper.toDto(residence);
         return new ResponseEntity(residenceDTO,HttpStatus.OK);
     }
+
+    @GetMapping(value = "/by_building/{buildingId}")
+    public ResponseEntity getByBuilding(@PathVariable long buildingId){
+        List<ResidenceDTO> residenceDTOS = new ArrayList<ResidenceDTO>();
+        Building building=buildingService.findOneById(buildingId);
+        if(building==null)
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        List<Residence> residences = residenceService.getAllByBuilding(building);
+        if(residences==null)
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+
+        for(Residence r :residences){
+            residenceDTOS.add(residenceMapper.toDto(r));
+        }
+
+        return new ResponseEntity(residenceDTOS,HttpStatus.OK);
+    }
+
 
 }

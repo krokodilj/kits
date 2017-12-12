@@ -54,6 +54,11 @@ public class ResidenceMapper {
         }
         residenceDTO.setResidents(r.getResidents());
         //appertmentowner
+        if(r.getApartmentOwner()!=null){
+            r.getApartmentOwner().setPassword(null);
+            r.getApartmentOwner().setComments(null);
+            r.getApartmentOwner().setOwnedApartments(null);
+        }
 
 
         return residenceDTO;
