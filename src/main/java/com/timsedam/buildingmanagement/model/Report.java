@@ -8,11 +8,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-
-import org.apache.catalina.Manager;
 
 @Entity
 public class Report {
@@ -32,15 +29,13 @@ public class Report {
 	private List<Comment> comments;
 	@OneToMany(mappedBy = "forwardedReport")
 	private List<Forward> forwards;
-	@ManyToOne
-	private User currentHolder;
 	
 	public Report() {
 		super();
 	}
 
 	public Report(User sender, ReportStatus status, String description, Building location, String photo,
-			List<Comment> comments, List<Forward> forwards, User currentHolder) {
+			List<Comment> comments, List<Forward> forwards) {
 		super();
 		this.sender = sender;
 		this.status = status;
@@ -49,7 +44,6 @@ public class Report {
 		this.photo = photo;
 		this.comments = comments;
 		this.forwards = forwards;
-		this.currentHolder = currentHolder;
 	}
 
 	public long getId() {
@@ -116,19 +110,11 @@ public class Report {
 		this.forwards = forwards;
 	}
 
-	public User getCurrentHolder() {
-		return currentHolder;
-	}
-
-	public void setCurrentHolder(User currentHolder) {
-		this.currentHolder = currentHolder;
-	}
-
 	@Override
 	public String toString() {
 		return "Report [id=" + id + ", sender=" + sender + ", status=" + status + ", description=" + description
 				+ ", location=" + location + ", photo=" + photo + ", comments=" + comments + ", forwards=" + forwards
-				+ ", currentHolder=" + currentHolder + "]";
+				+ ", currentHolder=" + "]";
 	}
 	
 	
