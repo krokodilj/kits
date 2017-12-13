@@ -6,9 +6,11 @@ import com.timsedam.buildingmanagement.dto.CreateBuildingDTO;
 import com.timsedam.buildingmanagement.model.Building;
 import com.timsedam.buildingmanagement.model.Residence;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 
+@Component
 public class BuildingMapper {
 
     private ModelMapper modelMapper=new ModelMapper();
