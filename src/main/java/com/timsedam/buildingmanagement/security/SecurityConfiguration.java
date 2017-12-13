@@ -66,7 +66,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.antMatchers("/api/auth/**").permitAll()
 			
 			.antMatchers("/api/admins/**", "/api/users/**", "/api/companies/**")
-			.hasAuthority("REGISTER");
+			.hasAuthority("REGISTER")
+			
+			.antMatchers("/api/reports/create/").hasAuthority("CREATE-REPORT");
 				 
 		httpSecurity.addFilterBefore(authenticationTokenFilterBean(),
 				UsernamePasswordAuthenticationFilter.class);

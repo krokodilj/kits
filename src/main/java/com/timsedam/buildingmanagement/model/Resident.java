@@ -8,7 +8,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 @Entity
-@DiscriminatorValue("resident")
+@DiscriminatorValue("RESIDENT")
 public class Resident extends User {
 	
 	@ManyToMany(mappedBy = "residents")
@@ -45,6 +45,18 @@ public class Resident extends User {
 	@Override
 	public String toString() {
 		return "Resident [residences=" + residences + ", ownedApartments=" + ownedApartments + "]";
+	}
+
+	public boolean isResident(String address) {
+		for(int i=0; i<ownedApartments.size(); i++){
+			if(ownedApartments.get(i).getBuilding().getAddress().equals(address))
+				return true;
+		}
+		for(int i=0; i<residences.size(); i++){
+			if(residences.get(i).getBuilding().getAddress().equals(address))
+				return true;
+		}
+		return false;
 	}
 	
 }
