@@ -2,20 +2,25 @@ package com.timsedam.buildingmanagement.dto;
 
 public class ForwardDTO {
 
-	private Long to;
-	private Long report;
+	private long to;
+	private long report;
 	
 	public ForwardDTO(){}
+	
+	public ForwardDTO(long to, long report){
+		this.to = to;
+		this.report = report;
+	}
 
-	public Long getTo() {
+	public long getTo() {
 		return to;
 	}
 
-	public void setTo(Long to) {
+	public void setTo(long to) {
 		this.to = to;
 	}
 
-	public Long getReport() {
+	public long getReport() {
 		return report;
 	}
 
