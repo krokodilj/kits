@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -114,25 +115,62 @@ public class MeetingControllerTest {
 		ResponseEntity<MeetingDTO> responseEntity = 
 				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(invalidMeetingCreateDTO), MeetingDTO.class);
 		
-		MeetingDTO meetingFromResponse = responseEntity.getBody();
 		assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
     }
 	
 	/**
-	 * POST request to "/api/meetings/" with invalid MeetingCreate parameter - missing buildingId parameter 
-	 * Expected: no MeetingDTO is returned to the client, HTTP Status 400
+	 * GET request to "/api/meetings/{meetingId}" with valid meetingId parameter 
+	 * Expected: MeetingDTO is returned to the client, HTTP Status 200
 	 */
 	@Test
-	public void nullBuildingIdCreateMeeting() throws Exception {
+	public void getMeeting() throws Exception {
 		
-		MeetingCreateDTO invalidMeetingCreateDTO = new MeetingCreateDTO(validMeetingCreateDTO);
-		invalidMeetingCreateDTO.setBuildingId(null);
+		ResponseEntity<MeetingDTO> responseEntity = restTemplate.exchange(
+				"/api/meetings/1", HttpMethod.GET, getRequestEntity(null), MeetingDTO.class);
 		
-		ResponseEntity<MeetingDTO> responseEntity = 
-				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(invalidMeetingCreateDTO), MeetingDTO.class);
+		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    }
+	
+	/**
+	 * GET request to "/api/meetings/{meetingId}" with invalid meetingId parameter - Meeting with specified id doesnt exist 
+	 * Expected: MeetingDTO is returned to the client, HTTP Status 200
+	 */
+	@Test
+	public void invalidMeetingIdGetMeeting() throws Exception {
 		
-		MeetingDTO meetingFromResponse = responseEntity.getBody();
-		assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
+		ResponseEntity<MeetingDTO> responseEntity = restTemplate.exchange(
+				"/api/meetings/156", HttpMethod.GET, getRequestEntity(null), MeetingDTO.class);
+		
+		assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
+    }
+	
+	/**
+	 * GET request to "/api/meetings?buildingId=6"
+	 * Expected: MeetingDTO array is returned to the client, HTTP Status 200
+	 */
+	@Test
+	public void getMeetingsByBuildingId() throws Exception {
+		
+		ResponseEntity<MeetingDTO[]> responseEntity = restTemplate.exchange(
+				"/api/meetings?buildingId=6", HttpMethod.GET, getRequestEntity(null), MeetingDTO[].class);
+		
+		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+		
+    }
+	
+	/**
+	 * GET request to "/api/meetings?buildingId=123" - invalid buildingId parameter
+	 * Expected: empty MeetingDTO array is returned to the client, HTTP Status 200
+	 */
+	@Test
+	public void getMeetingsByBuildingIdInvalidBuildId() throws Exception {
+		
+		ResponseEntity<MeetingDTO[]> responseEntity = restTemplate.exchange(
+				"/api/meetings?buildingId=123", HttpMethod.GET, getRequestEntity(null), MeetingDTO[].class);
+		
+		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+		assertEquals(responseEntity.getBody().length, 0);
+		
     }
 
 }
