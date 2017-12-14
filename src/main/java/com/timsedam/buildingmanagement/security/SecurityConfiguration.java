@@ -17,66 +17,56 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-	
+
 	@Autowired
 	private UserDetailsService userDetailsService;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
 	@Autowired
-	public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {		
-		authenticationManagerBuilder
-			.userDetailsService(userDetailsService)
-			.passwordEncoder(passwordEncoder());		
+	public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+		authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
 	}
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-	
+
 	@Bean
 	@Override
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
 	}
-	
+
 	@Bean
-	public AuthenticationTokenFilter authenticationTokenFilterBean()
-			throws Exception {
+	public AuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
 		AuthenticationTokenFilter authenticationTokenFilter = new AuthenticationTokenFilter();
-		authenticationTokenFilter
-				.setAuthenticationManager(authenticationManagerBean());
+		authenticationTokenFilter.setAuthenticationManager(authenticationManagerBean());
 		return authenticationTokenFilter;
 	}
 
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
-		httpSecurity
-			.csrf().disable()
-			
-			.sessionManagement()
-			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-			.and()
+		httpSecurity.csrf().disable()
+
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+
+				.authorizeRequests().antMatchers("/index.html").permitAll()
+
+				.antMatchers("/api/auth/**", "/api/reports/forward/", "/api/reports/comment/")
+				.permitAll()
+
+				.antMatchers("/api/admins/**", "/api/users/**", "/api/companies/**").hasAuthority("REGISTER")
+
+				.antMatchers("/api/reports/create/").hasAuthority("CREATE-REPORT")
 				
-			.authorizeRequests()
-			.antMatchers("/index.html").permitAll()
-			
-			.antMatchers("/api/auth/**").permitAll()
-			
-			.antMatchers("/api/admins/**", "/api/users/**", "/api/companies/**")
-			.hasAuthority("REGISTER")
-			
+				.antMatchers("/api/reports/bid/").hasAuthority("SEND-BID")
 
-			.antMatchers("/api/reports/create/").hasAuthority("CREATE_REPORT")
+				.antMatchers("/api/meetings/**").hasAuthority("CREATE_MEETING");
 
-			.antMatchers("/api/meetings/**")
-			.hasAuthority("CREATE_MEETING");
-				 
-		httpSecurity.addFilterBefore(authenticationTokenFilterBean(),
-				UsernamePasswordAuthenticationFilter.class);
+		httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
 	}
-	
 
 }
