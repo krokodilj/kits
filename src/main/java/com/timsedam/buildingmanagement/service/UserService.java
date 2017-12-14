@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.timsedam.buildingmanagement.model.Building;
 import com.timsedam.buildingmanagement.model.Permission;
+import com.timsedam.buildingmanagement.model.Resident;
 import com.timsedam.buildingmanagement.model.User;
 import com.timsedam.buildingmanagement.repository.BuildingRepository;
 import com.timsedam.buildingmanagement.repository.UserRepository;
@@ -64,5 +65,9 @@ public class UserService implements UserDetailsService {
                     grantedAuthorities);
         }
     }
+
+	public User findByUsername(String name) {
+		return userRepository.findByUsername(name);
+	}
 	
 }

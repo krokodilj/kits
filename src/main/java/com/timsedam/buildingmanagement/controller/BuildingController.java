@@ -17,6 +17,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.validation.Valid;
 import com.timsedam.buildingmanagement.dto.BuildingDTO;
 import com.timsedam.buildingmanagement.dto.CreateBuildingDTO;
 import com.timsedam.buildingmanagement.model.Building;

@@ -1,18 +1,18 @@
 package com.timsedam.buildingmanagement.model;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.persistence.CascadeType;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-
-import org.apache.catalina.Manager;
 
 @Entity
 public class Report {
@@ -22,34 +22,33 @@ public class Report {
 	private long id;
 	@ManyToOne
 	private User sender;
-	@Enumerated(EnumType.STRING)
-	private ReportStatus status;
+	private String status;
 	private String description;
 	@ManyToOne
 	private Building location;
-	private String photo;
+	@ElementCollection
+	Map<Integer, String> photos;
 	@OneToMany(mappedBy = "reportCommented")
 	private List<Comment> comments;
-	@OneToMany(mappedBy = "forwardedReport")
+	@OneToMany(mappedBy = "forwardedReport", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<Forward> forwards;
-	@ManyToOne
-	private User currentHolder;
 	
 	public Report() {
 		super();
 	}
 
-	public Report(User sender, ReportStatus status, String description, Building location, String photo,
-			List<Comment> comments, List<Forward> forwards, User currentHolder) {
+	public Report(User sender, String status, String description, Building location, List<String> photos,
+			List<Comment> comments, List<Forward> forwards) {
 		super();
 		this.sender = sender;
 		this.status = status;
 		this.description = description;
 		this.location = location;
-		this.photo = photo;
+		this.photos = new HashMap<Integer, String>();
+		for(int i=0; i<photos.size(); i++)
+			this.photos.put(i, photos.get(i));
 		this.comments = comments;
 		this.forwards = forwards;
-		this.currentHolder = currentHolder;
 	}
 
 	public long getId() {
@@ -68,11 +67,11 @@ public class Report {
 		this.sender = sender;
 	}
 
-	public ReportStatus getStatus() {
+	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(ReportStatus status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 
@@ -92,12 +91,12 @@ public class Report {
 		this.location = location;
 	}
 
-	public String getPhoto() {
-		return photo;
+	public Map<Integer, String> getPhotos() {
+		return photos;
 	}
 
-	public void setPhoto(String photo) {
-		this.photo = photo;
+	public void setPhotos(Map<Integer, String> photos) {
+		this.photos = photos;
 	}
 
 	public List<Comment> getComments() {
@@ -116,19 +115,11 @@ public class Report {
 		this.forwards = forwards;
 	}
 
-	public User getCurrentHolder() {
-		return currentHolder;
-	}
-
-	public void setCurrentHolder(User currentHolder) {
-		this.currentHolder = currentHolder;
-	}
-
 	@Override
 	public String toString() {
 		return "Report [id=" + id + ", sender=" + sender + ", status=" + status + ", description=" + description
-				+ ", location=" + location + ", photo=" + photo + ", comments=" + comments + ", forwards=" + forwards
-				+ ", currentHolder=" + currentHolder + "]";
+				+ ", location=" + location + ", photos=" + photos + ", comments=" + comments + ", forwards=" + forwards
+				+ "]";
 	}
 	
 	
