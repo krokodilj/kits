@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.timsedam.buildingmanagement.dto.CreateReportDTO;
+import com.timsedam.buildingmanagement.dto.ForwardDTO;
 import com.timsedam.buildingmanagement.dto.UserLoginDTO;
 import com.timsedam.buildingmanagement.model.Report;
 import com.timsedam.buildingmanagement.repository.ReportRepository;
@@ -50,8 +51,7 @@ public class ReportControllerTest {
 
 	/**
 	 * Residence resident send POST request to "/api/reports/create" with valid
-	 * dto parameter 
-	 * Expected: id of new Report and HTTP Status 201 (CREATED)
+	 * dto parameter Expected: id of new Report and HTTP Status 201 (CREATED)
 	 */
 	@Test
 	public void create() throws Exception {
@@ -70,11 +70,10 @@ public class ReportControllerTest {
 
 		reportRepository.delete(id);
 	}
-	
+
 	/**
-	 * Residence owner send POST request to "/api/reports/create" with valid
-	 * dto parameter 
-	 * Expected: id of new Report and HTTP Status 201 (CREATED)
+	 * Residence owner send POST request to "/api/reports/create" with valid dto
+	 * parameter Expected: id of new Report and HTTP Status 201 (CREATED)
 	 */
 	@Test
 	public void ownerCreate() throws Exception {
@@ -109,10 +108,10 @@ public class ReportControllerTest {
 		assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
 
 	}
-	
+
 	/**
-	 * Resident from the other building send POST request to "/api/reports/create"
-	 * Expected: HTTP status 409 (CONFLICT)
+	 * Resident from the other building send POST request to
+	 * "/api/reports/create" Expected: HTTP status 409 (CONFLICT)
 	 */
 	@Test
 	public void fromOtherBuilding() throws Exception {
@@ -123,6 +122,78 @@ public class ReportControllerTest {
 				getRequestEntity(validReportDTO, "ivan", "ivan"), String.class);
 
 		assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
+
+	}
+
+	/**
+	 * User send POST request to "/api/reports/forward" with not existing report
+	 * Expected: HTTP status 404 (NOT_FOUND)
+	 */
+	@Test
+	public void forwardAtNotExistingReport() throws Exception {
+
+		ForwardDTO badForwardDTO = new ForwardDTO(3, -95);
+
+		ResponseEntity<String> responseEntity = restTemplate.postForEntity(URL_PREFIX + "forward/",
+				getRequestEntity(badForwardDTO, "ivan", "ivan"), String.class);
+
+		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+
+	}
+
+	/**
+	 * User send POST request to "/api/reports/forward" with report on which he
+	 * isn't current holder 
+	 * Expected: HTTP status 409 (CONFLICT)
+	 */
+	@Test
+	public void notCurrentHolder() throws Exception {
+
+		ForwardDTO badForwardDTO = new ForwardDTO(3, 1);
+
+		ResponseEntity<String> responseEntity = restTemplate.postForEntity(URL_PREFIX + "forward/",
+				getRequestEntity(badForwardDTO, "ivan", "ivan"), String.class);
+
+		assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
+
+	}
+	
+	/**
+	 * User send POST request to "/api/reports/forward" with not existing receiver
+	 * Expected: HTTP status 404 (NOT_FOUND)
+	 */
+	@Test
+	public void receiverNotExists() throws Exception {
+
+		ForwardDTO badForwardDTO = new ForwardDTO(500, 1);
+
+		ResponseEntity<String> responseEntity = restTemplate.postForEntity(URL_PREFIX + "forward/",
+				getRequestEntity(badForwardDTO, "ivan", "ivan"), String.class);
+
+		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+
+	}
+	
+	/**
+	 * User send valid POST request to "/api/reports/forward"
+	 * Expected: Set new holder on report and send back HTTP status 200 (OK)
+	 */
+	@Test
+	public void forward() throws Exception {
+
+		long report = 1;
+		long to = 4; 
+		long current = 3;
+		ForwardDTO validForwardDTO = new ForwardDTO(to, report);
+
+		ResponseEntity<String> responseEntity = restTemplate.postForEntity(URL_PREFIX + "forward/",
+				getRequestEntity(validForwardDTO, "vaso", "vaso"), String.class);
+
+		long newHolder = reportRepository.findOne(report).getCurrentHolder().getForwardedTo().getId();
+		long oldHolder = reportRepository.findOne(report).getCurrentHolder().getForwarder().getId();
+		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+		assertEquals(current, oldHolder);
+		assertEquals(to, newHolder);
 
 	}
 }

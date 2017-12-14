@@ -190,9 +190,13 @@ insert into kts_test.resident_residence (residence_id, resident_id) values (19, 
 insert into kts_test.resident_residence (residence_id, resident_id) values (5, 53);
 insert into kts_test.resident_residence (residence_id, resident_id) values (7, 15);
 
+truncate kts_test.forward;
+insert into kts_test.forward (forwarded_report_id, forwarded_to_id, forwarder_id) 
+values (1, 3, null);
+
 truncate kts_test.report; 
-insert into kts_test.report (description, status, location_id, sender_id) values ('Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero. Nullam sit amet turpis elementum ligula vehicula consequat. Morbi a ipsum. Integer a nibh. In quis justo. Maecenas rhoncus aliquam lacus. Morbi quis tortor id nulla ultrices aliquet.', 
-'OPEN', 2, 34);
+insert into kts_test.report (description, status, current_holder_id, location_id, sender_id) values ('Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero. Nullam sit amet turpis elementum ligula vehicula consequat. Morbi a ipsum. Integer a nibh. In quis justo. Maecenas rhoncus aliquam lacus. Morbi quis tortor id nulla ultrices aliquet.', 
+'OPEN', 1, 2, 34);
 insert into kts_test.report (description, status, location_id, sender_id) values ('Duis bibendum. Morbi non quam nec dui luctus rutrum. Nulla tellus. In sagittis dui vel nisl. Duis ac nibh. Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus.', 
 'OPEN', 9, 60);
 insert into kts_test.report (description, status, location_id, sender_id) values ('In hac habitasse platea dictumst. Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo. Aliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis. Sed ante. Vivamus tortor. Duis mattis egestas metus.', 

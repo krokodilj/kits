@@ -83,17 +83,18 @@ public class ReportController {
 
 		if (report == null)
 			return new ResponseEntity<>("Report doesn't exist.", HttpStatus.NOT_FOUND);
-		;
+		
+		User to = userService.findOne(forwardDTO.getTo());
+		if (to == null)
+			return new ResponseEntity<>("Forwarded user doesn't exist.", HttpStatus.NOT_FOUND);
+		
 
 		if (forwared.getId() != report.getCurrentHolder().getForwardedTo().getId()) {
 			return new ResponseEntity<>("You can't forward report because you are not current holder.",
 					HttpStatus.CONFLICT);
 		}
-		User to = userService.findOne(forwardDTO.getTo());
+		
 
-		if (to == null)
-			return new ResponseEntity<>("Forwarded user doesn't exist.", HttpStatus.NOT_FOUND);
-		;
 
 		Forward forward = new Forward(forwared, to, report);
 		forward = forwardService.save(forward);
