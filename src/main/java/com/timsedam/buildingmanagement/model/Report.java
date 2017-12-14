@@ -1,5 +1,6 @@
 package com.timsedam.buildingmanagement.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -29,9 +30,10 @@ public class Report {
 	private List<String> pictures;
 	@OneToMany(mappedBy = "reportCommented")
 	private List<Comment> comments;
-	
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Forward currentHolder;
+	@OneToMany(mappedBy = "reportBid")
+	private List<Bid> bids;
 	
 	public Report() {
 		super();
@@ -47,6 +49,7 @@ public class Report {
 		this.pictures = pictures;
 		this.comments = comments;
 		this.currentHolder = currentHolder;
+		this.bids = new ArrayList<Bid>();
 	}
 
 	public long getId() {
@@ -111,6 +114,14 @@ public class Report {
 
 	public void setCurrentHolder(Forward currentHolder) {
 		this.currentHolder = currentHolder;
+	}
+
+	public List<Bid> getBids() {
+		return bids;
+	}
+
+	public void setBids(List<Bid> bids) {
+		this.bids = bids;
 	}
 
 	@Override
