@@ -2,12 +2,14 @@ package com.timsedam.buildingmanagement.service;
 
 import com.timsedam.buildingmanagement.model.Announcement;
 import com.timsedam.buildingmanagement.model.Building;
+import com.timsedam.buildingmanagement.model.Report;
 import com.timsedam.buildingmanagement.repository.AnnouncementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -30,6 +32,18 @@ public class AnnouncementService {
             Page<Announcement> pejdz= announcementRepository.findAllByBuilding(b,new PageRequest(page,count));
             return pejdz.getContent();
         }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public Announcement createFromReport(Report report){
+        try{
+            Announcement announcement= new Announcement(
+                    report.getDescription(), LocalDateTime.now(),report.getSender(),report.getLocation()
+            );
+            return announcementRepository.save(announcement);
+        }catch(Exception e){
             e.printStackTrace();
             return null;
         }
