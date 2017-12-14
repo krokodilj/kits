@@ -13,9 +13,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.timsedam.buildingmanagement.model.Building;
 import com.timsedam.buildingmanagement.model.Permission;
 import com.timsedam.buildingmanagement.model.Resident;
 import com.timsedam.buildingmanagement.model.User;
+import com.timsedam.buildingmanagement.repository.BuildingRepository;
 import com.timsedam.buildingmanagement.repository.UserRepository;
 
 @Service
@@ -24,13 +26,29 @@ public class UserService implements UserDetailsService {
 	@Autowired
 	private UserRepository userRepository;
 	
+	@Autowired
+	private BuildingRepository buildingRepository;
+	
 	public void save(User user) {
 		userRepository.save(user);
+	}
+	
+	public User findOneByUsername(String username) {
+		return userRepository.findByUsername(username);
 	}
 	
 	public boolean exists(String username) {
 		return userRepository.existsByUsername(username);
 	}
+	
+	public boolean isManager(Long userId, Long buildingId) {
+		Building building = buildingRepository.findOne(buildingId);
+		if(building.getManager().getId() == userId)
+			return true;
+		else
+			return false;
+	}
+	
 	
 	@Override
     @Transactional
