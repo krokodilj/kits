@@ -30,8 +30,8 @@ public class AnnouncementService {
 
     public List<Announcement> findAllByBuilding(Building b, int page, int count){
         try{
-            Page<Announcement> pejdz= announcementRepository.findAllByBuilding(b,new PageRequest(page,count));
-            return pejdz.getContent();
+            Page<Announcement> announcementPage= announcementRepository.findAllByBuilding(b,new PageRequest(page,count));
+            return announcementPage.getContent();
         }catch (Exception e){
             e.printStackTrace();
             return null;
