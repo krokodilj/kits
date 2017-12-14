@@ -28,7 +28,7 @@ import com.timsedam.buildingmanagement.service.BuildingService;
 import com.timsedam.buildingmanagement.util.mappers.BuildingMapper;
 
 @RestController
-@RequestMapping(value = "api/building")
+@RequestMapping(value = "/api/buildings/")
 public class BuildingController {
 
     @Autowired
@@ -36,6 +36,11 @@ public class BuildingController {
 
     private BuildingMapper buildingMapper=new BuildingMapper();
 
+    /**
+     *Create new building
+     * @param createBuildingDTO
+     * @return List<BuildingDTO>
+     */
     @PostMapping(consumes = "application/json")
     public ResponseEntity create(
             @Valid @RequestBody CreateBuildingDTO createBuildingDTO, BindingResult validationResult){
@@ -52,18 +57,27 @@ public class BuildingController {
         return new ResponseEntity(buildingDTO,HttpStatus.OK);
     }
 
-    @GetMapping(value="/{id}",produces = "application/json")
-    public ResponseEntity get(@PathVariable long id){
+    /**
+     * Get building by id
+     * @param buildinId
+     * @return BuildingDTO
+     */
+    @GetMapping(value="/{buildinId}",produces = "application/json")
+    public ResponseEntity get(@PathVariable long buildinId){
 
-        Building building=buildingService.findOneById(id);
+        Building building=buildingService.findOneById(buildinId);
         if(building==null)
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity("Building does not exists",HttpStatus.NOT_FOUND);
 
         BuildingDTO buildingDTO = buildingMapper.toDto(building);
 
         return new ResponseEntity(buildingDTO,HttpStatus.OK);
     }
 
+    /**
+     * Get all buildings
+     * @return List<BuildingDTO>
+     */
     @GetMapping(value="/all",produces = "application/json")
     public ResponseEntity get(){
 

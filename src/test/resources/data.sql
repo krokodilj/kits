@@ -6,6 +6,7 @@ insert into kts_test.permission (id, name) values (2, 'CREATE_MEETING');
 insert into kts_test.permission (id, name) values (3, 'CREATE_REPORT');
 insert into kts_test.permission (id, name) values (4, 'SEND_BID');
 insert into kts_test.permission (id, name) values (5, 'UPDATE_RESIDENT');
+insert into kts_test.permission (id, name) values (6, 'CREATE_BUILDING');
 
 truncate kts_test.role; 
 insert into kts_test.role (id, name) values (1, 'ADMIN');
@@ -21,6 +22,7 @@ insert into kts_test.role_permissions (role_id, permissions_id) values (4, 2);
 insert into kts_test.role_permissions (role_id, permissions_id) values (5, 3);
 insert into kts_test.role_permissions (role_id, permissions_id) values (3, 4);
 insert into kts_test.role_permissions (role_id, permissions_id) values (1, 5);
+insert into kts_test.role_permissions (role_id, permissions_id) values (1, 6);
 
 truncate kts_test.user; 
 insert into kts_test.user (user_type, email, username, password, role_id) values ('ADMIN', 'admin@gmail.com', 'admin', 'admin', 1);

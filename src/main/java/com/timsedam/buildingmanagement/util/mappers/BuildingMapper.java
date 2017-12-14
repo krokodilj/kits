@@ -39,6 +39,8 @@ public class BuildingMapper {
             dto.setResidences(new ArrayList<Residence>());
             for(Residence r:b.getResidences()){
                 r.setBuilding(null);
+                r.setApartmentOwner(null);
+                r.setResidents(null);
                 dto.getResidences().add(r);
             }
         }
