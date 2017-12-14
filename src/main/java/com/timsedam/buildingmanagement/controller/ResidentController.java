@@ -18,7 +18,7 @@ import javax.validation.Valid;
 
 
 @RestController
-@RequestMapping(value = "api/residents")
+@RequestMapping(value = "/api/residents/")
 public class ResidentController {
 
     @Autowired

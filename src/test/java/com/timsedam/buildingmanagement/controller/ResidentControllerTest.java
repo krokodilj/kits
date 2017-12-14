@@ -1,6 +1,5 @@
 package com.timsedam.buildingmanagement.controller;
 
-import com.sun.jndi.toolkit.url.Uri;
 import com.timsedam.buildingmanagement.dto.UserLoginDTO;
 import com.timsedam.buildingmanagement.dto.UserRegisterDTO;
 import com.timsedam.buildingmanagement.model.User;
@@ -14,7 +13,6 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.net.MalformedURLException;
 
 import static org.junit.Assert.assertEquals;
 
@@ -31,7 +29,7 @@ public class ResidentControllerTest {
     @Autowired
     private ResidenceRepository residenceRepository;
 
-    private static final String URL_PREFIX="/api/residents";
+    private static final String URL_PREFIX="/api/residents/";
     private String getUserToken(String username, String password) {
         UserLoginDTO userLoginData = new UserLoginDTO(username, password);
         ResponseEntity<String> responseEntity = restTemplate.postForEntity("/api/auth/login", userLoginData,
@@ -57,8 +55,10 @@ public class ResidentControllerTest {
         UserRegisterDTO userRegisterDTO = new UserRegisterDTO(
                 "compi","compi123",
                 "compi@compi.compi",null);
-        ResponseEntity responseEntity=restTemplate.postForEntity(URL_PREFIX ,
-                getRequestEntity(userRegisterDTO, "admin", "admin"),Long.class);
+        ResponseEntity responseEntity=restTemplate.postForEntity(
+                URL_PREFIX ,
+                getRequestEntity(userRegisterDTO, "admin", "admin"),
+                Long.class);
         Long id = (Long) responseEntity.getBody();
         User user = userRepository.findOne(id);
 
@@ -115,8 +115,10 @@ public class ResidentControllerTest {
         UserRegisterDTO userRegisterDTO = new UserRegisterDTO(
                 "com","3",
                 "compi.compi",null);
-        ResponseEntity responseEntity=restTemplate.postForEntity(URL_PREFIX ,
-                getRequestEntity(userRegisterDTO, "admin", "admin"),String.class);
+        ResponseEntity responseEntity=restTemplate.postForEntity(
+                URL_PREFIX ,
+                getRequestEntity(userRegisterDTO, "admin", "admin"),
+                String.class);
 
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY,responseEntity.getStatusCode());
     }
@@ -131,7 +133,7 @@ public class ResidentControllerTest {
         String residentId = "5";
         String residenceId = "3";
         ResponseEntity responseEntity=restTemplate.exchange(
-                URL_PREFIX+"/"+residentId+"/add_to_residence/"+residenceId ,
+                URL_PREFIX+residentId+"/add_to_residence/"+residenceId ,
                 HttpMethod.PUT,
                 getRequestEntity(null, "admin", "admin"),
                 Object.class);
@@ -150,7 +152,7 @@ public class ResidentControllerTest {
         String residenceId = "27";
 
         ResponseEntity responseEntity=restTemplate.exchange(
-                URL_PREFIX+"/"+residentId+"/add_to_residence/"+residenceId,
+                URL_PREFIX+residentId+"/add_to_residence/"+residenceId,
                 HttpMethod.PUT,
                 getRequestEntity(null,"admin","admin"),
                 String.class
@@ -169,7 +171,7 @@ public class ResidentControllerTest {
         String residentId = "5";
         String residenceId = "27343";
         ResponseEntity responseEntity=restTemplate.exchange(
-                URL_PREFIX+"/"+residentId+"/add_to_residence/"+residenceId,
+                URL_PREFIX+residentId+"/add_to_residence/"+residenceId,
                 HttpMethod.PUT,
                 getRequestEntity(null,"admin","admin"),
                 String.class);
@@ -188,7 +190,7 @@ public class ResidentControllerTest {
         String residenceId = "3";
 
         ResponseEntity responseEntity=restTemplate.exchange(
-                URL_PREFIX+"/"+residentId+"/add_to_residence/"+residenceId,
+                URL_PREFIX+residentId+"/add_to_residence/"+residenceId,
                 HttpMethod.PUT,
                 getRequestEntity(null,"admin","admin"),
                 String.class);
@@ -207,7 +209,7 @@ public class ResidentControllerTest {
         String residentId = "5";
         String residenceId = "27343";
         ResponseEntity responseEntity=restTemplate.exchange(
-                URL_PREFIX+"/"+residentId+"/add_to_owner/"+residenceId,
+                URL_PREFIX+residentId+"/add_to_owner/"+residenceId,
                 HttpMethod.PUT,
                 getRequestEntity(null,"admin","admin"),
                 String.class);
@@ -228,7 +230,7 @@ public class ResidentControllerTest {
         String residenceId = "27";
 
         ResponseEntity responseEntity=restTemplate.exchange(
-                URL_PREFIX+"/"+residentId+"/add_to_owner/"+residenceId,
+                URL_PREFIX+residentId+"/add_to_owner/"+residenceId,
                 HttpMethod.PUT,
                 getRequestEntity(null,"admin","admin"),
                 String.class
