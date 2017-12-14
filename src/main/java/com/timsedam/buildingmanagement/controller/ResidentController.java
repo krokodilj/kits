@@ -33,17 +33,25 @@ public class ResidentController {
     @Autowired
     private ModelMapper modelMapper;
 
+    /**
+     * Register new resident
+     * @param userRegisterDTO
+     * @return UserDTO
+     */
     @PostMapping
     public ResponseEntity create(
             @Valid @RequestBody UserRegisterDTO userRegisterDTO,
             BindingResult validationResult
             )
     {
+        //if dto has invalid input
         if (validationResult.hasErrors())
             return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
 
+        //if username already in use
         if(userService.exists(userRegisterDTO.getUsername()))
             return new ResponseEntity<>("Username in use",HttpStatus.BAD_REQUEST);
+
 
         Resident resident = (Resident) modelMapper.map(userRegisterDTO, Resident.class);
 
@@ -55,18 +63,29 @@ public class ResidentController {
         return new ResponseEntity(residentDTO,HttpStatus.OK);
     }
 
+
+    /**
+     * Set new residence to its new resident
+     * if resident has another residence delete it
+     * @param residentId
+     * @param residenceId
+     * @return ResidentDTO
+     */
     @PutMapping(value = "/{residentId}/add_to_residence/{residenceId}")
     public ResponseEntity addBuilding(
             @PathVariable long residentId,
             @PathVariable long residenceId
     ){
+        //if resident exists
         Resident resident =(Resident) userService.findOne(residentId);
         if (resident == null)
             return new ResponseEntity("User not found",HttpStatus.NOT_FOUND);
 
+        //if residence exists
         Residence residence = residenceService.findOneById(residenceId);
         if (residence == null)
             return new ResponseEntity("Residence not found", HttpStatus.NOT_FOUND);
+
 
         residence.getResidents().add(resident);
         resident.getResidences().add(residence);
@@ -75,15 +94,24 @@ public class ResidentController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    /**
+     * Set residence to its new owner,
+     * if residence has owner switch owners
+     * @param residentId
+     * @param residenceId
+     * @return
+     */
     @PutMapping(value = "/{residentId}/add_to_owned_residence/{residenceId}")
     public ResponseEntity addToOwned(
             @PathVariable long residentId,
             @PathVariable long residenceId
     ){
+        //if resident exists
         Resident resident =(Resident) userService.findOne(residentId);
         if (resident == null)
             return new ResponseEntity("User not found",HttpStatus.NOT_FOUND);
 
+        //if residence exists
         Residence residence = residenceService.findOneById(residenceId);
         if (residence == null)
             return new ResponseEntity("Residence not found", HttpStatus.NOT_FOUND);
