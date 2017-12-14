@@ -72,16 +72,16 @@ insert into kts_test.user (user_type, email, username, password, pib, location, 
 insert into kts_test.user (user_type, email, username, password, pib, location, name, phone_number, role_id) values 
 ('COMPANY', 'nkornyakovj@cargocollective.com', 'nkochsj', 'iRCelXqtd1', '73-831-7632', 'South Dakota', 'Edgewire', '605-302-2215', 3);
 
-insert into kts_test.user (user_type, email, username, password, role_id) values ('MANAGER', 'mmccutheonk@twitpic.com', 'rgilvaryk', 'lgcWoOrVa0t', 4);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('MANAGER', 'amearsl@delicious.com', 'smcteaguel', 'yHrZGFfTDpP', 4);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('MANAGER', 'apinchbeckm@usa.gov', 'rdallasm', 'ie1wfT0', 4);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('MANAGER', 'gkonradn@mozilla.com', 'tdoerrenn', '1CL60hj08HV', 4);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('MANAGER', 'ehurleyo@bloomberg.com', 'ablowneo', '8O3eSQKHTrk', 4);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('MANAGER', 'pmcarthurp@alexa.com', 'clorainp', 'mtIUYzz3Yd', 4);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('MANAGER', 'bpeintonq@gmpg.org', 'lgrissettq', 'zPTVal6FI', 4);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('MANAGER', 'dfrancaisr@jalbum.net', 'cpavelkar', 'CGFTGkx', 4);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('MANAGER', 'itidmans@nydailynews.com', 'amacnalleys', 'e0Mg1zgwHKin', 4);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('MANAGER', 'bbeckerst@drupal.org', 'awindlet', 'd9R5CjHz6s', 4);
+insert into kts_test.user (user_type, email, username, password, role_id) values ('USER', 'mmccutheonk@twitpic.com', 'rgilvaryk', 'lgcWoOrVa0t', 4);
+insert into kts_test.user (user_type, email, username, password, role_id) values ('USER', 'amearsl@delicious.com', 'smcteaguel', 'yHrZGFfTDpP', 4);
+insert into kts_test.user (user_type, email, username, password, role_id) values ('USER', 'apinchbeckm@usa.gov', 'rdallasm', 'ie1wfT0', 4);
+insert into kts_test.user (user_type, email, username, password, role_id) values ('USER', 'gkonradn@mozilla.com', 'tdoerrenn', '1CL60hj08HV', 4);
+insert into kts_test.user (user_type, email, username, password, role_id) values ('USER', 'ehurleyo@bloomberg.com', 'ablowneo', '8O3eSQKHTrk', 4);
+insert into kts_test.user (user_type, email, username, password, role_id) values ('USER', 'pmcarthurp@alexa.com', 'clorainp', 'mtIUYzz3Yd', 4);
+insert into kts_test.user (user_type, email, username, password, role_id) values ('USER', 'bpeintonq@gmpg.org', 'lgrissettq', 'zPTVal6FI', 4);
+insert into kts_test.user (user_type, email, username, password, role_id) values ('USER', 'dfrancaisr@jalbum.net', 'cpavelkar', 'CGFTGkx', 4);
+insert into kts_test.user (user_type, email, username, password, role_id) values ('USER', 'itidmans@nydailynews.com', 'amacnalleys', 'e0Mg1zgwHKin', 4);
+insert into kts_test.user (user_type, email, username, password, role_id) values ('USER', 'bbeckerst@drupal.org', 'awindlet', 'd9R5CjHz6s', 4);
 
 insert into kts_test.user (user_type, email, username, password, role_id) values ('RESIDENT', 'alinthead0@craigslist.org', 'dstedman0', 'qKUIKAcUedTl', 5);
 insert into kts_test.user (user_type, email, username, password, role_id) values ('RESIDENT', 'oleitche1@booking.com', 'cgremane1', 'LTKc8CO3', 5);
