@@ -4,9 +4,15 @@ public class BidDTO {
 
 	private String description;
 	private double price;
-	private Long report;
+	private long report;
 	
 	public BidDTO(){}
+	
+	public BidDTO(String description, double price, long report){
+		this.description = description;
+		this.price = price;
+		this.report = report;
+	}
 
 	public String getDescription() {
 		return description;
@@ -24,11 +30,11 @@ public class BidDTO {
 		this.price = price;
 	}
 
-	public Long getReport() {
+	public long getReport() {
 		return report;
 	}
 
-	public void setReport(Long report) {
+	public void setReport(long report) {
 		this.report = report;
 	}
 	
