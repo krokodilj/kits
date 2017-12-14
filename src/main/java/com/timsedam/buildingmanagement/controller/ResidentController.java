@@ -74,4 +74,24 @@ public class ResidentController {
 
         return new ResponseEntity(HttpStatus.OK);
     }
+
+    @PutMapping(value = "/{residentId}/add_to_owned_residence/{residenceId}")
+    public ResponseEntity addToOwned(
+            @PathVariable long residentId,
+            @PathVariable long residenceId
+    ){
+        Resident resident =(Resident) userService.findOne(residentId);
+        if (resident == null)
+            return new ResponseEntity("User not found",HttpStatus.NOT_FOUND);
+
+        Residence residence = residenceService.findOneById(residenceId);
+        if (residence == null)
+            return new ResponseEntity("Residence not found", HttpStatus.NOT_FOUND);
+
+        residence.setApartmentOwner(resident);
+        resident.getOwnedApartments().add(residence);
+        userService.save(resident);
+
+        return new ResponseEntity(HttpStatus.OK);
+    }
 }
