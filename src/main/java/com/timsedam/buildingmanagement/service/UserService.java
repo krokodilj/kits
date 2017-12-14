@@ -65,12 +65,15 @@ public class UserService implements UserDetailsService {
         }
     }
 
+
 	public User findByUsername(String name) {
 		return userRepository.findByUsername(name);
 	}
 
+
 	public User findOne(Long to) {
 		return userRepository.findOne(to);
 	}
+
 	
 }
