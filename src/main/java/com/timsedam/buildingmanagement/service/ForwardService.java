@@ -12,8 +12,8 @@ public class ForwardService {
 	@Autowired
     ForwardRepository forwardRepository;
 	
-	public void save(Forward forward) {
-		forwardRepository.save(forward);
+	public Forward save(Forward forward) {
+		return forwardRepository.save(forward);
 	}
 
 }

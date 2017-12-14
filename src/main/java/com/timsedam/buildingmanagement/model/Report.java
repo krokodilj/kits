@@ -1,13 +1,10 @@
 package com.timsedam.buildingmanagement.model;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,15 +27,16 @@ public class Report {
 	private List<String> pictures;
 	@OneToMany(mappedBy = "reportCommented")
 	private List<Comment> comments;
-	@OneToMany(mappedBy = "forwardedReport", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	private List<Forward> forwards;
+	
+	@ManyToOne(cascade = CascadeType.ALL)
+	private Forward currentHolder;
 	
 	public Report() {
 		super();
 	}
 
 	public Report(User sender, String status, String description, Building location, List<String> pictures,
-			List<Comment> comments, List<Forward> forwards) {
+			List<Comment> comments, Forward currentHolder) {
 		super();
 		this.sender = sender;
 		this.status = status;
@@ -46,7 +44,7 @@ public class Report {
 		this.location = location;
 		this.pictures = pictures;
 		this.comments = comments;
-		this.forwards = forwards;
+		this.currentHolder = currentHolder;
 	}
 
 	public long getId() {
@@ -105,20 +103,19 @@ public class Report {
 		this.comments = comments;
 	}
 
-	public List<Forward> getForwards() {
-		return forwards;
+	public Forward getCurrentHolder() {
+		return currentHolder;
 	}
 
-	public void setForwards(List<Forward> forwards) {
-		this.forwards = forwards;
+	public void setCurrentHolder(Forward currentHolder) {
+		this.currentHolder = currentHolder;
 	}
 
 	@Override
 	public String toString() {
 		return "Report [id=" + id + ", sender=" + sender + ", status=" + status + ", description=" + description
-				+ ", location=" + location + ", pictures=" + pictures + ", comments=" + comments + ", forwards="
-				+ forwards + "]";
+				+ ", location=" + location + ", pictures=" + pictures + ", comments=" + comments + ", currentHolder="
+				+ currentHolder + "]";
 	}
-	
-	
+
 }
