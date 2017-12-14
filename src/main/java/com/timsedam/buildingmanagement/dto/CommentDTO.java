@@ -3,9 +3,14 @@ package com.timsedam.buildingmanagement.dto;
 public class CommentDTO {
 
 	private String data;
-	private Long report;
+	private long report;
 	
 	public CommentDTO(){}
+	
+	public CommentDTO(String data, long report){
+		this.data = data;
+		this.report = report;
+	}
 
 	public String getData() {
 		return data;
@@ -15,11 +20,11 @@ public class CommentDTO {
 		this.data = data;
 	}
 
-	public Long getReport() {
+	public long getReport() {
 		return report;
 	}
 
-	public void setReport(Long report) {
+	public void setReport(long report) {
 		this.report = report;
 	}
 	

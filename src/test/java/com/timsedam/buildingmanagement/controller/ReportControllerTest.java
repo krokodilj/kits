@@ -16,10 +16,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.timsedam.buildingmanagement.dto.CommentDTO;
 import com.timsedam.buildingmanagement.dto.CreateReportDTO;
 import com.timsedam.buildingmanagement.dto.ForwardDTO;
 import com.timsedam.buildingmanagement.dto.UserLoginDTO;
+import com.timsedam.buildingmanagement.model.Comment;
 import com.timsedam.buildingmanagement.model.Report;
+import com.timsedam.buildingmanagement.repository.CommentRepository;
 import com.timsedam.buildingmanagement.repository.ReportRepository;
 
 @RunWith(SpringRunner.class)
@@ -31,6 +34,9 @@ public class ReportControllerTest {
 
 	@Autowired
 	private ReportRepository reportRepository;
+	
+	@Autowired
+	private CommentRepository commentRepository;
 
 	private static final String URL_PREFIX = "/api/reports/";
 
@@ -194,6 +200,61 @@ public class ReportControllerTest {
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 		assertEquals(current, oldHolder);
 		assertEquals(to, newHolder);
+
+	}
+	
+	/**
+	 * User send POST request to "/api/reports/comment" with not existing report
+	 * Expected: HTTP status 404 (NOT_FOUND)
+	 */
+	@Test
+	public void commentAtNotExistingReport() throws Exception {
+
+		CommentDTO badDTO = new CommentDTO("komentar", -59);
+
+		ResponseEntity<String> responseEntity = restTemplate.postForEntity(URL_PREFIX + "comment/",
+				getRequestEntity(badDTO, "ivan", "ivan"), String.class);
+
+		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+
+	}
+	
+	/**
+	 * User send POST request to "/api/reports/comment" with empty comment
+	 * Expected: HTTP status 400 (BAD_REQUEST)
+	 */
+	@Test
+	public void emptyComment() throws Exception {
+
+		CommentDTO badDTO = new CommentDTO("", 1);
+
+		ResponseEntity<String> responseEntity = restTemplate.postForEntity(URL_PREFIX + "comment/",
+				getRequestEntity(badDTO, "ivan", "ivan"), String.class);
+
+		assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+
+	}
+	
+	/**
+	 * User send POST request to "/api/reports/comment" with not existing report
+	 * Expected: HTTP status 200 (OK)
+	 */
+	@Test
+	public void postComment() throws Exception {
+
+		long report = 1;
+		String komentar = "komentar";
+		
+		CommentDTO validDTO = new CommentDTO(komentar, report);
+
+		ResponseEntity<Long> responseEntity = restTemplate.postForEntity(URL_PREFIX + "comment/",
+				getRequestEntity(validDTO, "ivan", "ivan"), Long.class);
+
+		Long id = responseEntity.getBody();
+		Comment comment = commentRepository.findOne(id);
+		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+		assertEquals(komentar, comment.getData());
+		
 
 	}
 }

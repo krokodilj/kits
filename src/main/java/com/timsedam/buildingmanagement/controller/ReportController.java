@@ -118,9 +118,9 @@ public class ReportController {
 			return new ResponseEntity<>("Comment is empty.", HttpStatus.BAD_REQUEST);
 
 		Comment comment = new Comment(commentDTO.getData(), commenter, report, LocalDateTime.now());
-		commentService.save(comment);
+		comment = commentService.save(comment);
 
-		return new ResponseEntity<>("The comment was successfully posted.", HttpStatus.OK);
+		return new ResponseEntity<>(comment.getId(), HttpStatus.OK);
 	}
 
 	@SuppressWarnings("rawtypes")
