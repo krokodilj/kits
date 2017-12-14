@@ -74,11 +74,25 @@ CREATE TABLE `building` (
   `city` varchar(255) DEFAULT NULL,
   `country` varchar(255) DEFAULT NULL,
   `description` varchar(255) DEFAULT NULL,
-  `picture` varchar(255) DEFAULT NULL,
   `manager_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKpo7ntep3yb67bix8yayxjlaet` (`manager_id`),
   CONSTRAINT `FKpo7ntep3yb67bix8yayxjlaet` FOREIGN KEY (`manager_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `building_pictures`
+--
+
+DROP TABLE IF EXISTS `building_pictures`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `building_pictures` (
+  `building_id` bigint(20) NOT NULL,
+  `pictures` varchar(255) DEFAULT NULL,
+  KEY `FKrgc9m8cmli8p886hiox6r1bb1` (`building_id`),
+  CONSTRAINT `FKrgc9m8cmli8p886hiox6r1bb1` FOREIGN KEY (`building_id`) REFERENCES `building` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -122,23 +136,6 @@ CREATE TABLE `forward` (
   CONSTRAINT `FK3272k8wk25i1y76edipski9bf` FOREIGN KEY (`forwarded_report_id`) REFERENCES `report` (`id`),
   CONSTRAINT `FKbd8hnhi6cxlx3lnovredt85s6` FOREIGN KEY (`forwarder_id`) REFERENCES `user` (`id`),
   CONSTRAINT `FKrp61n4ia3nia4eqr6plveftf3` FOREIGN KEY (`forwarded_to_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `manager_building`
---
-
-DROP TABLE IF EXISTS `manager_building`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `manager_building` (
-  `manager_id` bigint(20) NOT NULL,
-  `building_id` bigint(20) NOT NULL,
-  KEY `FKp0elcnbku9og51m35q37mbdye` (`building_id`),
-  KEY `FKmdgceipaa1anp9g6m6qcye5gx` (`manager_id`),
-  CONSTRAINT `FKmdgceipaa1anp9g6m6qcye5gx` FOREIGN KEY (`manager_id`) REFERENCES `user` (`id`),
-  CONSTRAINT `FKp0elcnbku9og51m35q37mbdye` FOREIGN KEY (`building_id`) REFERENCES `building` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -207,7 +204,7 @@ CREATE TABLE `permission` (
   `name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_2ojme20jpga3r4r79tdso17gi` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -336,19 +333,30 @@ DROP TABLE IF EXISTS `report`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `report` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `description` varchar(255) DEFAULT NULL,
-  `photo` varchar(255) DEFAULT NULL,
+  `description` LONGTEXT DEFAULT NULL,
   `status` varchar(255) DEFAULT NULL,
-  `current_holder_id` bigint(20) DEFAULT NULL,
   `location_id` bigint(20) DEFAULT NULL,
   `sender_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `FK7g3or2p7wd1khm19irtlge2ro` (`current_holder_id`),
   KEY `FK3d2517ya9rjyjomcgfxmxxc12` (`location_id`),
   KEY `FKl0s7x00j3s7tr3ds2a85je2h5` (`sender_id`),
   CONSTRAINT `FK3d2517ya9rjyjomcgfxmxxc12` FOREIGN KEY (`location_id`) REFERENCES `building` (`id`),
-  CONSTRAINT `FK7g3or2p7wd1khm19irtlge2ro` FOREIGN KEY (`current_holder_id`) REFERENCES `user` (`id`),
   CONSTRAINT `FKl0s7x00j3s7tr3ds2a85je2h5` FOREIGN KEY (`sender_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `report_pictures`
+--
+
+DROP TABLE IF EXISTS `report_pictures`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `report_pictures` (
+  `report_id` bigint(20) NOT NULL,
+  `pictures` varchar(255) DEFAULT NULL,
+  KEY `FK5xn74e76yt29ss869y7mkj5bx` (`report_id`),
+  CONSTRAINT `FK5xn74e76yt29ss869y7mkj5bx` FOREIGN KEY (`report_id`) REFERENCES `report` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -402,7 +410,7 @@ CREATE TABLE `role` (
   `name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_8sewwnpamngi6b1dwaa88askk` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -434,17 +442,31 @@ CREATE TABLE `user` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `email` varchar(255) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
-  `picture` varchar(255) DEFAULT NULL,
   `username` varchar(255) DEFAULT NULL,
   `pib` varchar(255) DEFAULT NULL,
-  `locaton` varchar(255) DEFAULT NULL,
+  `location` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   `phone_number` varchar(255) DEFAULT NULL,
   `role_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKn82ha3ccdebhokx3a8fgdqeyy` (`role_id`),
   CONSTRAINT `FKn82ha3ccdebhokx3a8fgdqeyy` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `user_pictures`
+--
+
+DROP TABLE IF EXISTS `user_pictures`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_pictures` (
+  `user_id` bigint(20) NOT NULL,
+  `pictures` varchar(255) DEFAULT NULL,
+  KEY `FKjf2kxn67n2lfogmm7wnv88mp` (`user_id`),
+  CONSTRAINT `FKjf2kxn67n2lfogmm7wnv88mp` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -456,4 +478,4 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-12-12 23:39:34
+-- Dump completed on 2017-12-14  5:19:47

@@ -8,7 +8,7 @@ import javax.persistence.Entity;
 public class Company extends User {
 	
 	private String name;
-	private String locaton;
+	private String location;
 	private String PIB;
 	private String phoneNumber;
 	
@@ -16,10 +16,10 @@ public class Company extends User {
 		super();
 	}
 
-	public Company(String name, String locaton, String pIB, String phoneNumber) {
+	public Company(String name, String location, String pIB, String phoneNumber) {
 		super();
 		this.name = name;
-		this.locaton = locaton;
+		this.location = location;
 		PIB = pIB;
 		this.phoneNumber = phoneNumber;
 	}
@@ -32,12 +32,12 @@ public class Company extends User {
 		this.name = name;
 	}
 
-	public String getLocaton() {
-		return locaton;
+	public String getLocation() {
+		return location;
 	}
 
-	public void setLocaton(String locaton) {
-		this.locaton = locaton;
+	public void setLocation(String location) {
+		this.location = location;
 	}
 
 	public String getPIB() {
@@ -58,7 +58,8 @@ public class Company extends User {
 
 	@Override
 	public String toString() {
-		return "Company [name=" + name + ", locaton=" + locaton + ", PIB=" + PIB + ", phoneNumber=" + phoneNumber + "]";
+		return "Company [name=" + name + ", location=" + location + ", PIB=" + PIB + ", phoneNumber=" + phoneNumber
+				+ "]";
 	}
 
 }

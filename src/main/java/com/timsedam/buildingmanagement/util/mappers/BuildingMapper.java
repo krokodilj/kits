@@ -23,8 +23,14 @@ public class BuildingMapper {
         BuildingDTO dto= new BuildingDTO(
                 b.getId(),
                 b.getCity(),b.getAddress(),b.getCountry(),b.getApartmentCount(),
-                b.getDescription(),b.getPicture(),null,null);
+                b.getDescription(),null,null,null);
 
+        if(b.getPictures()!=null) {
+        	dto.setPictures(new ArrayList<String>());
+        	for(String picture : b.getPictures()) {
+        		dto.getPictures().add(picture);
+        	}
+        }
         if(b.getManager()!=null){
             b.getManager().setComments(null);
             b.getManager().setPassword(null);

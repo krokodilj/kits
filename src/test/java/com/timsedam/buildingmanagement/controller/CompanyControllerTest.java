@@ -2,6 +2,8 @@ package com.timsedam.buildingmanagement.controller;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +35,7 @@ public class CompanyControllerTest {
 	
 	private CompanyRegisterDTO validCompanyRegisterDTO = 
 			new CompanyRegisterDTO("USERNAME", "PASSWORD", "test@gmail.com",
-					"picture.png", "NAME", "LOCATION", "PIB", "PHONE");
+					new ArrayList<String>(), "NAME", "LOCATION", "PIB", "PHONE");
 	
 	private String getAdminToken() {
 		UserLoginDTO userLoginData = new UserLoginDTO("admin", "admin");
@@ -64,7 +66,7 @@ public class CompanyControllerTest {
 		assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
 		assertEquals(validCompanyRegisterDTO.getUsername(), companyFromResponse.getUsername());
 		assertEquals(validCompanyRegisterDTO.getEmail(), companyFromResponse.getEmail());
-		assertEquals(validCompanyRegisterDTO.getPicture(), companyFromResponse.getPicture());
+		assertEquals(validCompanyRegisterDTO.getPictures(), companyFromResponse.getPictures());
 		
 		
 		userRepository.delete(companyFromResponse.getId());
