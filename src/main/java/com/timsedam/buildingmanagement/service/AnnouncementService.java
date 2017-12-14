@@ -1,9 +1,14 @@
 package com.timsedam.buildingmanagement.service;
 
 import com.timsedam.buildingmanagement.model.Announcement;
+import com.timsedam.buildingmanagement.model.Building;
 import com.timsedam.buildingmanagement.repository.AnnouncementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class AnnouncementService {
@@ -20,5 +25,14 @@ public class AnnouncementService {
         }
     }
 
+    public List<Announcement> findAllByBuilding(Building b, int page, int count){
+        try{
+            Page<Announcement> pejdz= announcementRepository.findAllByBuilding(b,new PageRequest(page,count));
+            return pejdz.getContent();
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 }

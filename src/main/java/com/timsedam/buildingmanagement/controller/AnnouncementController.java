@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/announcements")
@@ -63,4 +65,25 @@ public class AnnouncementController {
         return new ResponseEntity(announcementDTO,HttpStatus.OK);
     }
 
+    @GetMapping(value="/by_building/{buildingId}")
+    public ResponseEntity getByBuilding(
+            @PathVariable long buildingId,
+            @RequestParam(defaultValue = "0")int page,
+            @RequestParam(defaultValue = "5") int count
+    ){
+        List<AnnouncementDTO> announcementDTOS=new ArrayList<AnnouncementDTO>();
+        Building building=buildingService.findOneById(buildingId);
+        if(building==null)
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+
+        List<Announcement> announcements = announcementService.findAllByBuilding(building,page,count);
+
+        if (announcements==null)
+            return new ResponseEntity("building does not exists",HttpStatus.INTERNAL_SERVER_ERROR);
+
+        for(Announcement a :announcements)
+            announcementDTOS.add(announcementMapper.toDto(a));
+
+        return new ResponseEntity(announcementDTOS,HttpStatus.OK);
+    }
 }
