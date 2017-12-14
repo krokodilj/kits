@@ -225,5 +225,6 @@ insert into kts_test.meeting (location, record, starts_at, building_id) values (
 insert into kts_test.meeting (location, record, starts_at, building_id) values ('Oklahoma', 'Echimys chrysurus', '2017-04-21 15:52:13', 5);
 insert into kts_test.meeting (location, record, starts_at, building_id) values ('California', 'Tauraco porphyrelophus', '2017-07-14 17:10:42', 7);
 
+truncate kts_test.comment; 
 
 SET FOREIGN_KEY_CHECKS = 1;

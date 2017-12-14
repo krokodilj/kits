@@ -6,12 +6,14 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.transaction.Transactional;
 
 @Entity
 public class Report {
@@ -28,7 +30,7 @@ public class Report {
 	private Building location;
 	@ElementCollection
 	private List<String> pictures;
-	@OneToMany(mappedBy = "reportCommented")
+	@OneToMany(mappedBy = "reportCommented", fetch = FetchType.LAZY)
 	private List<Comment> comments;
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Forward currentHolder;
