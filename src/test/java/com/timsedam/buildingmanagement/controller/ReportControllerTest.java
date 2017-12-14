@@ -3,6 +3,7 @@ package com.timsedam.buildingmanagement.controller;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,12 +17,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.timsedam.buildingmanagement.dto.BidDTO;
 import com.timsedam.buildingmanagement.dto.CommentDTO;
 import com.timsedam.buildingmanagement.dto.CreateReportDTO;
 import com.timsedam.buildingmanagement.dto.ForwardDTO;
 import com.timsedam.buildingmanagement.dto.UserLoginDTO;
+import com.timsedam.buildingmanagement.model.Bid;
 import com.timsedam.buildingmanagement.model.Comment;
 import com.timsedam.buildingmanagement.model.Report;
+import com.timsedam.buildingmanagement.repository.BidRepository;
 import com.timsedam.buildingmanagement.repository.CommentRepository;
 import com.timsedam.buildingmanagement.repository.ReportRepository;
 
@@ -37,6 +41,9 @@ public class ReportControllerTest {
 	
 	@Autowired
 	private CommentRepository commentRepository;
+	
+	@Autowired
+	private BidRepository bidRepository;
 
 	private static final String URL_PREFIX = "/api/reports/";
 
@@ -236,7 +243,7 @@ public class ReportControllerTest {
 	}
 	
 	/**
-	 * User send POST request to "/api/reports/comment" with not existing report
+	 * User send POST request to "/api/reports/comment" with valid DTO
 	 * Expected: HTTP status 200 (OK)
 	 */
 	@Test
@@ -254,6 +261,64 @@ public class ReportControllerTest {
 		Comment comment = commentRepository.findOne(id);
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 		assertEquals(komentar, comment.getData());
+
+	}
+	
+	/**
+	 * User without permission send POST request to "/api/reports/bid"
+	 * Expected: HTTP status 403 (FORBIDDEN)
+	 */
+	@Test
+	public void userWithoutPermissionBid() throws Exception {
+
+		BidDTO badDTO = new BidDTO("poslednja ponuda", 200, 1);
+
+		ResponseEntity<String> responseEntity = restTemplate.postForEntity(URL_PREFIX + "bid/",
+				getRequestEntity(badDTO, "ivan", "ivan"), String.class);
+
+		assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
+
+	}
+	
+	/**
+	 * User send POST request to "/api/reports/bid" with not existing report
+	 * Expected: HTTP status 404 (NOT_FOUND)
+	 */
+	@Test
+	public void bidAtNotExistingReport() throws Exception {
+
+		BidDTO badDTO = new BidDTO("poslednja ponuda", 200, -51);
+
+		ResponseEntity<String> responseEntity = restTemplate.postForEntity(URL_PREFIX + "bid/",
+				getRequestEntity(badDTO, "company", "company"), String.class);
+
+		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+
+	}
+	
+	/**
+	 * User send POST request to "/api/reports/bid" with valid DTO
+	 * Expected: Add new bid to report and send back HTTP status 200 (OK)
+	 */
+	@Test
+	public void sendBid() throws Exception {
+
+		long report_id = 1;
+		long price = 500;
+		String description = "ponuda";
+		
+		Report report = reportRepository.findOne(report_id);
+		List<Bid> bids = bidRepository.findByReportBid(report);
+		
+		BidDTO validDTO = new BidDTO(description, price, report_id);
+
+		ResponseEntity<String> responseEntity = restTemplate.postForEntity(URL_PREFIX + "bid/",
+				getRequestEntity(validDTO, "company", "company"), String.class);
+
+		List<Bid> newBids = bidRepository.findByReportBid(report);
+		
+		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+		assertEquals(newBids.size(), bids.size()+1);
 		
 
 	}

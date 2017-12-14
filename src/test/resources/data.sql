@@ -54,7 +54,7 @@ insert into kts_test.user (user_type, email, username, password, role_id) values
 insert into kts_test.user (user_type, email, username, password, role_id) values ('USER', 'nkornyakovj@cargocollective.com', 'nkochsj', 'iRCelXqtd1', 2);
 	
 insert into kts_test.user (user_type, email, username, password, pib, location, name, phone_number, role_id) values 
-('COMPANY', 'dhambya@odnoklassniki.ru', 'rmilkina', '984CJjXrhf', '41-959-1194', 'District of Columbia', 'Gigazoom', '202-496-5590', 3);
+('COMPANY', 'dhambya@odnoklassniki.ru', 'company', 'company', '41-959-1194', 'District of Columbia', 'Gigazoom', '202-496-5590', 3);
 insert into kts_test.user (user_type, email, username, password, pib, location, name, phone_number, role_id) values 
 ('COMPANY', 'wbirkbeckb@uol.com.br', 'ahollowb', 'f2BcG4hi', '54-577-9306', 'North Carolina', 'Eazzy', '336-478-1098', 3);
 insert into kts_test.user (user_type, email, username, password, pib, location, name, phone_number, role_id) values 
