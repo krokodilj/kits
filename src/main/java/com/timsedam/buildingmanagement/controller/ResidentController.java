@@ -99,7 +99,7 @@ public class ResidentController {
      * @param residenceId
      * @return
      */
-    @PutMapping(value = "/{residentId}/add_to_owned_residence/{residenceId}")
+    @PutMapping(value = "/{residentId}/add_to_owner/{residenceId}")
     public ResponseEntity addToOwned(
             @PathVariable long residentId,
             @PathVariable long residenceId

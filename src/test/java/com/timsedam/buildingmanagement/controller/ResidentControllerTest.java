@@ -1,5 +1,6 @@
 package com.timsedam.buildingmanagement.controller;
 
+import com.sun.jndi.toolkit.url.Uri;
 import com.timsedam.buildingmanagement.dto.UserLoginDTO;
 import com.timsedam.buildingmanagement.dto.UserRegisterDTO;
 import com.timsedam.buildingmanagement.model.User;
@@ -10,11 +11,10 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.net.MalformedURLException;
 
 import static org.junit.Assert.assertEquals;
 
@@ -71,6 +71,25 @@ public class ResidentControllerTest {
     }
 
     /**
+     * POST request to '/api/residents' sent by unauthorised user
+     * Expected:  residents id and HttpStatus.FORBIDDEN
+     */
+    @Test
+    public void registerResidentUnauthorised(){
+
+        UserRegisterDTO userRegisterDTO = new UserRegisterDTO(
+                "compi","compi123",
+                "compi@compi.compi",null);
+
+        ResponseEntity responseEntity=restTemplate.postForEntity(
+                URL_PREFIX ,
+                getRequestEntity(userRegisterDTO, "mladen", "mladen"),
+                Object.class);
+
+        assertEquals(HttpStatus.FORBIDDEN,responseEntity.getStatusCode());
+    }
+
+    /**
      * POST request to '/api/residents' with unavailable username
      * Expected: error message and HttpStatus.CONFLICT
      */
@@ -101,5 +120,121 @@ public class ResidentControllerTest {
 
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY,responseEntity.getStatusCode());
     }
-    
+
+
+    /**
+     * PUT request to 'api/residents/{residentId}/add_to_residence/{residenceId} with valid path params
+     * Expected: HttpStatus.OK
+     */
+    @Test
+    public void setResidence(){
+        String residentId = "5";
+        String residenceId = "3";
+        ResponseEntity responseEntity=restTemplate.exchange(
+                URL_PREFIX+"/"+residentId+"/add_to_residence/"+residenceId ,
+                HttpMethod.PUT,
+                getRequestEntity(null, "admin", "admin"),
+                Object.class);
+
+        assertEquals(HttpStatus.OK,responseEntity.getStatusCode());
+    }
+
+    /**
+     * PUT request to 'api/residents/{residentId}/add_to_residence/{residenceId}
+     *  to non existing resident
+     * Expected: error message and HttpStatus.NOT_FOUND
+     */
+    @Test
+    public void setResidenceWithInvalidResidentId() {
+        String residentId = "76567";
+        String residenceId = "27";
+
+        ResponseEntity responseEntity=restTemplate.exchange(
+                URL_PREFIX+"/"+residentId+"/add_to_residence/"+residenceId,
+                HttpMethod.PUT,
+                getRequestEntity(null,"admin","admin"),
+                String.class
+                );
+        assertEquals(HttpStatus.NOT_FOUND,responseEntity.getStatusCode());
+        assertEquals("User not found",responseEntity.getBody());
+    }
+
+    /**
+     * PUT request to 'api/residents/{residentId}/add_to_residence/{residenceId}
+     *  for non existing residence
+     * Expected: error message and HttpStatus.NOT_FOUND
+     */
+    @Test
+    public void setResidenceWithInvalidResidenceId() {
+        String residentId = "5";
+        String residenceId = "27343";
+        ResponseEntity responseEntity=restTemplate.exchange(
+                URL_PREFIX+"/"+residentId+"/add_to_residence/"+residenceId,
+                HttpMethod.PUT,
+                getRequestEntity(null,"admin","admin"),
+                String.class);
+
+        assertEquals(HttpStatus.NOT_FOUND,responseEntity.getStatusCode());
+        assertEquals("Residence not found",responseEntity.getBody());
+    }
+
+    /**
+     * PUT request to 'api/residents/{residentId}/add_to_owner/{residenceId} with valid path params
+     * Expected: HttpStatus.OK
+     */
+    @Test
+    public void setResidenceOwner(){
+        String residentId = "5";
+        String residenceId = "3";
+
+        ResponseEntity responseEntity=restTemplate.exchange(
+                URL_PREFIX+"/"+residentId+"/add_to_residence/"+residenceId,
+                HttpMethod.PUT,
+                getRequestEntity(null,"admin","admin"),
+                String.class);
+
+        assertEquals(HttpStatus.OK,responseEntity.getStatusCode());
+
+    }
+
+    /**
+     * PUT request to 'api/residents/{residentId}/add_to_owner/{residenceId}
+     *  for non existing residence
+     * Expected: error message and HttpStatus.NOT_FOUND
+     */
+    @Test
+    public void setResidenceOwnerWithInvalidResidenceId() {
+        String residentId = "5";
+        String residenceId = "27343";
+        ResponseEntity responseEntity=restTemplate.exchange(
+                URL_PREFIX+"/"+residentId+"/add_to_owner/"+residenceId,
+                HttpMethod.PUT,
+                getRequestEntity(null,"admin","admin"),
+                String.class);
+
+        assertEquals(HttpStatus.NOT_FOUND,responseEntity.getStatusCode());
+        assertEquals("Residence not found",responseEntity.getBody());
+    }
+
+
+    /**
+     * PUT request to 'api/residents/{residentId}/add_to_owner/{residenceId}
+     *  to non existing resident
+     * Expected: error message and HttpStatus.NOT_FOUND
+     */
+    @Test
+    public void setResidencOwnereWithInvalidResidentId() {
+        String residentId = "76567";
+        String residenceId = "27";
+
+        ResponseEntity responseEntity=restTemplate.exchange(
+                URL_PREFIX+"/"+residentId+"/add_to_owner/"+residenceId,
+                HttpMethod.PUT,
+                getRequestEntity(null,"admin","admin"),
+                String.class
+        );
+        assertEquals(HttpStatus.NOT_FOUND,responseEntity.getStatusCode());
+        assertEquals("User not found",responseEntity.getBody());
+    }
+
 }
