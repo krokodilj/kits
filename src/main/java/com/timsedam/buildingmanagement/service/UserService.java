@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import com.timsedam.buildingmanagement.model.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -27,6 +28,9 @@ public class UserService implements UserDetailsService {
 	
 	@Autowired
 	private BuildingRepository buildingRepository;
+
+	@Autowired
+	private RoleService roleService;
 	
 	public void save(User user) {
 		userRepository.save(user);
@@ -73,6 +77,17 @@ public class UserService implements UserDetailsService {
 
 	public User findOne(Long to) {
 		return userRepository.findOne(to);
+	}
+
+	public User createUser(User user){
+		try{
+			Role role = roleService.findOneByName("RESIDENT");
+			user.setRole(role);
+			return userRepository.save(user);
+		}catch (Exception e){
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	

@@ -36,7 +36,7 @@ public class ResidentController {
     /**
      * Register new resident
      * @param userRegisterDTO
-     * @return UserDTO
+     * @return resident id
      */
     @PostMapping
     public ResponseEntity create(
@@ -50,17 +50,15 @@ public class ResidentController {
 
         //if username already in use
         if(userService.exists(userRegisterDTO.getUsername()))
-            return new ResponseEntity<>("Username in use",HttpStatus.BAD_REQUEST);
-
+            return new ResponseEntity<>("Username in use",HttpStatus.CONFLICT);
 
         Resident resident = (Resident) modelMapper.map(userRegisterDTO, Resident.class);
+        resident = (Resident) userService.createUser(resident);
 
-        Role role = roleService.findOneByName("USER");
-        resident.setRole(role);
-        userService.save(resident);
+        if (resident == null)
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
 
-        UserDTO residentDTO = modelMapper.map(resident, UserDTO.class);
-        return new ResponseEntity(residentDTO,HttpStatus.OK);
+        return new ResponseEntity(resident.getId(),HttpStatus.CREATED);
     }
 
 
