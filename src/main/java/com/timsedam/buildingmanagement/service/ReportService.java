@@ -3,6 +3,7 @@ package com.timsedam.buildingmanagement.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.timsedam.buildingmanagement.model.Forward;
 import com.timsedam.buildingmanagement.model.Report;
 import com.timsedam.buildingmanagement.repository.ReportRepository;
 
@@ -18,6 +19,10 @@ public class ReportService {
 
 	public Report findOne(long id) {
 		return reportRepository.findOne(id);
+	}
+	
+	public void setCurrentHolder(Forward currentHolder, Long id){
+		reportRepository.setCurrentHolder(currentHolder, id);
 	}
 
 }

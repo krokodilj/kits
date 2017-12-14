@@ -2,7 +2,6 @@ package com.timsedam.buildingmanagement.controller;
 
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,13 +12,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.timsedam.buildingmanagement.dto.CreateReportDTO;
+import com.timsedam.buildingmanagement.dto.ForwardDTO;
 import com.timsedam.buildingmanagement.model.Building;
 import com.timsedam.buildingmanagement.model.Comment;
 import com.timsedam.buildingmanagement.model.Forward;
 import com.timsedam.buildingmanagement.model.Report;
 import com.timsedam.buildingmanagement.model.Residence;
 import com.timsedam.buildingmanagement.model.Resident;
+import com.timsedam.buildingmanagement.model.User;
 import com.timsedam.buildingmanagement.service.BuildingService;
+import com.timsedam.buildingmanagement.service.ForwardService;
 import com.timsedam.buildingmanagement.service.ReportService;
 import com.timsedam.buildingmanagement.service.UserService;
 
@@ -36,8 +38,11 @@ public class ReportController {
 	@Autowired
 	private ReportService reportService;
 
+	@Autowired
+	private ForwardService forwardService;
+
 	@SuppressWarnings("rawtypes")
-	@PostMapping(value="create", consumes = "application/json")
+	@PostMapping(value = "create", consumes = "application/json")
 	public ResponseEntity create(Principal principal, @RequestBody CreateReportDTO reportDTO) {
 
 		Resident sender = (Resident) userService.findByUsername(principal.getName());
@@ -47,15 +52,39 @@ public class ReportController {
 			return new ResponseEntity<>("Sender isn't resident of building!", HttpStatus.CONFLICT);
 		}
 
-		Report report = new Report(sender, "OPEN", reportDTO.getDescription(), building,
-				reportDTO.getPhotos(), new ArrayList<Comment>(), new ArrayList<Forward>());
+		Report report = new Report(sender, "OPEN", reportDTO.getDescription(), building, reportDTO.getPhotos(),
+				new ArrayList<Comment>(), null);
 		Forward forward = new Forward(null, building.getManager(), report);
-		List<Forward> forwards = new ArrayList<Forward>();
-		forwards.add(forward);
-		report.setForwards(forwards);
+
+		report.setCurrentHolder(forward);
 		report = reportService.save(report);
-		
 
 		return new ResponseEntity<>(report.getId(), HttpStatus.CREATED);
+	}
+
+	@SuppressWarnings("rawtypes")
+	@PostMapping(value = "forward", consumes = "application/json")
+	public ResponseEntity forward(Principal principal, @RequestBody ForwardDTO forwardDTO) {
+
+		User forwared = userService.findByUsername(principal.getName());
+		Report report = reportService.findOne(forwardDTO.getReport());
+		
+		if(report==null)
+			return new ResponseEntity<>("Report doesn't exist.", HttpStatus.NOT_FOUND);;
+		
+		if (forwared.getId() != report.getCurrentHolder().getForwardedTo().getId()) {
+			return new ResponseEntity<>("You can't forward report because you are not current holder.", HttpStatus.CONFLICT);
+		}
+		User to = userService.findOne(forwardDTO.getTo());
+		
+		if(to==null)
+			return new ResponseEntity<>("Forwarded user doesn't exist.", HttpStatus.NOT_FOUND);;
+		
+
+		Forward forward = new Forward(forwared, to, report);
+		forward = forwardService.save(forward);
+
+		reportService.setCurrentHolder(forward, report.getId());
+		return new ResponseEntity<>("The report was successfully forwarded.", HttpStatus.OK);
 	}
 }
