@@ -40,8 +40,10 @@ public class CreateReportDTO {
 	public void setPhotos(List<String> photos) {
 		this.photos = photos;
 	}
-	
-	
-	
+
+	@Override
+	public String toString() {
+		return "CreateReportDTO [description=" + description + ", building=" + building + ", photos=" + photos + "]";
+	}	
 
 }

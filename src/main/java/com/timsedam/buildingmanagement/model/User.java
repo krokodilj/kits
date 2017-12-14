@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.DiscriminatorValue;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -26,7 +27,8 @@ public class User {
 	private String username;
 	private String password;
 	private String email;
-	private String picture;   
+	@ElementCollection
+	private List<String> pictures;   
     @ManyToOne
     private Role role;
     @OneToMany(mappedBy = "reportCommented")
@@ -36,12 +38,13 @@ public class User {
 		super();
 	}
 
-	public User(String username, String password, String email, String picture, Role role, List<Comment> comments) {
+	public User(String username, String password, String email, List<String> pictures, Role role,
+			List<Comment> comments) {
 		super();
 		this.username = username;
 		this.password = password;
 		this.email = email;
-		this.picture = picture;
+		this.pictures = pictures;
 		this.role = role;
 		this.comments = comments;
 	}
@@ -78,12 +81,12 @@ public class User {
 		this.email = email;
 	}
 
-	public String getPicture() {
-		return picture;
+	public List<String> getPictures() {
+		return pictures;
 	}
 
-	public void setPicture(String picture) {
-		this.picture = picture;
+	public void setPictures(List<String> pictures) {
+		this.pictures = pictures;
 	}
 
 	public Role getRole() {
@@ -105,7 +108,7 @@ public class User {
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", username=" + username + ", password=" + password + ", email=" + email
-				+ ", picture=" + picture + ", role=" + role + ", comments=" + comments + "]";
+				+ ", pictures=" + pictures + ", role=" + role + ", comments=" + comments + "]";
 	}
     
 }

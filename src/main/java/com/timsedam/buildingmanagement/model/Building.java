@@ -2,6 +2,7 @@ package com.timsedam.buildingmanagement.model;
 
 import java.util.List;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,7 +21,8 @@ public class Building {
 	private String country;
 	private int apartmentCount;
 	private String description;
-	private String picture;
+	@ElementCollection
+	private List<String> pictures;
 	@ManyToOne
 	private User manager;
 	@OneToMany(mappedBy = "building")
@@ -30,15 +32,15 @@ public class Building {
 		super();
 	}
 
-	public Building(String city, String address, String country, int apartmentCount, String description, String picture,
-			User manager, List<Residence> residences) {
+	public Building(String city, String address, String country, int apartmentCount, String description,
+			List<String> pictures, User manager, List<Residence> residences) {
 		super();
 		this.city = city;
 		this.address = address;
 		this.country = country;
 		this.apartmentCount = apartmentCount;
 		this.description = description;
-		this.picture = picture;
+		this.pictures = pictures;
 		this.manager = manager;
 		this.residences = residences;
 	}
@@ -91,12 +93,12 @@ public class Building {
 		this.description = description;
 	}
 
-	public String getPicture() {
-		return picture;
+	public List<String> getPictures() {
+		return pictures;
 	}
 
-	public void setPicture(String picture) {
-		this.picture = picture;
+	public void setPictures(List<String> pictures) {
+		this.pictures = pictures;
 	}
 
 	public User getManager() {
@@ -118,7 +120,7 @@ public class Building {
 	@Override
 	public String toString() {
 		return "Building [id=" + id + ", city=" + city + ", address=" + address + ", country=" + country
-				+ ", apartmentCount=" + apartmentCount + ", description=" + description + ", picture=" + picture
+				+ ", apartmentCount=" + apartmentCount + ", description=" + description + ", pictures=" + pictures
 				+ ", manager=" + manager + ", residences=" + residences + "]";
 	}
 

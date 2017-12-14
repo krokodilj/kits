@@ -17,6 +17,7 @@ import com.timsedam.buildingmanagement.model.Building;
 import com.timsedam.buildingmanagement.model.Comment;
 import com.timsedam.buildingmanagement.model.Forward;
 import com.timsedam.buildingmanagement.model.Report;
+import com.timsedam.buildingmanagement.model.Residence;
 import com.timsedam.buildingmanagement.model.Resident;
 import com.timsedam.buildingmanagement.service.BuildingService;
 import com.timsedam.buildingmanagement.service.ReportService;
@@ -40,9 +41,9 @@ public class ReportController {
 	public ResponseEntity create(Principal principal, @RequestBody CreateReportDTO reportDTO) {
 
 		Resident sender = (Resident) userService.findByUsername(principal.getName());
-
 		Building building = buildingService.findOneById(reportDTO.getBuilding());
-		if (!sender.isResident(building.getAddress())) {
+		
+		if (!sender.isResident(building)) {
 			return new ResponseEntity<>("Sender isn't resident of building!", HttpStatus.CONFLICT);
 		}
 

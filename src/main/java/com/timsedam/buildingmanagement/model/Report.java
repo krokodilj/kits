@@ -27,7 +27,7 @@ public class Report {
 	@ManyToOne
 	private Building location;
 	@ElementCollection
-	Map<Integer, String> photos;
+	private List<String> pictures;
 	@OneToMany(mappedBy = "reportCommented")
 	private List<Comment> comments;
 	@OneToMany(mappedBy = "forwardedReport", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -37,16 +37,14 @@ public class Report {
 		super();
 	}
 
-	public Report(User sender, String status, String description, Building location, List<String> photos,
+	public Report(User sender, String status, String description, Building location, List<String> pictures,
 			List<Comment> comments, List<Forward> forwards) {
 		super();
 		this.sender = sender;
 		this.status = status;
 		this.description = description;
 		this.location = location;
-		this.photos = new HashMap<Integer, String>();
-		for(int i=0; i<photos.size(); i++)
-			this.photos.put(i, photos.get(i));
+		this.pictures = pictures;
 		this.comments = comments;
 		this.forwards = forwards;
 	}
@@ -91,12 +89,12 @@ public class Report {
 		this.location = location;
 	}
 
-	public Map<Integer, String> getPhotos() {
-		return photos;
+	public List<String> getPictures() {
+		return pictures;
 	}
 
-	public void setPhotos(Map<Integer, String> photos) {
-		this.photos = photos;
+	public void setPictures(List<String> pictures) {
+		this.pictures = pictures;
 	}
 
 	public List<Comment> getComments() {
@@ -118,8 +116,8 @@ public class Report {
 	@Override
 	public String toString() {
 		return "Report [id=" + id + ", sender=" + sender + ", status=" + status + ", description=" + description
-				+ ", location=" + location + ", photos=" + photos + ", comments=" + comments + ", forwards=" + forwards
-				+ "]";
+				+ ", location=" + location + ", pictures=" + pictures + ", comments=" + comments + ", forwards="
+				+ forwards + "]";
 	}
 	
 	

@@ -1,5 +1,7 @@
 package com.timsedam.buildingmanagement.dto;
 
+import java.util.ArrayList;
+
 import javax.validation.constraints.NotNull;
 
 public class CompanyRegisterDTO extends UserRegisterDTO {
@@ -16,16 +18,16 @@ public class CompanyRegisterDTO extends UserRegisterDTO {
 		super();
 	}
 
-	public CompanyRegisterDTO(String username, String password, String email, String picture, String name,
+	public CompanyRegisterDTO(String username, String password, String email, ArrayList<String> pictures, String name,
 			String locaton, String pIB, String phoneNumber) {
-		super(username, password, email, picture);
+		super(username, password, email, pictures);
 		this.name = name;
 		this.locaton = locaton;
 		PIB = pIB;
 		this.phoneNumber = phoneNumber;
 	}
 
-	public CompanyRegisterDTO(CompanyRegisterDTO companyRegisterDTO) {
+	public CompanyRegisterDTO(CompanyRegisterDTO companyRegisterDTO) throws CloneNotSupportedException {
 		super(companyRegisterDTO);
 		this.name = new String(companyRegisterDTO.getName());
 		this.locaton = new String(companyRegisterDTO.getLocaton());

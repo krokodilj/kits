@@ -47,13 +47,14 @@ public class Resident extends User {
 		return "Resident [residences=" + residences + ", ownedApartments=" + ownedApartments + "]";
 	}
 
-	public boolean isResident(String address) {
-		for(int i=0; i<ownedApartments.size(); i++){
-			if(ownedApartments.get(i).getBuilding().getAddress().equals(address))
+	public boolean isResident(Building building) {
+		
+		for(Residence ownedApartment : ownedApartments) {
+			if(ownedApartment.getBuilding().getId() == building.getId())
 				return true;
 		}
-		for(int i=0; i<residences.size(); i++){
-			if(residences.get(i).getBuilding().getAddress().equals(address))
+		for(Residence residence : residences) {
+			if(residence.getBuilding().getId() == building.getId())
 				return true;
 		}
 		return false;

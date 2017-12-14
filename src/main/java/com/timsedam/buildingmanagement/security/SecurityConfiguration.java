@@ -69,7 +69,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.hasAuthority("REGISTER")
 			
 
-			.antMatchers("/api/reports/create/").hasAuthority("CREATE-REPORT")
+			.antMatchers("/api/reports/create/").hasAuthority("CREATE_REPORT")
 
 			.antMatchers("/api/meetings/**")
 			.hasAuthority("CREATE_MEETING");
