@@ -1,5 +1,5 @@
 INSERT INTO kts_prod.permission (`id`, `name`) VALUES (1, 'REGISTER');
-INSERT INTO kts_prod.permission (`id`, `name`) VALUES (2, 'CREATE_REPORT');
+INSERT INTO kts_prod.permission (`id`, `name`) VALUES (2, 'CREATE-REPORT');
 
 INSERT INTO kts_prod.role (`id`, `name`) VALUES (1, 'ADMIN');
 INSERT INTO kts_prod.role (`id`, `name`) VALUES (2, 'USER');
