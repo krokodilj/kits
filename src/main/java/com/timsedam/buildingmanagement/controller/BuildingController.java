@@ -37,7 +37,7 @@ public class BuildingController {
     private BuildingMapper buildingMapper=new BuildingMapper();
 
     /**
-     * 
+     *Create new building
      * @param createBuildingDTO
      * @return List<BuildingDTO>
      */
@@ -57,10 +57,15 @@ public class BuildingController {
         return new ResponseEntity(buildingDTO,HttpStatus.OK);
     }
 
-    @GetMapping(value="/{id}",produces = "application/json")
-    public ResponseEntity get(@PathVariable long id){
+    /**
+     * Get building by id
+     * @param buildinId
+     * @return BuildingDTO
+     */
+    @GetMapping(value="/{buildinId}",produces = "application/json")
+    public ResponseEntity get(@PathVariable long buildinId){
 
-        Building building=buildingService.findOneById(id);
+        Building building=buildingService.findOneById(buildinId);
         if(building==null)
             return new ResponseEntity("Building does not exists",HttpStatus.NOT_FOUND);
 
@@ -69,6 +74,10 @@ public class BuildingController {
         return new ResponseEntity(buildingDTO,HttpStatus.OK);
     }
 
+    /**
+     * Get all buildings
+     * @return List<BuildingDTO>
+     */
     @GetMapping(value="/all",produces = "application/json")
     public ResponseEntity get(){
 
