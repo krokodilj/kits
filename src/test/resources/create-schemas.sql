@@ -335,13 +335,16 @@ CREATE TABLE `report` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `description` LONGTEXT DEFAULT NULL,
   `status` varchar(255) DEFAULT NULL,
+  `current_holder_id` bigint(20) DEFAULT NULL,
   `location_id` bigint(20) DEFAULT NULL,
   `sender_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
+  KEY `FKov4vpx2mq5ep67h3mefdl6cfo` (`current_holder_id`),
   KEY `FK3d2517ya9rjyjomcgfxmxxc12` (`location_id`),
   KEY `FKl0s7x00j3s7tr3ds2a85je2h5` (`sender_id`),
   CONSTRAINT `FK3d2517ya9rjyjomcgfxmxxc12` FOREIGN KEY (`location_id`) REFERENCES `building` (`id`),
-  CONSTRAINT `FKl0s7x00j3s7tr3ds2a85je2h5` FOREIGN KEY (`sender_id`) REFERENCES `user` (`id`)
+  CONSTRAINT `FKl0s7x00j3s7tr3ds2a85je2h5` FOREIGN KEY (`sender_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `FKov4vpx2mq5ep67h3mefdl6cfo` FOREIGN KEY (`current_holder_id`) REFERENCES `forward` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -478,4 +481,4 @@ CREATE TABLE `user_pictures` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-12-14  5:19:47
+-- Dump completed on 2017-12-14 13:13:05
