@@ -25,4 +25,8 @@ public class ReportService {
 		reportRepository.setCurrentHolder(currentHolder, id);
 	}
 
+	public void setStatus(String status, long id) {
+		reportRepository.setStatus(status, id);
+	}
+
 }

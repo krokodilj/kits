@@ -201,14 +201,18 @@ insert into kts_test.resident_residence (residence_id, resident_id) values (7, 1
 truncate kts_test.forward;
 insert into kts_test.forward (forwarded_report_id, forwarded_to_id, forwarder_id) 
 values (1, 3, null);
+insert into kts_test.forward (forwarded_report_id, forwarded_to_id, forwarder_id) 
+values (2, 3, null);
+insert into kts_test.forward (forwarded_report_id, forwarded_to_id, forwarder_id) 
+values (3, 3, null);
 
 truncate kts_test.report; 
 insert into kts_test.report (description, status, current_holder_id, location_id, sender_id) values ('Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero. Nullam sit amet turpis elementum ligula vehicula consequat. Morbi a ipsum. Integer a nibh. In quis justo. Maecenas rhoncus aliquam lacus. Morbi quis tortor id nulla ultrices aliquet.', 
 'OPEN', 1, 2, 34);
-insert into kts_test.report (description, status, location_id, sender_id) values ('Duis bibendum. Morbi non quam nec dui luctus rutrum. Nulla tellus. In sagittis dui vel nisl. Duis ac nibh. Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus.', 
-'OPEN', 9, 60);
-insert into kts_test.report (description, status, location_id, sender_id) values ('In hac habitasse platea dictumst. Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo. Aliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis. Sed ante. Vivamus tortor. Duis mattis egestas metus.', 
-'CLOSED', 3, 31);
+insert into kts_test.report (description, status, current_holder_id, location_id, sender_id) values ('Duis bibendum. Morbi non quam nec dui luctus rutrum. Nulla tellus. In sagittis dui vel nisl. Duis ac nibh. Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus.', 
+'OPEN', 2, 9, 30);
+insert into kts_test.report (description, status, current_holder_id, location_id, sender_id) values ('In hac habitasse platea dictumst. Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo. Aliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis. Sed ante. Vivamus tortor. Duis mattis egestas metus.', 
+'OPEN', 3, 3, 31);
 insert into kts_test.report (description, status, location_id, sender_id) values ('Curabitur gravida nisi at nibh. In hac habitasse platea dictumst. Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem. Integer tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat.nPraesent blandit. Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede.', 
 'CLOSED', 7, 13);
 insert into kts_test.report (description, status, location_id, sender_id) values ('Maecenas ut massa quis augue luctus tincidunt. Nulla mollis molestie lorem. Quisque ut erat.', 
@@ -231,6 +235,12 @@ insert into kts_test.meeting (location, record, starts_at, building_id) values (
 insert into kts_test.meeting (location, record, starts_at, building_id) values ('Oklahoma', 'Echimys chrysurus', '2017-04-21 15:52:13', 5);
 insert into kts_test.meeting (location, record, starts_at, building_id) values ('California', 'Tauraco porphyrelophus', '2017-07-14 17:10:42', 7);
 
-truncate kts_test.comment; 
-
+truncate kts_test.comment;
+truncate kts_test.bid;
+insert into kts_test.bid (description, status, price, company_id, report_bid_id) values ('Moze?', 
+'OPEN', 5000, 26, 1);
+insert into kts_test.bid (description, status, price, company_id, report_bid_id) values ('Moze?', 
+'OPEN', 4500, 27, 1);
+insert into kts_test.bid (description, status, price, company_id, report_bid_id) values ('Moze?', 
+'ACCEPTED', 480, 27, 3);
 SET FOREIGN_KEY_CHECKS = 1;

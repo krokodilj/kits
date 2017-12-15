@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.timsedam.buildingmanagement.dto.AcceptBidDTO;
 import com.timsedam.buildingmanagement.dto.BidDTO;
 import com.timsedam.buildingmanagement.dto.CommentDTO;
 import com.timsedam.buildingmanagement.dto.CreateReportDTO;
@@ -28,6 +29,7 @@ import com.timsedam.buildingmanagement.model.Report;
 import com.timsedam.buildingmanagement.repository.BidRepository;
 import com.timsedam.buildingmanagement.repository.CommentRepository;
 import com.timsedam.buildingmanagement.repository.ReportRepository;
+import com.timsedam.buildingmanagement.service.BidService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -303,7 +305,7 @@ public class ReportControllerTest {
 	@Test
 	public void sendBid() throws Exception {
 
-		long report_id = 1;
+		long report_id = 2;
 		long price = 500;
 		String description = "ponuda";
 		
@@ -321,5 +323,83 @@ public class ReportControllerTest {
 		assertEquals(newBids.size(), bids.size()+1);
 		
 
+	}
+	
+	/**
+	 * User send POST request to "/api/reports/acceptBid" with valid DTO
+	 * Expected: 
+	 * 1 - Change bid status to ACCEPTED
+	 * 2 - Change bid status to other bids from same report to DECLINED
+	 * 3 - Change report status to CLOSED
+	 * send back HTTP status 200 (OK)
+	 */
+	@Test
+	public void acceptBid() throws Exception {
+		
+		long bid_id = 2;
+		AcceptBidDTO validDTO = new AcceptBidDTO(bid_id);
+		Bid bid = bidRepository.findOne(bid_id);
+		
+		ResponseEntity<String> responseEntity = restTemplate.postForEntity(URL_PREFIX + "acceptBid/",
+				getRequestEntity(validDTO, "vaso", "vaso"), String.class);
+		
+		Bid newBid = bidRepository.findOne(bid_id);
+		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+		assertEquals("OPEN", bid.getStatus());
+		assertEquals("ACCEPTED", newBid.getStatus());
+		assertEquals("CLOSED", newBid.getReport().getStatus());
+		
+
+	}
+	
+	/**
+	 * User send POST request to "/api/reports/acceptBid" with not existing bid
+	 * Expected: send back HTTP status 404 (NOT_FOUND)
+	 */
+	@Test
+	public void bidNotExists() throws Exception {
+		
+		long bid_id = -55;
+		AcceptBidDTO validDTO = new AcceptBidDTO(bid_id);
+		
+		ResponseEntity<String> responseEntity = restTemplate.postForEntity(URL_PREFIX + "acceptBid/",
+				getRequestEntity(validDTO, "vaso", "vaso"), String.class);
+		
+		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+		
+	}
+	
+	/**
+	 * User send POST request to "/api/reports/acceptBid" with invalid bid (already ACCEPTED)
+	 * Expected: send back HTTP status 409 (CONFLICT)
+	 */
+	@Test
+	public void alreadyAccepted() throws Exception {
+		
+		long bid_id = 3;
+		AcceptBidDTO validDTO = new AcceptBidDTO(bid_id);
+		
+		ResponseEntity<String> responseEntity = restTemplate.postForEntity(URL_PREFIX + "acceptBid/",
+				getRequestEntity(validDTO, "vaso", "vaso"), String.class);
+		
+		assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
+		
+	}
+	
+	/**
+	 * User without permission send POST request to "/api/reports/acceptBid"
+	 * Expected: HTTP status 403 (FORBIDDEN)
+	 */
+	@Test
+	public void userWithoutPermissionAcceptBid() throws Exception {
+		
+		long bid_id = 3;
+		AcceptBidDTO validDTO = new AcceptBidDTO(bid_id);
+		
+		ResponseEntity<String> responseEntity = restTemplate.postForEntity(URL_PREFIX + "acceptBid/",
+				getRequestEntity(validDTO, "ivan", "ivan"), String.class);
+		
+		assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
+		
 	}
 }
