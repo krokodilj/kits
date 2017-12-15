@@ -14,7 +14,7 @@ public class CreateResidenceDTO {
 
     public CreateResidenceDTO(){}
 
-    public CreateResidenceDTO(long id, long building, int floorNumber, int apartmentNumber) {
+    public CreateResidenceDTO(long building, int floorNumber, int apartmentNumber) {
         this.building = building;
         this.floorNumber = floorNumber;
         this.apartmentNumber = apartmentNumber;

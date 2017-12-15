@@ -68,7 +68,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 				.antMatchers("/api/residents/**").hasAuthority("UPDATE_RESIDENT")
 
-				.antMatchers("/api/buildings/").hasAuthority("CREATE_BUILDING");
+				.antMatchers("/api/buildings/").hasAuthority("CREATE_BUILDING")
+
+				.antMatchers("/api/residences/").hasAuthority("CREATE_RESIDENCE");
 
 		httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
 	}

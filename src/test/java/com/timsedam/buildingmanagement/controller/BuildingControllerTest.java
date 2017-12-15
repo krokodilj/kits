@@ -25,12 +25,6 @@ public class BuildingControllerTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private ResidenceRepository residenceRepository;
-
     private static final String URL_PREFIX="/api/buildings/";
     private String getUserToken(String username, String password) {
         UserLoginDTO userLoginData = new UserLoginDTO(username, password);
@@ -140,15 +134,15 @@ public class BuildingControllerTest {
     public void getBuildingById(){
         String id="4";
         ResponseEntity responseEntity = restTemplate.exchange(
-                URL_PREFIX+"all",
+                URL_PREFIX+"/"+id,
                 HttpMethod.GET,
                 getRequestEntity(null,"admin","admin"),
-                List.class
+                BuildingDTO.class
         );
 
-        List<BuildingDTO> buildingDTOS =(List<BuildingDTO>) responseEntity.getBody();
-
+        BuildingDTO building = (BuildingDTO) responseEntity.getBody();
         assertEquals(HttpStatus.OK,responseEntity.getStatusCode());
+        assertEquals(building.getId(),Long.parseLong(id));
     }
 
     /**
