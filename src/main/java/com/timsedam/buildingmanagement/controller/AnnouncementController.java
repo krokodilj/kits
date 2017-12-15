@@ -4,6 +4,7 @@ import com.timsedam.buildingmanagement.dto.AnnouncementDTO;
 import com.timsedam.buildingmanagement.dto.CreateAnnouncementDTO;
 import com.timsedam.buildingmanagement.model.Announcement;
 import com.timsedam.buildingmanagement.model.Building;
+import com.timsedam.buildingmanagement.model.Resident;
 import com.timsedam.buildingmanagement.model.User;
 import com.timsedam.buildingmanagement.service.AnnouncementService;
 import com.timsedam.buildingmanagement.service.BuildingService;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "api/announcements")
+@RequestMapping(value = "/api/announcements/")
 public class AnnouncementController {
 
 
@@ -36,6 +37,13 @@ public class AnnouncementController {
 
     private AnnouncementMapper announcementMapper = new AnnouncementMapper();
 
+
+    /**
+     * Create announcement
+     * @param principal
+     * @param createAnnouncementDTO
+     * @return AnnouncementDTO
+     */
     @PostMapping(consumes = "application/json")
     public ResponseEntity create(
             Principal principal,
@@ -48,12 +56,19 @@ public class AnnouncementController {
 
         Building building = buildingService.findOneById(createAnnouncementDTO.getBuilding());
         if (building == null)
-            return new ResponseEntity("building does not exists",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity("Building does not exists",HttpStatus.NOT_FOUND);
+
+        if(principal == null)
+            return new ResponseEntity("User does not exists",HttpStatus.NOT_FOUND);
 
         User user =  userService.findOneByUsername(principal.getName());
-
         if(user == null)
-            return new ResponseEntity("user does not exists",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity("User does not exists",HttpStatus.NOT_FOUND);
+
+        Resident r = (Resident) user;
+
+        if(r.isResident(building))
+            return new ResponseEntity("User isn't resident of building",HttpStatus.CONFLICT);
 
         Announcement announcement = announcementMapper.toModel(createAnnouncementDTO,building,user);
         announcement = announcementService.save(announcement);
@@ -62,9 +77,16 @@ public class AnnouncementController {
 
         AnnouncementDTO announcementDTO = announcementMapper.toDto(announcement);
 
-        return new ResponseEntity(announcementDTO,HttpStatus.OK);
+        return new ResponseEntity(announcementDTO,HttpStatus.CREATED);
     }
 
+    /**
+     * Get announcements by building
+     * @param buildingId
+     * @param page default 0
+     * @param count default 5
+     * @return List<AnnouncementDTO>
+     */
     @GetMapping(value="/by_building/{buildingId}")
     public ResponseEntity getByBuilding(
             @PathVariable long buildingId,
@@ -79,7 +101,7 @@ public class AnnouncementController {
         List<Announcement> announcements = announcementService.findAllByBuilding(building,page,count);
 
         if (announcements==null)
-            return new ResponseEntity("building does not exists",HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity("Building does not exists",HttpStatus.INTERNAL_SERVER_ERROR);
 
         for(Announcement a :announcements)
             announcementDTOS.add(announcementMapper.toDto(a));
