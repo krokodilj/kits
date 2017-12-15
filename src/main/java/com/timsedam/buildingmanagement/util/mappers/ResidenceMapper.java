@@ -36,11 +36,9 @@ public class ResidenceMapper {
 
         //building
         r.getBuilding().setResidences(null);
-        if(r.getBuilding().getManager()!=null) {
-            r.getBuilding().getManager().setPassword(null);
-            r.getBuilding().getManager().setComments(null);
-        }
+        r.getBuilding().setManager(null);
         residenceDTO.setBuilding(r.getBuilding());
+        
         //residents
         if(r.getResidents()!=null){
             residenceDTO.setResidents(new ArrayList<Resident>());
@@ -58,6 +56,7 @@ public class ResidenceMapper {
             r.getApartmentOwner().setPassword(null);
             r.getApartmentOwner().setComments(null);
             r.getApartmentOwner().setOwnedApartments(null);
+            r.getApartmentOwner().setResidences(null);
         }
 
 

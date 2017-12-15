@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import com.timsedam.buildingmanagement.model.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,6 +15,9 @@ import org.springframework.stereotype.Service;
 
 import com.timsedam.buildingmanagement.model.Building;
 import com.timsedam.buildingmanagement.model.Permission;
+import com.timsedam.buildingmanagement.model.Residence;
+import com.timsedam.buildingmanagement.model.Resident;
+import com.timsedam.buildingmanagement.model.Role;
 import com.timsedam.buildingmanagement.model.User;
 import com.timsedam.buildingmanagement.repository.BuildingRepository;
 import com.timsedam.buildingmanagement.repository.UserRepository;
@@ -50,6 +52,20 @@ public class UserService implements UserDetailsService {
 			return true;
 		else
 			return false;
+	}
+	
+	public boolean isResidentOrManagerInBuilding(Long userId, Long buildingId) {
+		Building building = buildingRepository.findOne(buildingId);
+		for(Residence residence : building.getResidences()) {
+			for(Resident resident : residence.getResidents()) {
+				if(userId == resident.getId()) {
+					return true;
+				}
+			}
+			if(userId == residence.getApartmentOwner().getId())
+				return true;
+		}
+		return false;
 	}
 	
 	

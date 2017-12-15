@@ -67,6 +67,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/api/reports/bid/").hasAuthority("SEND_BID")
 
 				.antMatchers("/api/meetings/**").hasAuthority("CREATE_MEETING")
+				
+				.antMatchers("/api/proposals/**").hasAnyAuthority("CREATE_PROPOSAL")
 
 				.antMatchers("/api/residents/**").hasAuthority("UPDATE_RESIDENT")
 
