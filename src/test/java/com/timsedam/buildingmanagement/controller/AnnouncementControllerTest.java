@@ -47,7 +47,7 @@ public class AnnouncementControllerTest {
     @Test
     public void createAnnouncement(){
         CreateAnnouncementDTO createAnnouncementDTO = new CreateAnnouncementDTO(
-                "deste drugari", 3 , LocalDateTime.now()
+                "deste drugari", 1 , LocalDateTime.now()
         );
         ResponseEntity responseEntity = restTemplate.exchange(
                 URL_PREFIX,
@@ -148,7 +148,7 @@ public class AnnouncementControllerTest {
      */
     @Test
     public void getAnnouncementsByBuilding(){
-        String buiildingId="3";
+        String buiildingId="1";
         ResponseEntity responseEntity = restTemplate.exchange(
                 URL_PREFIX+"by_building/"+buiildingId,
                 HttpMethod.GET,
