@@ -60,14 +60,12 @@ public class AnnouncementController {
 
         if(principal == null)
             return new ResponseEntity("User does not exists",HttpStatus.NOT_FOUND);
-
         User user =  userService.findOneByUsername(principal.getName());
         if(user == null)
             return new ResponseEntity("User does not exists",HttpStatus.NOT_FOUND);
 
         Resident r = (Resident) user;
-
-        if(r.isResident(building))
+        if(!r.isResident(building))
             return new ResponseEntity("User isn't resident of building",HttpStatus.CONFLICT);
 
         Announcement announcement = announcementMapper.toModel(createAnnouncementDTO,building,user);
@@ -89,6 +87,7 @@ public class AnnouncementController {
      */
     @GetMapping(value="/by_building/{buildingId}")
     public ResponseEntity getByBuilding(
+            Principal principal,
             @PathVariable long buildingId,
             @RequestParam(defaultValue = "0")int page,
             @RequestParam(defaultValue = "5") int count
@@ -96,12 +95,15 @@ public class AnnouncementController {
         List<AnnouncementDTO> announcementDTOS=new ArrayList<AnnouncementDTO>();
         Building building=buildingService.findOneById(buildingId);
         if(building==null)
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity("Building does not exists",HttpStatus.NOT_FOUND);
+
+        Resident r = (Resident) userService.findOneByUsername(principal.getName());
+        if(!r.isResident(building))
+            return new ResponseEntity("User isn't resident of building",HttpStatus.CONFLICT);
 
         List<Announcement> announcements = announcementService.findAllByBuilding(building,page,count);
-
         if (announcements==null)
-            return new ResponseEntity("Building does not exists",HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
 
         for(Announcement a :announcements)
             announcementDTOS.add(announcementMapper.toDto(a));

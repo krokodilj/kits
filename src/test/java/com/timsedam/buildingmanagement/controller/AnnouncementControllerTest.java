@@ -13,6 +13,7 @@ import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -46,7 +47,7 @@ public class AnnouncementControllerTest {
     @Test
     public void createAnnouncement(){
         CreateAnnouncementDTO createAnnouncementDTO = new CreateAnnouncementDTO(
-                "deste drugari", 1 , LocalDateTime.now()
+                "deste drugari", 3 , LocalDateTime.now()
         );
         ResponseEntity responseEntity = restTemplate.exchange(
                 URL_PREFIX,
@@ -69,7 +70,7 @@ public class AnnouncementControllerTest {
     @Test
     public void createAnnouncemenInvalidDto(){
         CreateAnnouncementDTO createAnnouncementDTO = new CreateAnnouncementDTO(
-                "deste drugari", 1 , null
+                "deste drugari", 3 , null
         );
         ResponseEntity responseEntity = restTemplate.exchange(
                 URL_PREFIX,
@@ -118,6 +119,7 @@ public class AnnouncementControllerTest {
         );
 
         assertEquals(HttpStatus.NOT_FOUND,responseEntity.getStatusCode());
+        assertEquals("User does not exists",responseEntity.getBody());
     }
 
     /**
@@ -137,6 +139,59 @@ public class AnnouncementControllerTest {
         );
 
         assertEquals(HttpStatus.CONFLICT,responseEntity.getStatusCode());
+        assertEquals("User isn't resident of building",responseEntity.getBody());
+    }
+
+    /**
+     * GET method to '/api/announcements/by_building/{buildingId}'
+     * Expected: List<AnnouncementDTO> and HttpStatus.OK
+     */
+    @Test
+    public void getAnnouncementsByBuilding(){
+        String buiildingId="3";
+        ResponseEntity responseEntity = restTemplate.exchange(
+                URL_PREFIX+"by_building/"+buiildingId,
+                HttpMethod.GET,
+                getRequestEntity(null,"mladen","mladen"),
+                List.class
+        );
+
+        assertEquals(HttpStatus.OK,responseEntity.getStatusCode());
+    }
+
+    /**
+     * GET method to '/api/announcements/by_building/{buildingId}'
+     * Expected: error message and HttpStatus.CONFLICT
+     */
+    @Test
+    public void getAnnouncementsByBuildingForbidden(){
+        String buiildingId="3";
+        ResponseEntity responseEntity = restTemplate.exchange(
+                URL_PREFIX+"by_building/"+buiildingId,
+                HttpMethod.GET,
+                getRequestEntity(null,"ivan","ivan"),
+                String.class
+        );
+
+        assertEquals(HttpStatus.CONFLICT,responseEntity.getStatusCode());
+        assertEquals("User isn't resident of building",responseEntity.getBody());
+    }
+
+    /**
+     * GET method to '/api/announcements/by_building/{buildingId}'
+     * Expected: error message and HttpStatus.NOT_FOUND
+     */
+    @Test
+    public void getAnnouncementsByNoBuilding(){
+        String buiildingId="999";
+        ResponseEntity responseEntity = restTemplate.exchange(
+                URL_PREFIX+"by_building/"+buiildingId,
+                HttpMethod.GET,
+                getRequestEntity(null,"ivan","ivan"),
+                String.class
+        );
+
+        assertEquals(HttpStatus.NOT_FOUND,responseEntity.getStatusCode());
     }
 
 }
