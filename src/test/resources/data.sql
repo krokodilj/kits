@@ -8,6 +8,7 @@ insert into kts_test.permission (id, name) values (4, 'SEND_BID');
 insert into kts_test.permission (id, name) values (5, 'UPDATE_RESIDENT');
 insert into kts_test.permission (id, name) values (6, 'CREATE_BUILDING');
 insert into kts_test.permission (id, name) values (7, 'CREATE_RESIDENCE');
+insert into kts_test.permission (id, name) values (95, 'CREATE_PROPOSAL');
 
 truncate kts_test.role; 
 insert into kts_test.role (id, name) values (1, 'ADMIN');
@@ -25,6 +26,12 @@ insert into kts_test.role_permissions (role_id, permissions_id) values (3, 4);
 insert into kts_test.role_permissions (role_id, permissions_id) values (1, 5);
 insert into kts_test.role_permissions (role_id, permissions_id) values (1, 6);
 insert into kts_test.role_permissions (role_id, permissions_id) values (1, 7);
+insert into kts_test.role_permissions (role_id, permissions_id) values (1, 95);
+insert into kts_test.role_permissions (role_id, permissions_id) values (2, 95);
+insert into kts_test.role_permissions (role_id, permissions_id) values (3, 95);
+insert into kts_test.role_permissions (role_id, permissions_id) values (4, 95);
+insert into kts_test.role_permissions (role_id, permissions_id) values (5, 95);
+insert into kts_test.role_permissions (role_id, permissions_id) values (6, 95);
 
 truncate kts_test.user; 
 insert into kts_test.user (user_type, email, username, password, role_id) values ('ADMIN', 'admin@gmail.com', 'admin', 'admin', 1);
@@ -155,48 +162,49 @@ insert into kts_test.residence (apartment_number, floor_number, apartment_owner_
 insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (11, 2, 60, 10);
 
 truncate kts_test.resident_residence; 
-insert into kts_test.resident_residence (residence_id, resident_id) values (1, 4);
-insert into kts_test.resident_residence (residence_id, resident_id) values (1, 1);
-insert into kts_test.resident_residence (residence_id, resident_id) values (2, 6);
-insert into kts_test.resident_residence (residence_id, resident_id) values (3, 14);
-insert into kts_test.resident_residence (residence_id, resident_id) values (3, 18);
-insert into kts_test.resident_residence (residence_id, resident_id) values (3, 11);
-insert into kts_test.resident_residence (residence_id, resident_id) values (4, 25);
-insert into kts_test.resident_residence (residence_id, resident_id) values (5, 6);
-insert into kts_test.resident_residence (residence_id, resident_id) values (6, 44);
-insert into kts_test.resident_residence (residence_id, resident_id) values (7, 34);
-insert into kts_test.resident_residence (residence_id, resident_id) values (8, 16);
-insert into kts_test.resident_residence (residence_id, resident_id) values (8, 28);
-insert into kts_test.resident_residence (residence_id, resident_id) values (9, 31);
-insert into kts_test.resident_residence (residence_id, resident_id) values (9, 33);
-insert into kts_test.resident_residence (residence_id, resident_id) values (10, 19);
+insert into kts_test.resident_residence (residence_id, resident_id) values (1, 46);
+insert into kts_test.resident_residence (residence_id, resident_id) values (1, 51);
+insert into kts_test.resident_residence (residence_id, resident_id) values (2, 4);
+insert into kts_test.resident_residence (residence_id, resident_id) values (3, 48);
+insert into kts_test.resident_residence (residence_id, resident_id) values (3, 52);
+insert into kts_test.resident_residence (residence_id, resident_id) values (3, 54);
+insert into kts_test.resident_residence (residence_id, resident_id) values (4, 55);
+insert into kts_test.resident_residence (residence_id, resident_id) values (5, 46);
+insert into kts_test.resident_residence (residence_id, resident_id) values (6, 49);
+insert into kts_test.resident_residence (residence_id, resident_id) values (7, 49);
+insert into kts_test.resident_residence (residence_id, resident_id) values (8, 51);
+insert into kts_test.resident_residence (residence_id, resident_id) values (8, 52);
+insert into kts_test.resident_residence (residence_id, resident_id) values (9, 53);
+insert into kts_test.resident_residence (residence_id, resident_id) values (9, 54);
+insert into kts_test.resident_residence (residence_id, resident_id) values (10, 51);
 insert into kts_test.resident_residence (residence_id, resident_id) values (11, 49);
-insert into kts_test.resident_residence (residence_id, resident_id) values (12, 41);
-insert into kts_test.resident_residence (residence_id, resident_id) values (13, 3);
-insert into kts_test.resident_residence (residence_id, resident_id) values (14, 7);
-insert into kts_test.resident_residence (residence_id, resident_id) values (15, 18);
+insert into kts_test.resident_residence (residence_id, resident_id) values (12, 47);
+insert into kts_test.resident_residence (residence_id, resident_id) values (13, 53);
+insert into kts_test.resident_residence (residence_id, resident_id) values (14, 47);
+insert into kts_test.resident_residence (residence_id, resident_id) values (15, 48);
 insert into kts_test.resident_residence (residence_id, resident_id) values (16, 48);
-insert into kts_test.resident_residence (residence_id, resident_id) values (17, 27);
-insert into kts_test.resident_residence (residence_id, resident_id) values (17, 37);
-insert into kts_test.resident_residence (residence_id, resident_id) values (18, 29);
-insert into kts_test.resident_residence (residence_id, resident_id) values (19, 13);
-insert into kts_test.resident_residence (residence_id, resident_id) values (20, 20);
-insert into kts_test.resident_residence (residence_id, resident_id) values (21, 10);
-insert into kts_test.resident_residence (residence_id, resident_id) values (21, 16);
+insert into kts_test.resident_residence (residence_id, resident_id) values (17, 47);
+insert into kts_test.resident_residence (residence_id, resident_id) values (17, 47);
+insert into kts_test.resident_residence (residence_id, resident_id) values (18, 49);
+insert into kts_test.resident_residence (residence_id, resident_id) values (19, 53);
+insert into kts_test.resident_residence (residence_id, resident_id) values (20, 50);
+insert into kts_test.resident_residence (residence_id, resident_id) values (21, 50);
+insert into kts_test.resident_residence (residence_id, resident_id) values (21, 46);
 insert into kts_test.resident_residence (residence_id, resident_id) values (22, 52);
-insert into kts_test.resident_residence (residence_id, resident_id) values (24, 42);
-insert into kts_test.resident_residence (residence_id, resident_id) values (26, 23);
-insert into kts_test.resident_residence (residence_id, resident_id) values (28, 38);
-insert into kts_test.resident_residence (residence_id, resident_id) values (29, 12);
-insert into kts_test.resident_residence (residence_id, resident_id) values (30, 9);
-insert into kts_test.resident_residence (residence_id, resident_id) values (22, 34);
-insert into kts_test.resident_residence (residence_id, resident_id) values (11, 30);
-insert into kts_test.resident_residence (residence_id, resident_id) values (21, 9);
-insert into kts_test.resident_residence (residence_id, resident_id) values (19, 43);
+insert into kts_test.resident_residence (residence_id, resident_id) values (24, 52);
+insert into kts_test.resident_residence (residence_id, resident_id) values (26, 53);
+insert into kts_test.resident_residence (residence_id, resident_id) values (28, 48);
+insert into kts_test.resident_residence (residence_id, resident_id) values (29, 52);
+insert into kts_test.resident_residence (residence_id, resident_id) values (30, 49);
+insert into kts_test.resident_residence (residence_id, resident_id) values (22, 54);
+insert into kts_test.resident_residence (residence_id, resident_id) values (11, 50);
+insert into kts_test.resident_residence (residence_id, resident_id) values (21, 49);
+insert into kts_test.resident_residence (residence_id, resident_id) values (19, 53);
 insert into kts_test.resident_residence (residence_id, resident_id) values (5, 53);
 insert into kts_test.resident_residence (residence_id, resident_id) values (7, 15);
-    insert into kts_test.resident_residence (residence_id, resident_id) values (2, 57);
-    insert into kts_test.resident_residence (residence_id, resident_id) values (2, 56);
+insert into kts_test.resident_residence (residence_id, resident_id) values (2, 57);
+insert into kts_test.resident_residence (residence_id, resident_id) values (2, 56);
+insert into kts_test.resident_residence (residence_id, resident_id) values (7, 55);
 
 truncate kts_test.forward;
 insert into kts_test.forward (forwarded_report_id, forwarded_to_id, forwarder_id) 
@@ -214,19 +222,19 @@ insert into kts_test.report (description, status, current_holder_id, location_id
 insert into kts_test.report (description, status, current_holder_id, location_id, sender_id) values ('In hac habitasse platea dictumst. Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo. Aliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis. Sed ante. Vivamus tortor. Duis mattis egestas metus.', 
 'OPEN', 3, 3, 31);
 insert into kts_test.report (description, status, location_id, sender_id) values ('Curabitur gravida nisi at nibh. In hac habitasse platea dictumst. Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem. Integer tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat.nPraesent blandit. Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede.', 
-'CLOSED', 7, 13);
+'CLOSED', 7, 42);
 insert into kts_test.report (description, status, location_id, sender_id) values ('Maecenas ut massa quis augue luctus tincidunt. Nulla mollis molestie lorem. Quisque ut erat.', 
-'CLOSED', 4, 58);
+'CLOSED', 4, 19);
 insert into kts_test.report (description, status, location_id, sender_id) values ('In hac habitasse platea dictumst. Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo. Aliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis. Sed ante. Vivamus tortor. Duis mattis egestas metus.', 
-'OPEN', 7, 16);
+'OPEN', 7, 23);
 insert into kts_test.report (description, status, location_id, sender_id) values ('Aenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum. Curabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est.', 
-'OPEN', 2, 34);
+'OPEN', 2, 21);
 insert into kts_test.report (description, status, location_id, sender_id) values ('Duis consequat dui nec nisi volutpat eleifend. Donec ut dolor. Morbi vel lectus in quam fringilla rhoncus. Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero. Nullam sit amet turpis elementum ligula vehicula consequat. Morbi a ipsum. Integer a nibh.', 
-'CLOSED', 9, 60);
+'CLOSED', 9, 40);
 insert into kts_test.report (description, status, location_id, sender_id) values ('Integer ac leo. Pellentesque ultrices mattis odio. Donec vitae nisi. Nam ultrices, libero non mattis pulvinar, nulla pede ullamcorper augue, a suscipit nulla elit ac nulla. Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus. Curabitur at ipsum ac tellus semper interdum. Mauris ullamcorper purus sit amet nulla. Quisque arcu libero, rutrum ac, lobortis vel, dapibus at, diam.', 
-'CLOSED', 1, 25);
+'CLOSED', 1, 39);
 insert into kts_test.report (description, status, location_id, sender_id) values ('Maecenas tristique, est et tempus semper, est quam pharetra magna, ac consequat metus sapien ut nunc. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Mauris viverra diam vitae quam. Suspendisse potenti. Nullam porttitor lacus at turpis. Donec posuere metus vitae ipsum. Aliquam non mauris.', 
-'CLOSED', 4, 60);
+'CLOSED', 4, 38);
 
 truncate kts_test.meeting; 
 insert into kts_test.meeting (location, record, starts_at, building_id) values ('Florida', 'Haliaetus vocifer', '2016-12-19 09:24:43', 4);
@@ -236,6 +244,7 @@ insert into kts_test.meeting (location, record, starts_at, building_id) values (
 insert into kts_test.meeting (location, record, starts_at, building_id) values ('California', 'Tauraco porphyrelophus', '2017-07-14 17:10:42', 7);
 
 truncate kts_test.comment;
+
 truncate kts_test.bid;
 insert into kts_test.bid (description, status, price, company_id, report_bid_id) values ('Moze?', 
 'OPEN', 5000, 26, 1);
@@ -243,4 +252,17 @@ insert into kts_test.bid (description, status, price, company_id, report_bid_id)
 'OPEN', 4500, 27, 1);
 insert into kts_test.bid (description, status, price, company_id, report_bid_id) values ('Moze?', 
 'ACCEPTED', 480, 27, 3);
+
+truncate kts_test.proposal; 
+insert into kts_test.proposal (content, status, suggested_at, attached_report_id, meeting_id, proposer_id, building_id) values 
+('Crataegus wootoniana Eggl.', 'ACCEPTED', '2017-06-29 15:10:02', 1, 1, 53, 6);
+insert into kts_test.proposal (content, status, suggested_at, attached_report_id, proposer_id, building_id) values 
+('Adiantum capillus-veneris L.', 'OPEN', '2017-01-18 00:19:23', 2, 53, 9);
+insert into kts_test.proposal (content, status, suggested_at, attached_report_id, proposer_id, building_id) values 
+('Orthotrichum speciosum Nees var. elegans (Schwägr. ex Hook. & Grev.) Warnst.', 'OPEN', '2017-08-25 19:43:02', 3, 51, 2);
+insert into kts_test.proposal (content, status, suggested_at, attached_report_id, meeting_id, proposer_id, building_id) values 
+('Asplenium unilaterale Lam.', 'ACCEPTED', '2017-08-20 19:09:22', 4, 2, 50, 7);
+insert into kts_test.proposal (content, status, suggested_at, attached_report_id, meeting_id, proposer_id, building_id) values 
+('Spiraea alba Du Roi var. latifolia (Aiton) Dippel', 'ACCEPTED', '2017-02-21 00:39:13', 5, 3, 49, 6);
+
 SET FOREIGN_KEY_CHECKS = 1;

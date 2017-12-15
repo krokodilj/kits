@@ -26,27 +26,27 @@ public class Proposal {
 	private Meeting meeting;
 	private LocalDateTime suggestedAt;
 	@OneToMany
-	private List<ProposalVote> discussOnMeetingVotes;
-	@OneToMany
-	private List<ProposalVote> onMeetingVotes;
+	private List<ProposalVote> votes;
 	@ManyToOne
 	private Report attachedReport;
+	@ManyToOne
+	private Building building;
 	
 	public Proposal() {
 		super();
 	}
 
 	public Proposal(String content, ProposalStatus status, User proposer, Meeting meeting, LocalDateTime suggestedAt,
-			List<ProposalVote> discussOnMeetingVotes, List<ProposalVote> onMeetingVotes, Report attachedReport) {
+			List<ProposalVote> votes, Report attachedReport, Building building) {
 		super();
 		this.content = content;
 		this.status = status;
 		this.proposer = proposer;
 		this.meeting = meeting;
 		this.suggestedAt = suggestedAt;
-		this.discussOnMeetingVotes = discussOnMeetingVotes;
-		this.onMeetingVotes = onMeetingVotes;
+		this.votes = votes;
 		this.attachedReport = attachedReport;
+		this.building = building;
 	}
 
 	public Long getId() {
@@ -97,20 +97,12 @@ public class Proposal {
 		this.suggestedAt = suggestedAt;
 	}
 
-	public List<ProposalVote> getDiscussOnMeetingVotes() {
-		return discussOnMeetingVotes;
+	public List<ProposalVote> getVotes() {
+		return votes;
 	}
 
-	public void setDiscussOnMeetingVotes(List<ProposalVote> discussOnMeetingVotes) {
-		this.discussOnMeetingVotes = discussOnMeetingVotes;
-	}
-
-	public List<ProposalVote> getOnMeetingVotes() {
-		return onMeetingVotes;
-	}
-
-	public void setOnMeetingVotes(List<ProposalVote> onMeetingVotes) {
-		this.onMeetingVotes = onMeetingVotes;
+	public void setVotes(List<ProposalVote> votes) {
+		this.votes = votes;
 	}
 
 	public Report getAttachedReport() {
@@ -121,12 +113,19 @@ public class Proposal {
 		this.attachedReport = attachedReport;
 	}
 
+	public Building getBuilding() {
+		return building;
+	}
+
+	public void setBuilding(Building building) {
+		this.building = building;
+	}
+
 	@Override
 	public String toString() {
 		return "Proposal [id=" + id + ", content=" + content + ", status=" + status + ", proposer=" + proposer
-				+ ", meeting=" + meeting + ", suggestedAt=" + suggestedAt + ", discussOnMeetingVotes="
-				+ discussOnMeetingVotes + ", onMeetingVotes=" + onMeetingVotes + ", attachedReport=" + attachedReport
-				+ "]";
+				+ ", meeting=" + meeting + ", suggestedAt=" + suggestedAt + ", votes=" + votes + ", attachedReport="
+				+ attachedReport + ", building=" + building + "]";
 	}
 	
 }
