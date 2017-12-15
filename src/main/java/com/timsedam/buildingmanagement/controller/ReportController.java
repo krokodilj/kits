@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.timsedam.buildingmanagement.dto.AcceptBidDTO;
 import com.timsedam.buildingmanagement.dto.BidDTO;
 import com.timsedam.buildingmanagement.dto.CommentDTO;
 import com.timsedam.buildingmanagement.dto.CreateReportDTO;
@@ -49,7 +50,7 @@ public class ReportController {
 
 	@Autowired
 	private CommentService commentService;
-	
+
 	@Autowired
 	private BidService bidService;
 
@@ -83,18 +84,15 @@ public class ReportController {
 
 		if (report == null)
 			return new ResponseEntity<>("Report doesn't exist.", HttpStatus.NOT_FOUND);
-		
+
 		User to = userService.findOne(forwardDTO.getTo());
 		if (to == null)
 			return new ResponseEntity<>("Forwarded user doesn't exist.", HttpStatus.NOT_FOUND);
-		
 
 		if (forwared.getId() != report.getCurrentHolder().getForwardedTo().getId()) {
 			return new ResponseEntity<>("You can't forward report because you are not current holder.",
 					HttpStatus.CONFLICT);
 		}
-		
-
 
 		Forward forward = new Forward(forwared, to, report);
 		forward = forwardService.save(forward);
@@ -125,7 +123,7 @@ public class ReportController {
 
 	@SuppressWarnings("rawtypes")
 	@PostMapping(value = "bid", consumes = "application/json")
-	public ResponseEntity bid(Principal principal, @RequestBody BidDTO bidDTO) {
+	public ResponseEntity sendBid(Principal principal, @RequestBody BidDTO bidDTO) {
 		Company company = (Company) userService.findByUsername(principal.getName());
 
 		Report report = reportService.findOne(bidDTO.getReport());
@@ -133,8 +131,31 @@ public class ReportController {
 			return new ResponseEntity<>("Report doesn't exist.", HttpStatus.NOT_FOUND);
 
 		Bid bid = new Bid(bidDTO.getDescription(), bidDTO.getPrice(), company, report, "OPEN");
-		
+
 		bidService.save(bid);
 		return new ResponseEntity<>("The bid was successfully sent.", HttpStatus.OK);
+	}
+
+	@SuppressWarnings("rawtypes")
+	@PostMapping(value = "acceptBid", consumes = "application/json")
+	public ResponseEntity acceptBid(Principal principal, @RequestBody AcceptBidDTO acceptBidDTO) {
+		User user = userService.findByUsername(principal.getName());
+		Bid bid = bidService.findOne(acceptBidDTO.getBid());
+		if (bid == null)
+			return new ResponseEntity<>("Bid doesn't exist.", HttpStatus.NOT_FOUND);
+
+		if (user.getId() != bid.getReport().getCurrentHolder().getForwardedTo().getId())
+			return new ResponseEntity<>("You can't accept bid because you are not current holder!",
+					HttpStatus.FORBIDDEN);
+		
+		if(!bid.getStatus().equals("OPEN"))
+			return new ResponseEntity<>("You can't accept bid because bid status isn't OPEN!",
+					HttpStatus.CONFLICT);
+
+		bidService.setStatus("DECLINED", bid.getReport());
+		bidService.setStatus("ACCEPTED", bid.getId());
+		
+		reportService.setStatus("CLOSED", bid.getReport().getId());
+		return new ResponseEntity<>("The bid is accepted.", HttpStatus.OK);
 	}
 }
