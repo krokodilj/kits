@@ -18,10 +18,13 @@ mysql workbench - sudo apt-get install mysql-workbench
 A step by step series of examples that tell you have to get a development env running
 
 clone this project to your machine - git clone https://github.com/krokodilj/kits.git
+
 relocate to project's home dir - cd kits
+
 create database schemas - mysql < create schema kts_test
 
 endpoints can be tested with curl, example:
+
 curl -H "Content-Type: application/json" -X POST -d '{"username":"admin","password":"admin"}' http://localhost:8080/api/auth/login
 
 ## Running the tests
