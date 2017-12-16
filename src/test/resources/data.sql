@@ -154,7 +154,7 @@ insert into kts_test.residence (apartment_number, floor_number, apartment_owner_
 insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (22, 4, 57, 8);
 insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (35, 5, 58, 8);
 insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (36, 5, 59, 8);
-insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (5, 1, 60, 9);
+insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (5, 1, 57, 9);
 insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (8, 2, 57, 9);
 insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (2, 1, 57, 10);
 insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (5, 1, 58, 10);

@@ -59,7 +59,7 @@ public class ProposalController {
 			Building building = buildingService.findOneById(proposalCreateDTO.getBuildingId());
 			if(proposalCreateDTO.getAttachedReport() != null) {
 				Report attachedReport = reportService.findOne(proposalCreateDTO.getAttachedReport());
-				if(!userService.isResidentOrManagerInBuilding(requestSender.getId(), attachedReport.getLocation().getId())) {
+				if(!userService.isResidentOrApartmentOwnerInBuilding(requestSender.getId(), attachedReport.getLocation().getId())) {
 					// User has sent a Proposal concerning a Report that has nothing to do with his Building or Residence
 					return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 				}

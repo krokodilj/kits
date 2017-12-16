@@ -34,8 +34,23 @@ public class UserService implements UserDetailsService {
 	@Autowired
 	private RoleService roleService;
 	
+	public User findOne(Long to) {
+		return userRepository.findOne(to);
+	}
+	
 	public void save(User user) {
 		userRepository.save(user);
+	}
+	
+	public User createResident(User user){
+		try{
+			Role role = roleService.findOneByName("RESIDENT");
+			user.setRole(role);
+			return userRepository.save(user);
+		}catch (Exception e){
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	public User findOneByUsername(String username) {
@@ -54,7 +69,16 @@ public class UserService implements UserDetailsService {
 			return false;
 	}
 	
-	public boolean isResidentOrManagerInBuilding(Long userId, Long buildingId) {
+	public boolean isApartmentOwnerInBuilding(Long userId, Long buildingId) {
+		Building building = buildingRepository.findOne(buildingId);
+		for(Residence residence : building.getResidences()) {
+			if(userId == residence.getApartmentOwner().getId())
+				return true;
+		}
+		return false;
+	}
+		
+	public boolean isResidentOrApartmentOwnerInBuilding(Long userId, Long buildingId) {
 		Building building = buildingRepository.findOne(buildingId);
 		for(Residence residence : building.getResidences()) {
 			for(Resident resident : residence.getResidents()) {
@@ -84,27 +108,6 @@ public class UserService implements UserDetailsService {
                     grantedAuthorities);
         }
     }
-
-
-	public User findByUsername(String name) {
-		return userRepository.findByUsername(name);
-	}
-
-
-	public User findOne(Long to) {
-		return userRepository.findOne(to);
-	}
-
-	public User createUser(User user){
-		try{
-			Role role = roleService.findOneByName("RESIDENT");
-			user.setRole(role);
-			return userRepository.save(user);
-		}catch (Exception e){
-			e.printStackTrace();
-			return null;
-		}
-	}
 
 	
 }

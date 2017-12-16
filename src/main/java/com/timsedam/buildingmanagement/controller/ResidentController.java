@@ -53,7 +53,7 @@ public class ResidentController {
             return new ResponseEntity<>("Username in use",HttpStatus.CONFLICT);
 
         Resident resident = (Resident) modelMapper.map(userRegisterDTO, Resident.class);
-        resident = (Resident) userService.createUser(resident);
+        resident = (Resident) userService.createResident(resident);
 
         if (resident == null)
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
