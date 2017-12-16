@@ -130,7 +130,7 @@ public class ResidentControllerTest {
      */
     @Test
     public void setResidence(){
-        String residentId = "5";
+        String residentId = "51";
         String residenceId = "3";
         ResponseEntity responseEntity=restTemplate.exchange(
                 URL_PREFIX+residentId+"/add_to_residence/"+residenceId ,
@@ -186,7 +186,7 @@ public class ResidentControllerTest {
      */
     @Test
     public void setResidenceOwner(){
-        String residentId = "5";
+        String residentId = "49";
         String residenceId = "3";
 
         ResponseEntity responseEntity=restTemplate.exchange(

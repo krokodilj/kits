@@ -48,14 +48,16 @@ public class Resident extends User {
 	}
 
 	public boolean isResident(Building building) {
-		
+
 		for(Residence ownedApartment : ownedApartments) {
-			if(ownedApartment.getBuilding().getId() == building.getId())
+			if(ownedApartment.getBuilding().getId() == building.getId()) {
 				return true;
+			}
 		}
 		for(Residence residence : residences) {
-			if(residence.getBuilding().getId() == building.getId())
+			if(residence.getBuilding().getId() == building.getId()) {
 				return true;
+			}
 		}
 		return false;
 	}

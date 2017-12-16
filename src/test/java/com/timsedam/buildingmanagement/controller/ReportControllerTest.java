@@ -71,7 +71,7 @@ public class ReportControllerTest {
 	@Test
 	public void create() throws Exception {
 
-		CreateReportDTO validReportDTO = new CreateReportDTO("kvar", 3, new ArrayList<String>());
+		CreateReportDTO validReportDTO = new CreateReportDTO("kvar", 1, new ArrayList<String>());
 
 		ResponseEntity<Long> responseEntity = restTemplate.postForEntity(URL_PREFIX + "create/",
 				getRequestEntity(validReportDTO, "mladen", "mladen"), Long.class);
@@ -81,7 +81,7 @@ public class ReportControllerTest {
 		assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
 		assertEquals("mladen", report.getSender().getUsername());
 		assertEquals("kvar", report.getDescription());
-		assertEquals(3, report.getLocation().getId());
+		assertEquals(1, report.getLocation().getId());
 
 		reportRepository.delete(id);
 	}
