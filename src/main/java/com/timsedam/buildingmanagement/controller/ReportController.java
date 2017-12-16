@@ -58,7 +58,7 @@ public class ReportController {
 	@PostMapping(value = "create", consumes = "application/json")
 	public ResponseEntity create(Principal principal, @RequestBody CreateReportDTO reportDTO) {
 
-		Resident sender = (Resident) userService.findByUsername(principal.getName());
+		Resident sender = (Resident) userService.findOneByUsername(principal.getName());
 		Building building = buildingService.findOneById(reportDTO.getBuilding());
 
 		if (!sender.isResident(building)) {
@@ -79,7 +79,7 @@ public class ReportController {
 	@PostMapping(value = "forward", consumes = "application/json")
 	public ResponseEntity forward(Principal principal, @RequestBody ForwardDTO forwardDTO) {
 
-		User forwared = userService.findByUsername(principal.getName());
+		User forwared = userService.findOneByUsername(principal.getName());
 		Report report = reportService.findOne(forwardDTO.getReport());
 
 		if (report == null)
@@ -105,7 +105,7 @@ public class ReportController {
 	@PostMapping(value = "comment", consumes = "application/json")
 	public ResponseEntity comment(Principal principal, @RequestBody CommentDTO commentDTO) {
 
-		User commenter = userService.findByUsername(principal.getName());
+		User commenter = userService.findOneByUsername(principal.getName());
 		Report report = reportService.findOne(commentDTO.getReport());
 
 		if (report == null)
@@ -124,7 +124,7 @@ public class ReportController {
 	@SuppressWarnings("rawtypes")
 	@PostMapping(value = "bid", consumes = "application/json")
 	public ResponseEntity sendBid(Principal principal, @RequestBody BidDTO bidDTO) {
-		Company company = (Company) userService.findByUsername(principal.getName());
+		Company company = (Company) userService.findOneByUsername(principal.getName());
 
 		Report report = reportService.findOne(bidDTO.getReport());
 		if (report == null)
@@ -139,7 +139,7 @@ public class ReportController {
 	@SuppressWarnings("rawtypes")
 	@PostMapping(value = "acceptBid", consumes = "application/json")
 	public ResponseEntity acceptBid(Principal principal, @RequestBody AcceptBidDTO acceptBidDTO) {
-		User user = userService.findByUsername(principal.getName());
+		User user = userService.findOneByUsername(principal.getName());
 		Bid bid = bidService.findOne(acceptBidDTO.getBid());
 		if (bid == null)
 			return new ResponseEntity<>("Bid doesn't exist.", HttpStatus.NOT_FOUND);
