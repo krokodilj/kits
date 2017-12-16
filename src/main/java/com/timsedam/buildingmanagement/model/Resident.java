@@ -48,19 +48,14 @@ public class Resident extends User {
 	}
 
 	public boolean isResident(Building building) {
-		
-		System.out.println("------------");
-		System.out.println(this.getUsername());
-		
+
 		for(Residence ownedApartment : ownedApartments) {
 			if(ownedApartment.getBuilding().getId() == building.getId()) {
-				System.out.println("OWNED APARTMENT " + building.getId());
 				return true;
 			}
 		}
 		for(Residence residence : residences) {
 			if(residence.getBuilding().getId() == building.getId()) {
-				System.out.println("LIVES IN " + building.getId());
 				return true;
 			}
 		}
