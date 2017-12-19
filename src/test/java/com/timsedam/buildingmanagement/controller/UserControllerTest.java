@@ -71,7 +71,7 @@ public class UserControllerTest {
 	
 	/**
 	 * POST request to "/api/users/" twice with the same UserRegisterDTO parameter
-	 * Expected: new UserDTO is returned to the client, HTTP Status 201
+	 * Expected: error message is returned, HTTP Status 400
 	 */
 	@Test
 	public void registerDuplicate() throws Exception {
@@ -81,16 +81,16 @@ public class UserControllerTest {
 		assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
 		UserDTO userFromResponse = responseEntity.getBody();
 		
-		responseEntity = 
-				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(validUserRegisterDTO), UserDTO.class);
-		assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+		ResponseEntity<String> responseEntityDuplicate = 
+				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(validUserRegisterDTO), String.class);
+		assertEquals(HttpStatus.BAD_REQUEST, responseEntityDuplicate.getStatusCode());
 		
 		userRepository.delete(userFromResponse.getId());
     }
 	
 	/**
 	 * POST request to "/api/users/" with invalid UserRegisterDTO parameter - username too short
-	 * Expected: no UserDTO is returned, HTTP Status 422
+	 * Expected: error message is returned, HTTP Status 422
 	 */
 	@Test
 	public void registerUsernameInvalid() throws Exception {
@@ -98,17 +98,15 @@ public class UserControllerTest {
 		UserRegisterDTO requestObject = new UserRegisterDTO(validUserRegisterDTO);
 		requestObject.setUsername("123");
 		
-		ResponseEntity<UserDTO> responseEntity = 
-				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(requestObject), UserDTO.class);
-		
-		assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
-		assertEquals(responseEntity.getBody(), null);
-		
+		ResponseEntity<String> responseEntity = 
+				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(requestObject), String.class);
+				
+		assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());		
     }
 	
 	/**
 	 * POST request to "/api/users/" with invalid UserRegisterDTO parameter - password too short
-	 * Expected: no UserDTO is returned, HTTP Status 422
+	 * Expected: error message is returned, HTTP Status 422
 	 */
 	@Test
 	public void registerPasswordInvalid() throws Exception {
@@ -116,28 +114,25 @@ public class UserControllerTest {
 		UserRegisterDTO requestObject = new UserRegisterDTO(validUserRegisterDTO);
 		requestObject.setPassword("123");
 		
-		ResponseEntity<UserDTO> responseEntity = 
-				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(requestObject), UserDTO.class);
+		ResponseEntity<String> responseEntity = 
+				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(requestObject), String.class);
 		
 		assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
-		assertEquals(responseEntity.getBody(), null);
     }
 	
 	/**
 	 * POST request to "/api/users/" with invalid UserRegisterDTO parameter - email of invalid format
-	 * Expected: no UserDTO is returned, HTTP Status 422
+	 * Expected: error message is returned, HTTP Status 422
 	 */
 	@Test
 	public void registerEmailInvalid() throws Exception {
 		UserRegisterDTO requestObject = new UserRegisterDTO(validUserRegisterDTO);
 		requestObject.setEmail("INVALID_EMAIL_FORMAT");
 		
-		ResponseEntity<UserDTO> responseEntity = 
-				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(requestObject), UserDTO.class);
+		ResponseEntity<String> responseEntity = 
+				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(requestObject), String.class);
 		
 		assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
-		assertEquals(responseEntity.getBody(), null);
     }
-	
 
 }

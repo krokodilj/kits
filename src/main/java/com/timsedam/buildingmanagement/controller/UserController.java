@@ -33,14 +33,19 @@ public class UserController {
 	private ModelMapper modelMapper;
 	
 	@PostMapping(consumes = "application/json", produces = "application/json")
-	public ResponseEntity<UserDTO> register(@Valid @RequestBody UserRegisterDTO userRegisterDTO,
+	public ResponseEntity<?> register(@Valid @RequestBody UserRegisterDTO userRegisterDTO,
 			BindingResult validationResult) throws ClassNotFoundException {
-		
+				
 		if (validationResult.hasErrors()) {
-			return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+			String errorMessage = "Validation failed!\n"
+					+ "username must be atleast 4 characters long,\n"
+					+ "password must be atleast 6 characters long,\n"
+					+ "email must be of the valid format.";
+			return new ResponseEntity<String>(errorMessage, HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 		else if(userService.exists(userRegisterDTO.getUsername())) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			String errorMessage = "User with the provided username already exists.";
+			return new ResponseEntity<String>(errorMessage, HttpStatus.BAD_REQUEST);
 		}
 		else {
  			User user = (User) modelMapper.map(userRegisterDTO, User.class);
@@ -50,6 +55,7 @@ public class UserController {
 			userService.save(user);
 			
 			UserDTO responseData = modelMapper.map(user, UserDTO.class);
+			
 			return new ResponseEntity<UserDTO>(responseData, HttpStatus.CREATED);
 		}
 		

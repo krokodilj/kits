@@ -7,6 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class BuildingManagementApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(BuildingManagementApplication.class, args);
+		
+		SpringApplication app = new SpringApplication(BuildingManagementApplication.class);
+		app.setLogStartupInfo(false);
+		app.run(args);
 	}
 }

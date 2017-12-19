@@ -1,18 +1,17 @@
 package com.timsedam.buildingmanagement.util.mappers;
 
+import java.util.ArrayList;
+
+import org.springframework.stereotype.Component;
+
 import com.timsedam.buildingmanagement.dto.CreateResidenceDTO;
 import com.timsedam.buildingmanagement.dto.ResidenceDTO;
 import com.timsedam.buildingmanagement.model.Building;
 import com.timsedam.buildingmanagement.model.Residence;
 import com.timsedam.buildingmanagement.model.Resident;
-import com.timsedam.buildingmanagement.service.BuildingService;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
-
+@Component
 public class ResidenceMapper {
-    @Autowired
-    private BuildingService buildingService ;
 
     public Residence toModel(CreateResidenceDTO r,Building b){
         Residence residence=new Residence(
@@ -51,7 +50,8 @@ public class ResidenceMapper {
             }
         }
         residenceDTO.setResidents(r.getResidents());
-        //appertmentowner
+        
+        //apartment owner
         if(r.getApartmentOwner()!=null){
             r.getApartmentOwner().setPassword(null);
             r.getApartmentOwner().setComments(null);

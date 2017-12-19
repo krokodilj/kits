@@ -1,20 +1,25 @@
 package com.timsedam.buildingmanagement.controller;
 
-import com.timsedam.buildingmanagement.dto.UserDTO;
-import com.timsedam.buildingmanagement.dto.UserRegisterDTO;
-import com.timsedam.buildingmanagement.model.*;
-import com.timsedam.buildingmanagement.service.BuildingService;
-import com.timsedam.buildingmanagement.service.ResidenceService;
-import com.timsedam.buildingmanagement.service.RoleService;
-import com.timsedam.buildingmanagement.service.UserService;
+import javax.validation.Valid;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
+import com.timsedam.buildingmanagement.dto.UserRegisterDTO;
+import com.timsedam.buildingmanagement.model.Residence;
+import com.timsedam.buildingmanagement.model.Resident;
+import com.timsedam.buildingmanagement.service.ResidenceService;
+import com.timsedam.buildingmanagement.service.RoleService;
+import com.timsedam.buildingmanagement.service.UserService;
 
 
 @RestController
