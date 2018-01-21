@@ -4,7 +4,7 @@
 		.config(['$routeProvider',function($routeProvider){
 			$routeProvider
 			.when('/login',{
-					templateUrl:"./app/login/login.html",
+					templateUrl:"./app/main/login/login.html",
 					controller:"LoginController",
 					controllerAs:"vm"								
 				})

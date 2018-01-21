@@ -4,7 +4,7 @@
 		.config(['$routeProvider',function($routeProvider){
 			$routeProvider
 			.when('/register',{
-					templateUrl:"./app/register/register.html",
+					templateUrl:"./app/main/register/register.html",
 					controller:"RegisterController",
 					controllerAs:"vm"								
 				})
