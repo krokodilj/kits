@@ -1,0 +1,29 @@
+language: java
+jdk: 
+    - oraclejdk8
+services: 
+    - mysql
+test:
+  adapter: mysql2
+  database: kts_test
+  username: root
+  encoding: utf8
+before_install:
+  - mysql -u root -e "CREATE DATABASE kts_test"
+  - mysql -u root -e "CREATE DATABASE kts_prod"
+  - mysql -u root -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('root');"
+
+addons:
+  sonarcloud:
+    organization: "krokodilj-github" # the key of the org you chose at step #3
+    token:
+      secure: "2q+SqUdVES225Zr9GChestDaLTQNsbGP9LtnJacnjDRHT3fj1RF65vsBDD/NaYeQhv03m+rXuVlvH12Ve2EMqm4LqhSPptfJ6GNcQE/uEPdLkjJT/4kZK71tHC9fvKn6nPC61znSqz3iF6uOLwiuwnfaIN0ZvTzT/621ufTo1qgrAGv1ua61o0fyAAIhQkWBV+su92996meqTtvqSpk2CfY6urZqmITaasfl+g0Ona+RNKM7jbPkveX2V5jOK1GzBxki5k+TgrxrqmW8TJO4v4APfKJO9ePSa2z4tQ5ebW4tL1p1vQSJc0dBcGzIu1W1U+6SHcj2fmGtvZIOWkjdfK3Tx/Z0ZYZ9ED0DbJvgVSJa98OZnH8EtsNtr7x6y36nA0AYYuuw7AqFb6aF0Hc4KihcSuAHL5Fhnr6HExNdp712pmE8TNuJfGIDQONNV3HIwQUaj1lOsZd895s3jrUb6/zp2ZaV0GTwj2wAAIsgILe6UR+HH8vO9cqeQXVVA0JRcviqsF5EegBhLfLhA1qr9drAXkENE7VonH112qBT+trfAc//AcWp1lFkJtL1ILn4asYG9cX5RSOUXEsTivzMug6u/0SIHLQc9RnU4tAClhGxdfDnbCIESY7gQinsd4S/zKpTQaAEi3Jxay250T/3zLxrP9xUG3QRkghd980LQes="
+ # encrypted value of your token
+    branches:
+      - master
+      - develop
+script:
+  # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
+notifications:
+  email: false
