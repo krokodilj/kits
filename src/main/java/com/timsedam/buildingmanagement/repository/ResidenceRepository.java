@@ -11,5 +11,5 @@ import com.timsedam.buildingmanagement.model.Residence;
 public interface ResidenceRepository extends JpaRepository<Residence,Long>{
 
     public List<Residence> findAllByBuilding(Building b);
-
+    
 }

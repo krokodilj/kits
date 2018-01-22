@@ -2,10 +2,6 @@ package com.timsedam.buildingmanagement.controller;
 
 import static org.junit.Assert.assertEquals;
 
-import java.time.LocalDateTime;
-
-import javax.persistence.ValidationMode;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +14,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.timsedam.buildingmanagement.dto.MeetingDTO;
-import com.timsedam.buildingmanagement.dto.ProposalVoteCastDTO;
-import com.timsedam.buildingmanagement.dto.ProposalVoteDTO;
-import com.timsedam.buildingmanagement.dto.UserLoginDTO;
+import com.timsedam.buildingmanagement.dto.request.ProposalVoteCastDTO;
+import com.timsedam.buildingmanagement.dto.request.UserLoginDTO;
+import com.timsedam.buildingmanagement.dto.response.ProposalVoteDTO;
 import com.timsedam.buildingmanagement.model.ProposalVoteValue;
 
 @RunWith(SpringRunner.class)

@@ -17,19 +17,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.timsedam.buildingmanagement.dto.AcceptBidDTO;
-import com.timsedam.buildingmanagement.dto.BidDTO;
-import com.timsedam.buildingmanagement.dto.CommentDTO;
-import com.timsedam.buildingmanagement.dto.CreateReportDTO;
-import com.timsedam.buildingmanagement.dto.ForwardDTO;
-import com.timsedam.buildingmanagement.dto.UserLoginDTO;
+import com.timsedam.buildingmanagement.dto.request.AcceptBidDTO;
+import com.timsedam.buildingmanagement.dto.request.CommentDTO;
+import com.timsedam.buildingmanagement.dto.request.CreateReportDTO;
+import com.timsedam.buildingmanagement.dto.request.ForwardDTO;
+import com.timsedam.buildingmanagement.dto.request.UserLoginDTO;
+import com.timsedam.buildingmanagement.dto.response.BidDTO;
 import com.timsedam.buildingmanagement.model.Bid;
 import com.timsedam.buildingmanagement.model.Comment;
+import com.timsedam.buildingmanagement.model.Forward;
 import com.timsedam.buildingmanagement.model.Report;
 import com.timsedam.buildingmanagement.repository.BidRepository;
 import com.timsedam.buildingmanagement.repository.CommentRepository;
+import com.timsedam.buildingmanagement.repository.ForwardRepository;
 import com.timsedam.buildingmanagement.repository.ReportRepository;
-import com.timsedam.buildingmanagement.service.BidService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -40,6 +41,9 @@ public class ReportControllerTest {
 
 	@Autowired
 	private ReportRepository reportRepository;
+	
+	@Autowired
+	private ForwardRepository forwardRepository;
 	
 	@Autowired
 	private CommentRepository commentRepository;
@@ -65,21 +69,43 @@ public class ReportControllerTest {
 	}
 
 	/**
-	 * Residence resident send POST request to "/api/reports/create" with valid
-	 * dto parameter Expected: id of new Report and HTTP Status 201 (CREATED)
+	 * POST request to "/api/reports/" with valid dto parameter
+	 * Expected: id of new Report and HTTP Status 201 (CREATED)
 	 */
 	@Test
 	public void create() throws Exception {
-
 		CreateReportDTO validReportDTO = new CreateReportDTO("kvar", 1, new ArrayList<String>());
 
-		ResponseEntity<Long> responseEntity = restTemplate.postForEntity(URL_PREFIX + "create/",
-				getRequestEntity(validReportDTO, "mladen", "mladen"), Long.class);
+		ResponseEntity<Long> responseEntity = 
+			restTemplate.postForEntity(URL_PREFIX, getRequestEntity(validReportDTO, "resident1", "resident1"), Long.class);
+
+		Long reportId = responseEntity.getBody();
+		Report report = reportRepository.findOne(reportId);
+		
+		assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+		assertEquals("resident1", report.getSender().getUsername());
+		assertEquals("kvar", report.getDescription());
+		assertEquals(1, report.getLocation().getId());
+
+		reportRepository.delete(reportId);
+	}
+
+	/**
+	 * Residence owner send POST request to "/api/reports/create" with valid dto parameter
+	 * Expected: id of new Report and HTTP Status 201 (CREATED)
+	 */
+	@Test
+	public void ownerCreate() throws Exception {
+		CreateReportDTO validReportDTO = new CreateReportDTO("kvar", 1, new ArrayList<String>());
+
+		ResponseEntity<Long> responseEntity = 
+				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(validReportDTO, "owner1", "owner1"), Long.class);
 
 		Long id = responseEntity.getBody();
 		Report report = reportRepository.findOne(id);
+		
 		assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-		assertEquals("mladen", report.getSender().getUsername());
+		assertEquals("owner1", report.getSender().getUsername());
 		assertEquals("kvar", report.getDescription());
 		assertEquals(1, report.getLocation().getId());
 
@@ -87,59 +113,60 @@ public class ReportControllerTest {
 	}
 
 	/**
-	 * Residence owner send POST request to "/api/reports/create" with valid dto
-	 * parameter Expected: id of new Report and HTTP Status 201 (CREATED)
-	 */
-	@Test
-	public void ownerCreate() throws Exception {
-
-		CreateReportDTO validReportDTO = new CreateReportDTO("kvar", 3, new ArrayList<String>());
-
-		ResponseEntity<Long> responseEntity = restTemplate.postForEntity(URL_PREFIX + "create/",
-				getRequestEntity(validReportDTO, "vaso", "vaso"), Long.class);
-
-		Long id = responseEntity.getBody();
-		Report report = reportRepository.findOne(id);
-		assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-		assertEquals("vaso", report.getSender().getUsername());
-		assertEquals("kvar", report.getDescription());
-		assertEquals(3, report.getLocation().getId());
-
-		reportRepository.delete(id);
-	}
-
-	/**
-	 * User without permission send POST request to "/api/reports/create"
+	 * User without permission send POST request to "/api/reports/"
 	 * Expected: HTTP status 403 (FORBIDDEN)
 	 */
 	@Test
 	public void invalidRole() throws Exception {
+		CreateReportDTO validReportDTO = new CreateReportDTO("kvar", 1, new ArrayList<String>());
 
-		CreateReportDTO validReportDTO = new CreateReportDTO("kvar", 3, new ArrayList<String>());
-
-		ResponseEntity<String> responseEntity = restTemplate.postForEntity(URL_PREFIX + "create/",
-				getRequestEntity(validReportDTO, "admin", "admin"), String.class);
+		ResponseEntity<String> responseEntity = 
+			restTemplate.postForEntity(URL_PREFIX, getRequestEntity(validReportDTO, "admin1", "admin1"), String.class);
 
 		assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
-
 	}
 
 	/**
-	 * Resident from the other building send POST request to
-	 * "/api/reports/create" Expected: HTTP status 409 (CONFLICT)
+	 * Resident from the other building send POST request to "/api/reports/" 
+	 * Expected: HTTP status 409 (CONFLICT)
 	 */
 	@Test
 	public void fromOtherBuilding() throws Exception {
+		CreateReportDTO validReportDTO = new CreateReportDTO("kvar", 1, new ArrayList<String>());
 
-		CreateReportDTO validReportDTO = new CreateReportDTO("kvar", 3, new ArrayList<String>());
+		ResponseEntity<String> responseEntity = 
+			restTemplate.postForEntity(URL_PREFIX, getRequestEntity(validReportDTO, "resident20", "resident20"), String.class);
 
-		ResponseEntity<String> responseEntity = restTemplate.postForEntity(URL_PREFIX + "create/",
-				getRequestEntity(validReportDTO, "ivan", "ivan"), String.class);
-
-		assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
-
+		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
 	}
+	
+	/**
+	 * User send valid POST request to "/api/reports/forward"
+	 * Expected: Set new holder on report and send back HTTP status 200 (OK)
+	 */
+	@Test
+	public void forward() throws Exception {
+		long reportId = 1;
+		long to = 12; 
+		long current = 11;
+		ForwardDTO validForwardDTO = new ForwardDTO(to, reportId);
 
+		ResponseEntity<String> responseEntity = 
+			restTemplate.postForEntity(URL_PREFIX + "forward/", getRequestEntity(validForwardDTO, "manager1", "manager1"), String.class);
+
+		Report report = reportRepository.findOne(1L);
+		long newHolder = report.getCurrentHolder().getForwardedTo().getId();
+		long oldHolder = report.getCurrentHolder().getForwarder().getId();
+		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+		assertEquals(current, oldHolder);
+		assertEquals(to, newHolder);
+
+		Forward originalHolder = forwardRepository.findOne(1L);
+		forwardRepository.delete(Long.parseLong(responseEntity.getBody()));
+		report.setCurrentHolder(originalHolder);
+		reportRepository.save(report);
+	}
+	
 	/**
 	 * User send POST request to "/api/reports/forward" with not existing report
 	 * Expected: HTTP status 404 (NOT_FOUND)
@@ -149,28 +176,27 @@ public class ReportControllerTest {
 
 		ForwardDTO badForwardDTO = new ForwardDTO(3, -95);
 
-		ResponseEntity<String> responseEntity = restTemplate.postForEntity(URL_PREFIX + "forward/",
-				getRequestEntity(badForwardDTO, "ivan", "ivan"), String.class);
+		ResponseEntity<String> responseEntity = 
+			restTemplate.postForEntity(URL_PREFIX + "forward/", getRequestEntity(badForwardDTO, "manager1", "manager1"), String.class);
 
 		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-
+		assertEquals("Report with id: -95 doesn't exist.", responseEntity.getBody());
 	}
-
+	
 	/**
-	 * User send POST request to "/api/reports/forward" with report on which he
-	 * isn't current holder 
+	 * User send POST request to "/api/reports/forward" with report on which he isn't current holder 
 	 * Expected: HTTP status 409 (CONFLICT)
 	 */
 	@Test
 	public void notCurrentHolder() throws Exception {
 
-		ForwardDTO badForwardDTO = new ForwardDTO(3, 1);
+		ForwardDTO badForwardDTO = new ForwardDTO(3, 5);
 
-		ResponseEntity<String> responseEntity = restTemplate.postForEntity(URL_PREFIX + "forward/",
-				getRequestEntity(badForwardDTO, "ivan", "ivan"), String.class);
+		ResponseEntity<String> responseEntity = 
+			restTemplate.postForEntity(URL_PREFIX + "forward/", getRequestEntity(badForwardDTO, "manager1", "manager1"), String.class);
 
-		assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
-
+		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+		assertEquals("User with id: 11 is not current holder of report with id: 5", responseEntity.getBody());
 	}
 	
 	/**
@@ -182,67 +208,13 @@ public class ReportControllerTest {
 
 		ForwardDTO badForwardDTO = new ForwardDTO(500, 1);
 
-		ResponseEntity<String> responseEntity = restTemplate.postForEntity(URL_PREFIX + "forward/",
-				getRequestEntity(badForwardDTO, "ivan", "ivan"), String.class);
+		ResponseEntity<String> responseEntity = 
+			restTemplate.postForEntity(URL_PREFIX + "forward/", getRequestEntity(badForwardDTO, "manager1", "manager1"), String.class);
 
 		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-
+		assertEquals("User with id: 500 doesn't exist.", responseEntity.getBody());
 	}
 	
-	/**
-	 * User send valid POST request to "/api/reports/forward"
-	 * Expected: Set new holder on report and send back HTTP status 200 (OK)
-	 */
-	@Test
-	public void forward() throws Exception {
-
-		long report = 1;
-		long to = 4; 
-		long current = 3;
-		ForwardDTO validForwardDTO = new ForwardDTO(to, report);
-
-		ResponseEntity<String> responseEntity = restTemplate.postForEntity(URL_PREFIX + "forward/",
-				getRequestEntity(validForwardDTO, "vaso", "vaso"), String.class);
-
-		long newHolder = reportRepository.findOne(report).getCurrentHolder().getForwardedTo().getId();
-		long oldHolder = reportRepository.findOne(report).getCurrentHolder().getForwarder().getId();
-		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-		assertEquals(current, oldHolder);
-		assertEquals(to, newHolder);
-
-	}
-	
-	/**
-	 * User send POST request to "/api/reports/comment" with not existing report
-	 * Expected: HTTP status 404 (NOT_FOUND)
-	 */
-	@Test
-	public void commentAtNotExistingReport() throws Exception {
-
-		CommentDTO badDTO = new CommentDTO("komentar", -59);
-
-		ResponseEntity<String> responseEntity = restTemplate.postForEntity(URL_PREFIX + "comment/",
-				getRequestEntity(badDTO, "ivan", "ivan"), String.class);
-
-		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-
-	}
-	
-	/**
-	 * User send POST request to "/api/reports/comment" with empty comment
-	 * Expected: HTTP status 400 (BAD_REQUEST)
-	 */
-	@Test
-	public void emptyComment() throws Exception {
-
-		CommentDTO badDTO = new CommentDTO("", 1);
-
-		ResponseEntity<String> responseEntity = restTemplate.postForEntity(URL_PREFIX + "comment/",
-				getRequestEntity(badDTO, "ivan", "ivan"), String.class);
-
-		assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-
-	}
 	
 	/**
 	 * User send POST request to "/api/reports/comment" with valid DTO
@@ -250,20 +222,79 @@ public class ReportControllerTest {
 	 */
 	@Test
 	public void postComment() throws Exception {
-
 		long report = 1;
-		String komentar = "komentar";
+		String data = "comment data";
 		
-		CommentDTO validDTO = new CommentDTO(komentar, report);
+		CommentDTO validDTO = new CommentDTO(data, report);
 
-		ResponseEntity<Long> responseEntity = restTemplate.postForEntity(URL_PREFIX + "comment/",
-				getRequestEntity(validDTO, "ivan", "ivan"), Long.class);
+		ResponseEntity<Long> responseEntity = 
+			restTemplate.postForEntity(URL_PREFIX + "comment/", getRequestEntity(validDTO, "resident1", "resident1"), Long.class);
 
-		Long id = responseEntity.getBody();
-		Comment comment = commentRepository.findOne(id);
+		Long commentId = responseEntity.getBody();
+		Comment comment = commentRepository.findOne(commentId);
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-		assertEquals(komentar, comment.getData());
+		assertEquals(data, comment.getData());
 
+		commentRepository.delete(commentId);
+	}
+
+	/**
+	 * User send POST request to "/api/reports/comment" with not existing report
+	 * Expected: HTTP status 404 (NOT_FOUND)
+	 */
+	@Test
+	public void commentAtNotExistingReport() throws Exception {
+
+		CommentDTO badDTO = new CommentDTO("comment data", -59);
+
+		ResponseEntity<String> responseEntity = 
+			restTemplate.postForEntity(URL_PREFIX + "comment/", getRequestEntity(badDTO, "resident1", "resident1"), String.class);
+
+		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+		assertEquals("Report with id: -59 doesn't exist.", responseEntity.getBody());
+	}
+	
+	/**
+	 * User send POST request to "/api/reports/comment" with empty comment
+	 * Expected: HTTP status 422 (UNPROCESSABLE_ENTITY)
+	 */
+	@Test
+	public void emptyComment() throws Exception {
+
+		CommentDTO badDTO = new CommentDTO(null, 1);
+
+		ResponseEntity<String> responseEntity = 
+			restTemplate.postForEntity(URL_PREFIX + "comment/", getRequestEntity(badDTO, "resident1", "resident1"), String.class);
+
+		assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
+		assertEquals("'data' not provided", responseEntity.getBody());
+	}
+	
+	
+	/**
+	 * User send POST request to "/api/reports/bid" with valid DTO
+	 * Expected: Add new bid to report and send back HTTP status 200 (OK)
+	 */
+	@Test
+	public void sendBid() throws Exception {
+
+		long report_id = 1;
+		long price = 500;
+		String description = "ponuda";
+		BidDTO validDTO = new BidDTO(description, price, report_id);
+
+		Report report = reportRepository.findOne(report_id);
+		List<Bid> bids = bidRepository.findByReportBid(report);
+		
+		ResponseEntity<String> responseEntity = 
+			restTemplate.postForEntity(URL_PREFIX + "bid/", getRequestEntity(validDTO, "company1", "company1"), String.class);
+		
+		List<Bid> newBids = bidRepository.findByReportBid(report);
+		
+		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+		assertEquals(newBids.size(), bids.size() + 1);
+		
+		bidRepository.delete(Long.parseLong(responseEntity.getBody()));
 	}
 	
 	/**
@@ -275,11 +306,10 @@ public class ReportControllerTest {
 
 		BidDTO badDTO = new BidDTO("poslednja ponuda", 200, 1);
 
-		ResponseEntity<String> responseEntity = restTemplate.postForEntity(URL_PREFIX + "bid/",
-				getRequestEntity(badDTO, "ivan", "ivan"), String.class);
+		ResponseEntity<String> responseEntity = 
+			restTemplate.postForEntity(URL_PREFIX + "bid/", getRequestEntity(badDTO, "resident1", "resident1"), String.class);
 
 		assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
-
 	}
 	
 	/**
@@ -291,38 +321,11 @@ public class ReportControllerTest {
 
 		BidDTO badDTO = new BidDTO("poslednja ponuda", 200, -51);
 
-		ResponseEntity<String> responseEntity = restTemplate.postForEntity(URL_PREFIX + "bid/",
-				getRequestEntity(badDTO, "company", "company"), String.class);
+		ResponseEntity<String> responseEntity = 
+			restTemplate.postForEntity(URL_PREFIX + "bid/", getRequestEntity(badDTO, "company1", "company1"), String.class);
 
 		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-
-	}
-	
-	/**
-	 * User send POST request to "/api/reports/bid" with valid DTO
-	 * Expected: Add new bid to report and send back HTTP status 200 (OK)
-	 */
-	@Test
-	public void sendBid() throws Exception {
-
-		long report_id = 2;
-		long price = 500;
-		String description = "ponuda";
-		
-		Report report = reportRepository.findOne(report_id);
-		List<Bid> bids = bidRepository.findByReportBid(report);
-		
-		BidDTO validDTO = new BidDTO(description, price, report_id);
-
-		ResponseEntity<String> responseEntity = restTemplate.postForEntity(URL_PREFIX + "bid/",
-				getRequestEntity(validDTO, "company", "company"), String.class);
-
-		List<Bid> newBids = bidRepository.findByReportBid(report);
-		
-		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-		assertEquals(newBids.size(), bids.size()+1);
-		
-
+		assertEquals("Report with id: -51 doesn't exist.", responseEntity.getBody());
 	}
 	
 	/**
@@ -336,12 +339,12 @@ public class ReportControllerTest {
 	@Test
 	public void acceptBid() throws Exception {
 		
-		long bid_id = 2;
+		long bid_id = 1;
 		AcceptBidDTO validDTO = new AcceptBidDTO(bid_id);
 		Bid bid = bidRepository.findOne(bid_id);
 		
-		ResponseEntity<String> responseEntity = restTemplate.postForEntity(URL_PREFIX + "acceptBid/",
-				getRequestEntity(validDTO, "vaso", "vaso"), String.class);
+		ResponseEntity<String> responseEntity = 
+			restTemplate.postForEntity(URL_PREFIX + "acceptBid/", getRequestEntity(validDTO, "manager1", "manager1"), String.class);
 		
 		Bid newBid = bidRepository.findOne(bid_id);
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -349,7 +352,7 @@ public class ReportControllerTest {
 		assertEquals("ACCEPTED", newBid.getStatus());
 		assertEquals("CLOSED", newBid.getReport().getStatus());
 		
-
+		bidRepository.setStatus("OPEN", bid_id);
 	}
 	
 	/**
@@ -362,44 +365,28 @@ public class ReportControllerTest {
 		long bid_id = -55;
 		AcceptBidDTO validDTO = new AcceptBidDTO(bid_id);
 		
-		ResponseEntity<String> responseEntity = restTemplate.postForEntity(URL_PREFIX + "acceptBid/",
-				getRequestEntity(validDTO, "vaso", "vaso"), String.class);
+		ResponseEntity<String> responseEntity = 
+			restTemplate.postForEntity(URL_PREFIX + "acceptBid/", getRequestEntity(validDTO, "manager1", "manager1"), String.class);
 		
 		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-		
+		assertEquals("Bid with id: -55 doesn't exist.", responseEntity.getBody());
 	}
 	
 	/**
 	 * User send POST request to "/api/reports/acceptBid" with invalid bid (already ACCEPTED)
-	 * Expected: send back HTTP status 409 (CONFLICT)
+	 * Expected: send back HTTP status 404 (NOT_FOUND)
 	 */
 	@Test
 	public void alreadyAccepted() throws Exception {
 		
-		long bid_id = 3;
+		long bid_id = 5;
 		AcceptBidDTO validDTO = new AcceptBidDTO(bid_id);
 		
-		ResponseEntity<String> responseEntity = restTemplate.postForEntity(URL_PREFIX + "acceptBid/",
-				getRequestEntity(validDTO, "vaso", "vaso"), String.class);
+		ResponseEntity<String> responseEntity = 
+			restTemplate.postForEntity(URL_PREFIX + "acceptBid/", getRequestEntity(validDTO, "manager5", "manager5"), String.class);
 		
-		assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
-		
+		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+		assertEquals("Bid must have status 'OPEN'.", responseEntity.getBody());
 	}
 	
-	/**
-	 * User without permission send POST request to "/api/reports/acceptBid"
-	 * Expected: HTTP status 403 (FORBIDDEN)
-	 */
-	@Test
-	public void userWithoutPermissionAcceptBid() throws Exception {
-		
-		long bid_id = 3;
-		AcceptBidDTO validDTO = new AcceptBidDTO(bid_id);
-		
-		ResponseEntity<String> responseEntity = restTemplate.postForEntity(URL_PREFIX + "acceptBid/",
-				getRequestEntity(validDTO, "ivan", "ivan"), String.class);
-		
-		assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
-		
-	}
 }

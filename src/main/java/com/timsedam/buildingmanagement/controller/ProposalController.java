@@ -19,8 +19,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.timsedam.buildingmanagement.dto.ProposalCreateDTO;
-import com.timsedam.buildingmanagement.dto.ProposalDTO;
+import com.timsedam.buildingmanagement.dto.request.ProposalCreateDTO;
+import com.timsedam.buildingmanagement.dto.response.ProposalDTO;
+import com.timsedam.buildingmanagement.exceptions.BuildingMissingException;
+import com.timsedam.buildingmanagement.exceptions.ReportMissingException;
+import com.timsedam.buildingmanagement.exceptions.UserMissingException;
+import com.timsedam.buildingmanagement.mapper.ProposalMapper;
 import com.timsedam.buildingmanagement.model.Building;
 import com.timsedam.buildingmanagement.model.Proposal;
 import com.timsedam.buildingmanagement.model.Report;
@@ -29,7 +33,6 @@ import com.timsedam.buildingmanagement.service.BuildingService;
 import com.timsedam.buildingmanagement.service.ProposalService;
 import com.timsedam.buildingmanagement.service.ReportService;
 import com.timsedam.buildingmanagement.service.UserService;
-import com.timsedam.buildingmanagement.util.mappers.ProposalMapper;
 
 @RestController
 @RequestMapping(value="/api/proposals")
@@ -48,7 +51,7 @@ public class ProposalController {
 	
 	@PostMapping(consumes = "application/json", produces = "application/json")
 	public ResponseEntity<ProposalDTO> create(@Valid @RequestBody ProposalCreateDTO proposalCreateDTO,
-			BindingResult validationResult, Principal principal) throws ClassNotFoundException {
+			BindingResult validationResult, Principal principal) throws ClassNotFoundException, BuildingMissingException, ReportMissingException, UserMissingException {
 		
 		User requestSender = userService.findOneByUsername(principal.getName());		
 		
@@ -92,7 +95,7 @@ public class ProposalController {
 	}
 	
 	@GetMapping(produces = "application/json")
-	public ResponseEntity<List<ProposalDTO>> getAllByBuildingId(@RequestParam Long buildingId) {
+	public ResponseEntity<List<ProposalDTO>> getAllByBuildingId(@RequestParam Long buildingId) throws BuildingMissingException {
 		Building building = buildingService.findOneById(buildingId);
 		List<Proposal> proposals = proposalService.findAllByBuildingId(buildingId);
 

@@ -17,9 +17,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.timsedam.buildingmanagement.dto.ProposalCreateDTO;
-import com.timsedam.buildingmanagement.dto.ProposalDTO;
-import com.timsedam.buildingmanagement.dto.UserLoginDTO;
+import com.timsedam.buildingmanagement.dto.request.ProposalCreateDTO;
+import com.timsedam.buildingmanagement.dto.request.UserLoginDTO;
+import com.timsedam.buildingmanagement.dto.response.ProposalDTO;
 import com.timsedam.buildingmanagement.repository.ProposalRepository;
 
 @RunWith(SpringRunner.class)
