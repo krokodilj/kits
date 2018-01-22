@@ -1,5 +1,12 @@
 SET FOREIGN_KEY_CHECKS = 0;
 
+truncate kts_test.role; 
+insert into kts_test.role (id, name) values (1, 'ADMIN');
+insert into kts_test.role (id, name) values (2, 'COMPANY');
+insert into kts_test.role (id, name) values (3, 'MANAGER');
+insert into kts_test.role (id, name) values (4, 'RESIDENT');
+insert into kts_test.role (id, name) values (5, 'OWNER');
+
 truncate kts_test.permission; 
 insert into kts_test.permission (id, name) values (1, 'REGISTER');
 insert into kts_test.permission (id, name) values (2, 'CREATE_MEETING');
@@ -8,261 +15,216 @@ insert into kts_test.permission (id, name) values (4, 'SEND_BID');
 insert into kts_test.permission (id, name) values (5, 'UPDATE_RESIDENT');
 insert into kts_test.permission (id, name) values (6, 'CREATE_BUILDING');
 insert into kts_test.permission (id, name) values (7, 'CREATE_RESIDENCE');
-insert into kts_test.permission (id, name) values (95, 'CREATE_PROPOSAL');
-
-truncate kts_test.role; 
-insert into kts_test.role (id, name) values (1, 'ADMIN');
-insert into kts_test.role (id, name) values (2, 'USER');
-insert into kts_test.role (id, name) values (3, 'COMPANY');
-insert into kts_test.role (id, name) values (4, 'MANAGER');
-insert into kts_test.role (id, name) values (5, 'RESIDENT');
-insert into kts_test.role (id, name) values (6, 'APARTMENT_OWNER');
+insert into kts_test.permission (id, name) values (8, 'CREATE_PROPOSAL');
+insert into kts_test.permission (id, name) values (9, 'FORWARD_REPORT');
+insert into kts_test.permission (id, name) values (10, 'PROPOSAL_VOTE');
+insert into kts_test.permission (id, name) values (11, 'CREATE_ANNOUNCEMENT');
 
 truncate kts_test.role_permissions; 
 insert into kts_test.role_permissions (role_id, permissions_id) values (1, 1);
-insert into kts_test.role_permissions (role_id, permissions_id) values (4, 2);
-insert into kts_test.role_permissions (role_id, permissions_id) values (5, 3);
-insert into kts_test.role_permissions (role_id, permissions_id) values (3, 4);
 insert into kts_test.role_permissions (role_id, permissions_id) values (1, 5);
 insert into kts_test.role_permissions (role_id, permissions_id) values (1, 6);
 insert into kts_test.role_permissions (role_id, permissions_id) values (1, 7);
-insert into kts_test.role_permissions (role_id, permissions_id) values (1, 95);
-insert into kts_test.role_permissions (role_id, permissions_id) values (2, 95);
-insert into kts_test.role_permissions (role_id, permissions_id) values (3, 95);
-insert into kts_test.role_permissions (role_id, permissions_id) values (4, 95);
-insert into kts_test.role_permissions (role_id, permissions_id) values (5, 95);
-insert into kts_test.role_permissions (role_id, permissions_id) values (6, 95);
+insert into kts_test.role_permissions (role_id, permissions_id) values (1, 8);
+insert into kts_test.role_permissions (role_id, permissions_id) values (1, 9);
+insert into kts_test.role_permissions (role_id, permissions_id) values (2, 4);
+insert into kts_test.role_permissions (role_id, permissions_id) values (2, 8);
+insert into kts_test.role_permissions (role_id, permissions_id) values (2, 9);
+insert into kts_test.role_permissions (role_id, permissions_id) values (3, 2);
+insert into kts_test.role_permissions (role_id, permissions_id) values (3, 8);
+insert into kts_test.role_permissions (role_id, permissions_id) values (3, 9);
+insert into kts_test.role_permissions (role_id, permissions_id) values (4, 3);
+insert into kts_test.role_permissions (role_id, permissions_id) values (4, 8);
+insert into kts_test.role_permissions (role_id, permissions_id) values (4, 9);
+insert into kts_test.role_permissions (role_id, permissions_id) values (4, 11);
+insert into kts_test.role_permissions (role_id, permissions_id) values (5, 3);
+insert into kts_test.role_permissions (role_id, permissions_id) values (5, 8);
+insert into kts_test.role_permissions (role_id, permissions_id) values (5, 9);
+insert into kts_test.role_permissions (role_id, permissions_id) values (5, 10);
 
 truncate kts_test.user; 
-insert into kts_test.user (user_type, email, username, password, role_id) values ('ADMIN', 'admin@gmail.com', 'admin', 'admin', 1);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('USER', 'manager@gmail.com', 'manager', 'manager', 4);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('RESIDENT', 'resident@gmail.com', 'vaso', 'vaso', 5);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('RESIDENT', 'mladjo@gmail.com', 'mladen', 'mladen', 5);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('RESIDENT', 'ivan@gmail.com', 'ivan', 'ivan', 5);
+insert into kts_test.user (id, user_type, email, username, password) values (1, 'USER', 'admin1@gmail.com', 'admin1', 'admin1');
+insert into kts_test.user (id, user_type, email, username, password) values (2, 'USER', 'admin2@gmail.com', 'admin2', 'admin2');
+insert into kts_test.user (id, user_type, email, username, password) values (3, 'USER', 'admin3@gmail.com', 'admin3', 'admin3');
+insert into kts_test.user (id, user_type, email, username, password) values (4, 'USER', 'admin4@gmail.com', 'admin4', 'admin4');
+insert into kts_test.user (id, user_type, email, username, password) values (5, 'USER', 'admin5@gmail.com', 'admin5', 'admin5');
 
-insert into kts_test.user (user_type, email, username, password, role_id) values ('ADMIN', 'nrozzier0@pinterest.com', 'dnertney0', 'prVignkE0MI', 1);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('ADMIN', 'swenban1@reuters.com', 'msanderson1', 'bVlctTfHcC', 1);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('ADMIN', 'bfebry2@patch.com', 'aerickssen2', 'A35EL4PGiG', 1);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('ADMIN', 'agrelka3@google.co.uk', 'kglew3', 'c5uyVAZjHJR3', 1);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('ADMIN', 'cwitherup4@admin.ch', 'jmcgragh4', 'mXUZJml3', 1);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('ADMIN', 'moshaughnessy5@stanford.edu', 'hbundey5', 'x9WlLU', 1);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('ADMIN', 'mbatcock6@upenn.edu', 'sstormont6', 'N63oh0yp', 1);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('ADMIN', 'abridywater7@omniture.com', 'gkellar7', 'tWYiaUmQc', 1);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('ADMIN', 'klabb8@apple.com', 'mharbin8', 'NYGRhYS', 1);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('ADMIN', 'phellings9@ask.com', 'ajouaneton9', '7V3LMQpgbg1', 1);
+truncate kts_test.user_roles;
+insert into kts_test.user_roles (user_id, roles_id) values (1, 1);
+insert into kts_test.user_roles (user_id, roles_id) values (2, 1);
+insert into kts_test.user_roles (user_id, roles_id) values (3, 1);
+insert into kts_test.user_roles (user_id, roles_id) values (4, 1);
+insert into kts_test.user_roles (user_id, roles_id) values (5, 1);
 
-insert into kts_test.user (user_type, email, username, password, role_id) values ('USER', 'dhambya@odnoklassniki.ru', 'rmilkina', '984CJjXrhf', 2);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('USER', 'wbirkbeckb@uol.com.br', 'ahollowb', 'f2BcG4hi', 2);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('USER', 'awindowsc@taobao.com', 'gfumagalloc', 'VjOP1qg', 2);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('USER', 'jreithd@nature.com', 'inoddingsd', 'TqrUYSrnAJ', 2);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('USER', 'rgrolle@umn.edu', 'rkarolovskye', 'Noc7KTfy2', 2);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('USER', 'bhayesf@illinois.edu', 'acannyf', 'Pfh8HTA2cW', 2);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('USER', 'hhasardg@amazon.com', 'bvanderveldeg', '9KivnduLOD2', 2);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('USER', 'fsygrovesh@mlb.com', 'gspiresh', '5ZPvklt', 2);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('USER', 'eangricki@thetimes.co.uk', 'elenagheni', 'm4dSeFMgFcf', 2);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('USER', 'nkornyakovj@cargocollective.com', 'nkochsj', 'iRCelXqtd1', 2);
-	
-insert into kts_test.user (user_type, email, username, password, pib, location, name, phone_number, role_id) values 
-('COMPANY', 'dhambya@odnoklassniki.ru', 'company', 'company', '41-959-1194', 'District of Columbia', 'Gigazoom', '202-496-5590', 3);
-insert into kts_test.user (user_type, email, username, password, pib, location, name, phone_number, role_id) values 
-('COMPANY', 'wbirkbeckb@uol.com.br', 'ahollowb', 'f2BcG4hi', '54-577-9306', 'North Carolina', 'Eazzy', '336-478-1098', 3);
-insert into kts_test.user (user_type, email, username, password, pib, location, name, phone_number, role_id) values 
-('COMPANY', 'awindowsc@taobao.com', 'gfumagalloc', 'VjOP1qg', '07-723-4768', 'California', 'Jabberbean', '408-797-7052', 3);
-insert into kts_test.user (user_type, email, username, password, pib, location, name, phone_number, role_id) values 
-('COMPANY', 'jreithd@nature.com', 'inoddingsd', 'TqrUYSrnAJ', '55-439-5231', 'Florida', 'Brightbean', '561-630-1295', 3);
-insert into kts_test.user (user_type, email, username, password, pib, location, name, phone_number, role_id) values 
-('COMPANY', 'rgrolle@umn.edu', 'rkarolovskye', 'Noc7KTfy2', '65-952-2982', 'New York', 'Thoughtbeat', '585-582-5869', 3);
-insert into kts_test.user (user_type, email, username, password, pib, location, name, phone_number, role_id) values 
-('COMPANY', 'bhayesf@illinois.edu', 'acannyf', 'Pfh8HTA2cW', '39-515-6198', 'District of Columbia', 'Yakidoo', '202-972-6182', 3);
-insert into kts_test.user (user_type, email, username, password, pib, location, name, phone_number, role_id) values 
-('COMPANY', 'hhasardg@amazon.com', 'bvanderveldeg', '9KivnduLOD2', '85-023-9503', 'Arizona', 'Katz', '602-854-2167', 3);
-insert into kts_test.user (user_type, email, username, password, pib, location, name, phone_number, role_id) values 
-('COMPANY', 'fsygrovesh@mlb.com', 'gspiresh', '5ZPvklt', '09-819-0132', 'Ohio', 'Aimbu', '937-488-8276', 3);
-insert into kts_test.user (user_type, email, username, password, pib, location, name, phone_number, role_id) values 
-('COMPANY', 'eangricki@thetimes.co.uk', 'elenagheni', 'm4dSeFMgFcf', '37-839-6572', 'California', 'Jaloo', '619-134-6006', 3);
-insert into kts_test.user (user_type, email, username, password, pib, location, name, phone_number, role_id) values 
-('COMPANY', 'nkornyakovj@cargocollective.com', 'nkochsj', 'iRCelXqtd1', '73-831-7632', 'South Dakota', 'Edgewire', '605-302-2215', 3);
+insert into kts_test.user (id, user_type, email, username, password, pib, location, name, phone_number) values 
+(6, 'COMPANY', 'company1@gmail.com', 'company1', 'company1', '54-577-9306', 'North Carolina', 'Eazzy', '336-478-1098');
+insert into kts_test.user (id, user_type, email, username, password, pib, location, name, phone_number) values 
+(7, 'COMPANY', 'company2@gmail.com', 'company2', 'company2', '07-723-4768', 'California', 'Jabberbean', '408-797-7052');
+insert into kts_test.user (id, user_type, email, username, password, pib, location, name, phone_number) values 
+(8, 'COMPANY', 'company3@gmail.com', 'company3', 'company3', '55-439-5231', 'Florida', 'Brightbean', '561-630-1295');
+insert into kts_test.user (id, user_type, email, username, password, pib, location, name, phone_number) values 
+(9, 'COMPANY', 'company4@gmail.com', 'company4', 'company4', '65-952-2982', 'New York', 'Thoughtbeat', '585-582-5869');
+insert into kts_test.user (id, user_type, email, username, password, pib, location, name, phone_number) values 
+(10, 'COMPANY', 'company5@gmail.com', 'company5', 'company5', '41-959-1194', 'District of Columbia', 'Gigazoom', '202-496-5590');
 
-insert into kts_test.user (user_type, email, username, password, role_id) values ('USER', 'mmccutheonk@twitpic.com', 'rgilvaryk', 'lgcWoOrVa0t', 4);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('USER', 'amearsl@delicious.com', 'smcteaguel', 'yHrZGFfTDpP', 4);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('USER', 'apinchbeckm@usa.gov', 'rdallasm', 'ie1wfT0', 4);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('USER', 'gkonradn@mozilla.com', 'tdoerrenn', '1CL60hj08HV', 4);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('USER', 'ehurleyo@bloomberg.com', 'ablowneo', '8O3eSQKHTrk', 4);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('USER', 'pmcarthurp@alexa.com', 'clorainp', 'mtIUYzz3Yd', 4);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('USER', 'bpeintonq@gmpg.org', 'lgrissettq', 'zPTVal6FI', 4);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('USER', 'dfrancaisr@jalbum.net', 'cpavelkar', 'CGFTGkx', 4);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('USER', 'itidmans@nydailynews.com', 'amacnalleys', 'e0Mg1zgwHKin', 4);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('USER', 'bbeckerst@drupal.org', 'awindlet', 'd9R5CjHz6s', 4);
+insert into kts_test.user_roles (user_id, roles_id) values (6, 2);
+insert into kts_test.user_roles (user_id, roles_id) values (7, 2);
+insert into kts_test.user_roles (user_id, roles_id) values (8, 2);
+insert into kts_test.user_roles (user_id, roles_id) values (9, 2);
+insert into kts_test.user_roles (user_id, roles_id) values (10, 2);
 
-insert into kts_test.user (user_type, email, username, password, role_id) values ('RESIDENT', 'alinthead0@craigslist.org', 'dstedman0', 'qKUIKAcUedTl', 5);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('RESIDENT', 'oleitche1@booking.com', 'cgremane1', 'LTKc8CO3', 5);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('RESIDENT', 'ckelso2@naver.com', 'ntiffin2', 'p3xH87ZQ', 5);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('RESIDENT', 'lbrahams3@archive.org', 'svictoria3', 'pMw2Kis0', 5);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('RESIDENT', 'gdruitt4@devhub.com', 'bdakhno4', 'xoygGP4xjtQA', 5);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('RESIDENT', 'mpeeke5@admin.ch', 'llaraway5', 'TunNbXAEOo', 5);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('RESIDENT', 'djablonski6@wikia.com', 'teasterbrook6', '9yjTFNN30DT', 5);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('RESIDENT', 'zramsey7@cam.ac.uk', 'amaccurtain7', 'SoNbzdQt', 5);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('RESIDENT', 'sgolder8@illinois.edu', 'namps8', 'TRzo0ScJ', 5);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('RESIDENT', 'cnisius9@zimbio.com', 'lziehms9', 'VW0XXPr', 5);
+insert into kts_test.user (id, user_type, email, username, password) values (11, 'USER', 'manager1@gmai.com', 'manager1', 'manager1');
+insert into kts_test.user (id, user_type, email, username, password) values (12, 'USER', 'manager2@gmai.com', 'manager2', 'manager2');
+insert into kts_test.user (id, user_type, email, username, password) values (13, 'USER', 'manager3@gmai.com', 'manager3', 'manager3');
+insert into kts_test.user (id, user_type, email, username, password) values (14, 'USER', 'manager4@gmai.com', 'manager4', 'manager4');
+insert into kts_test.user (id, user_type, email, username, password) values (15, 'USER', 'manager5@gmai.com', 'manager5', 'manager5');
 
-insert into kts_test.user (user_type, email, username, password, role_id) values ('RESIDENT', 'rfoakes0@ox.ac.uk', 'msedgemond0', 'zZXzGKDMJO', 6);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('RESIDENT', 'gbillo1@marriott.com', 'akondratyuk1', 'OgI0uDPrYye', 6);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('APARTMENT_OWNER', 'redmands2@ameblo.jp', 'swhitwam2', 'rjnDlESrrqlI', 6);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('APARTMENT_OWNER', 'fadamini3@weather.com', 'abolzen3', '0C0akN', 6);
-insert into kts_test.user (user_type, email, username, password, role_id) values ('APARTMENT_OWNER', 'gscritch4@parallels.com', 'dwest4', 'M5TWeM0', 6);
+insert into kts_test.user_roles (user_id, roles_id) values (11, 3);
+insert into kts_test.user_roles (user_id, roles_id) values (12, 3);
+insert into kts_test.user_roles (user_id, roles_id) values (13, 3);
+insert into kts_test.user_roles (user_id, roles_id) values (14, 3);
+insert into kts_test.user_roles (user_id, roles_id) values (15, 3);
 
-truncate kts_test.building; 
-insert into kts_test.building (address, apartment_count, city, country, description, manager_id) values ('3904 Green Hill Road', 4, 'OXFORD JUNCTION', 'Iowa', 'Nice Comfy place', 1);
-insert into kts_test.building (address, apartment_count, city, country, description, manager_id) values ('3478 Lightning Point Drive', 15, 'Memphis', 'Tennessee', 'Solid Building', 2);
-insert into kts_test.building (address, apartment_count, city, country,	description, manager_id) values ('Mise Dimitrijevica 3c', 40, 'Novi Sad', 'Srbija', 'opis', 4);
-    
-insert into kts_test.building (address, apartment_count, city, country, description, manager_id) values ('7171 Rowland Lane', 1, 'Guanajay', 'Cuba', 'Persistent', 36);
-insert into kts_test.building (address, apartment_count, city, country, description, manager_id) values ('86 Nevada Way', 2, 'Curahpacul Satu', 'Indonesia', 'core', 36);
-insert into kts_test.building (address, apartment_count, city, country, description, manager_id) values ('2847 Glacier Hill Hill', 3, 'Rancaerang', 'Indonesia', 'access', 37);
-insert into kts_test.building (address, apartment_count, city, country, description, manager_id) values ('1 Bayside Alley', 4, 'Aurora', 'United States', 'Multi-layered', 38);
-insert into kts_test.building (address, apartment_count, city, country, description, manager_id) values ('1488 Westridge Park', 5, 'Sîr ed Danniyé', 'Lebanon', 'frame', 39);
-insert into kts_test.building (address, apartment_count, city, country, description, manager_id) values ('916 Marcy Pass', 6, 'Orléans', 'France', 'leading edge', 40);
-insert into kts_test.building (address, apartment_count, city, country, description, manager_id) values ('5 Forster Terrace', 7, 'Jinxiang', 'China', 'dynamic', 40);
-insert into kts_test.building (address, apartment_count, city, country, description, manager_id) values ('9827 Onsgard Park', 8, 'Pardubice', 'Czech Republic', 'middleware', 40);
-insert into kts_test.building (address, apartment_count, city, country, description, manager_id) values ('05764 Corry Court', 9, 'Yuanhou', 'China', 'Profit-focused', 41);
-insert into kts_test.building (address, apartment_count, city, country, description, manager_id) values ('519 Carpenter Plaza', 10, 'Singa', 'Peru', 'Configurable', 42);
+insert into kts_test.user (id, user_type, email, username, password) values (16, 'USER', 'resident1@gmail.com', 'resident1', 'resident1');
+insert into kts_test.user (id, user_type, email, username, password) values (17, 'USER', 'resident2@gmail.com', 'resident2', 'resident2');
+insert into kts_test.user (id, user_type, email, username, password) values (18, 'USER', 'resident3@gmail.com', 'resident3', 'resident3');
+insert into kts_test.user (id, user_type, email, username, password) values (19, 'USER', 'resident4@gmail.com', 'resident4', 'resident4');
+insert into kts_test.user (id, user_type, email, username, password) values (20, 'USER', 'resident5@gmail.com', 'resident5', 'resident5');
+insert into kts_test.user (id, user_type, email, username, password) values (21, 'USER', 'resident6@gmail.com', 'resident6', 'resident6');
+insert into kts_test.user (id, user_type, email, username, password) values (22, 'USER', 'resident7@gmail.com', 'resident7', 'resident7');
+insert into kts_test.user (id, user_type, email, username, password) values (23, 'USER', 'resident8@gmail.com', 'resident8', 'resident8');
+insert into kts_test.user (id, user_type, email, username, password) values (24, 'USER', 'resident9@gmail.com', 'resident9', 'resident9');
+insert into kts_test.user (id, user_type, email, username, password) values (25, 'USER', 'resident10@gmail.com', 'resident10', 'resident10');
+insert into kts_test.user (id, user_type, email, username, password) values (26, 'USER', 'resident11@gmail.com', 'resident11', 'resident11');
+insert into kts_test.user (id, user_type, email, username, password) values (27, 'USER', 'resident12@gmail.com', 'resident12', 'resident12');
+insert into kts_test.user (id, user_type, email, username, password) values (28, 'USER', 'resident13@gmail.com', 'resident13', 'resident13');
+insert into kts_test.user (id, user_type, email, username, password) values (29, 'USER', 'resident14@gmail.com', 'resident14', 'resident14');
+insert into kts_test.user (id, user_type, email, username, password) values (30, 'USER', 'resident15@gmail.com', 'resident15', 'resident15');
+insert into kts_test.user (id, user_type, email, username, password) values (31, 'USER', 'resident16@gmail.com', 'resident16', 'resident16');
+insert into kts_test.user (id, user_type, email, username, password) values (32, 'USER', 'resident17@gmail.com', 'resident17', 'resident17');
+insert into kts_test.user (id, user_type, email, username, password) values (33, 'USER', 'resident18@gmail.com', 'resident18', 'resident18');
+insert into kts_test.user (id, user_type, email, username, password) values (34, 'USER', 'resident19@gmail.com', 'resident19', 'resident19');
+insert into kts_test.user (id, user_type, email, username, password) values (35, 'USER', 'resident20@gmail.com', 'resident20', 'resident20');
 
-truncate kts_test.residence; 
-insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (19, 3, 3, 3);
+insert into kts_test.user_roles (user_id, roles_id) values (16, 4);
+insert into kts_test.user_roles (user_id, roles_id) values (17, 4);
+insert into kts_test.user_roles (user_id, roles_id) values (18, 4);
+insert into kts_test.user_roles (user_id, roles_id) values (19, 4);
+insert into kts_test.user_roles (user_id, roles_id) values (20, 4);
+insert into kts_test.user_roles (user_id, roles_id) values (21, 4);
+insert into kts_test.user_roles (user_id, roles_id) values (22, 4);
+insert into kts_test.user_roles (user_id, roles_id) values (23, 4);
+insert into kts_test.user_roles (user_id, roles_id) values (24, 4);
+insert into kts_test.user_roles (user_id, roles_id) values (25, 4);
+insert into kts_test.user_roles (user_id, roles_id) values (26, 4);
+insert into kts_test.user_roles (user_id, roles_id) values (27, 4);
+insert into kts_test.user_roles (user_id, roles_id) values (28, 4);
+insert into kts_test.user_roles (user_id, roles_id) values (29, 4);
+insert into kts_test.user_roles (user_id, roles_id) values (30, 4);
+insert into kts_test.user_roles (user_id, roles_id) values (31, 4);
+insert into kts_test.user_roles (user_id, roles_id) values (32, 4);
+insert into kts_test.user_roles (user_id, roles_id) values (33, 4);
+insert into kts_test.user_roles (user_id, roles_id) values (34, 4);
+insert into kts_test.user_roles (user_id, roles_id) values (35, 4);
 
-insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (2, 1, 56, 1);
-insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (5, 1, 56, 1);
-insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (8, 2, 57, 1);
-insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (11, 2, 59, 1);
-insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (19, 3, 59, 1);
-insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (6, 2, 60, 1);
-insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (1, 1, 57, 2);
-insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (4, 1, 56, 2);
-insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (9, 9, 58, 3);
-insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (10, 3, 58, 4);
-insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (11, 3, 60, 4);
-insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (4, 1, 59, 5);
-insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (13, 3, 56, 5);
-insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (26, 5, 60, 5);
-insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (15, 3, 57, 6);
-insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (16, 3, 59, 6);
-insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (27, 6, 59, 6);
-insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (30, 6, 58, 6);
-insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (3, 1, 59, 7);
-insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (5, 1, 60, 7);
-insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (11, 2, 56, 7);
-insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (22, 4, 57, 8);
-insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (35, 5, 58, 8);
-insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (36, 5, 59, 8);
-insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (5, 1, 57, 9);
-insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (8, 2, 57, 9);
-insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (2, 1, 57, 10);
-insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (5, 1, 58, 10);
-insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (10, 2, 59, 10);
-insert into kts_test.residence (apartment_number, floor_number, apartment_owner_id, building_id) values (11, 2, 60, 10);
+insert into kts_test.user (id, user_type, email, username, password) values (36, 'USER', 'owner1@gmail.com', 'owner1', 'owner1');
+insert into kts_test.user (id, user_type, email, username, password) values (37, 'USER', 'owner2@gmail.com', 'owner2', 'owner2');
+insert into kts_test.user (id, user_type, email, username, password) values (38, 'USER', 'owner3@gmail.com', 'owner3', 'owner3');
+insert into kts_test.user (id, user_type, email, username, password) values (39, 'USER', 'owner4@gmail.com', 'owner4', 'owner4');
+insert into kts_test.user (id, user_type, email, username, password) values (40, 'USER', 'owner5@gmail.com', 'owner5', 'owner5');
 
-truncate kts_test.resident_residence; 
-insert into kts_test.resident_residence (residence_id, resident_id) values (1, 46);
-insert into kts_test.resident_residence (residence_id, resident_id) values (1, 51);
-insert into kts_test.resident_residence (residence_id, resident_id) values (2, 4);
-insert into kts_test.resident_residence (residence_id, resident_id) values (3, 48);
-insert into kts_test.resident_residence (residence_id, resident_id) values (3, 52);
-insert into kts_test.resident_residence (residence_id, resident_id) values (3, 54);
-insert into kts_test.resident_residence (residence_id, resident_id) values (4, 55);
-insert into kts_test.resident_residence (residence_id, resident_id) values (5, 46);
-insert into kts_test.resident_residence (residence_id, resident_id) values (6, 49);
-insert into kts_test.resident_residence (residence_id, resident_id) values (7, 49);
-insert into kts_test.resident_residence (residence_id, resident_id) values (8, 51);
-insert into kts_test.resident_residence (residence_id, resident_id) values (8, 52);
-insert into kts_test.resident_residence (residence_id, resident_id) values (9, 53);
-insert into kts_test.resident_residence (residence_id, resident_id) values (9, 54);
-insert into kts_test.resident_residence (residence_id, resident_id) values (10, 51);
-insert into kts_test.resident_residence (residence_id, resident_id) values (11, 49);
-insert into kts_test.resident_residence (residence_id, resident_id) values (12, 47);
-insert into kts_test.resident_residence (residence_id, resident_id) values (13, 53);
-insert into kts_test.resident_residence (residence_id, resident_id) values (14, 47);
-insert into kts_test.resident_residence (residence_id, resident_id) values (15, 48);
-insert into kts_test.resident_residence (residence_id, resident_id) values (16, 48);
-insert into kts_test.resident_residence (residence_id, resident_id) values (17, 47);
-insert into kts_test.resident_residence (residence_id, resident_id) values (17, 47);
-insert into kts_test.resident_residence (residence_id, resident_id) values (18, 49);
-insert into kts_test.resident_residence (residence_id, resident_id) values (19, 53);
-insert into kts_test.resident_residence (residence_id, resident_id) values (20, 50);
-insert into kts_test.resident_residence (residence_id, resident_id) values (21, 50);
-insert into kts_test.resident_residence (residence_id, resident_id) values (21, 46);
-insert into kts_test.resident_residence (residence_id, resident_id) values (22, 52);
-insert into kts_test.resident_residence (residence_id, resident_id) values (24, 52);
-insert into kts_test.resident_residence (residence_id, resident_id) values (26, 53);
-insert into kts_test.resident_residence (residence_id, resident_id) values (28, 48);
-insert into kts_test.resident_residence (residence_id, resident_id) values (29, 52);
-insert into kts_test.resident_residence (residence_id, resident_id) values (30, 49);
-insert into kts_test.resident_residence (residence_id, resident_id) values (22, 54);
-insert into kts_test.resident_residence (residence_id, resident_id) values (11, 50);
-insert into kts_test.resident_residence (residence_id, resident_id) values (21, 49);
-insert into kts_test.resident_residence (residence_id, resident_id) values (19, 53);
-insert into kts_test.resident_residence (residence_id, resident_id) values (5, 53);
-insert into kts_test.resident_residence (residence_id, resident_id) values (7, 15);
-insert into kts_test.resident_residence (residence_id, resident_id) values (2, 57);
-insert into kts_test.resident_residence (residence_id, resident_id) values (2, 56);
-insert into kts_test.resident_residence (residence_id, resident_id) values (7, 55);
+insert into kts_test.user_roles (user_id, roles_id) values (36, 5);
+insert into kts_test.user_roles (user_id, roles_id) values (37, 5);
+insert into kts_test.user_roles (user_id, roles_id) values (38, 5);
+insert into kts_test.user_roles (user_id, roles_id) values (39, 5);
+insert into kts_test.user_roles (user_id, roles_id) values (40, 5);
+
+
+truncate kts_test.building;
+insert into kts_test.building (id, address, apartment_count, city, country, description, manager_id) values (1, 'address', 5, 'city', 'country', 'description', 11);
+insert into kts_test.building (id, address, apartment_count, city, country, description, manager_id) values (2, 'address', 5, 'city', 'country', 'description', 12);
+insert into kts_test.building (id, address, apartment_count, city, country, description, manager_id) values (3, 'address', 5, 'city', 'country', 'description', 13);
+insert into kts_test.building (id, address, apartment_count, city, country, description, manager_id) values (4, 'address', 5, 'city', 'country', 'description', 14);
+insert into kts_test.building (id, address, apartment_count, city, country, description, manager_id) values (5, 'address', 5, 'city', 'country', 'description', 15);
+
+
+truncate kts_test.residence;
+insert into kts_test.residence (id, apartment_number, floor_number, apartment_owner_id, building_id) values (1, 1, 1, 36, 1);
+insert into kts_test.residence (id, apartment_number, floor_number, apartment_owner_id, building_id) values (2, 2, 1, 36, 1);
+insert into kts_test.residence (id, apartment_number, floor_number, apartment_owner_id, building_id) values (3, 3, 2, 36, 1);
+insert into kts_test.residence (id, apartment_number, floor_number, apartment_owner_id, building_id) values (4, 4, 2, 36, 1);
+insert into kts_test.residence (id, apartment_number, floor_number, apartment_owner_id, building_id) values (5, 1, 1, 37, 2);
+insert into kts_test.residence (id, apartment_number, floor_number, apartment_owner_id, building_id) values (6, 2, 1, 37, 2);
+insert into kts_test.residence (id, apartment_number, floor_number, apartment_owner_id, building_id) values (7, 3, 2, 37, 2);
+insert into kts_test.residence (id, apartment_number, floor_number, apartment_owner_id, building_id) values (8, 4, 2, 37, 2);
+insert into kts_test.residence (id, apartment_number, floor_number, apartment_owner_id, building_id) values (9, 1, 1, 38, 3);
+insert into kts_test.residence (id, apartment_number, floor_number, apartment_owner_id, building_id) values (10, 2, 1, 38, 3);
+insert into kts_test.residence (id, apartment_number, floor_number, apartment_owner_id, building_id) values (11, 3, 2, 38, 3);
+insert into kts_test.residence (id, apartment_number, floor_number, apartment_owner_id, building_id) values (12, 4, 2, 38, 3);
+insert into kts_test.residence (id, apartment_number, floor_number, apartment_owner_id, building_id) values (13, 1, 1, 39, 4);
+insert into kts_test.residence (id, apartment_number, floor_number, apartment_owner_id, building_id) values (14, 2, 1, 39, 4);
+insert into kts_test.residence (id, apartment_number, floor_number, apartment_owner_id, building_id) values (15, 3, 2, 39, 4);
+insert into kts_test.residence (id, apartment_number, floor_number, apartment_owner_id, building_id) values (16, 4, 2, 39, 4);
+insert into kts_test.residence (id, apartment_number, floor_number, apartment_owner_id, building_id) values (17, 1, 1, 40, 5);
+insert into kts_test.residence (id, apartment_number, floor_number, apartment_owner_id, building_id) values (18, 2, 1, 40, 5);
+insert into kts_test.residence (id, apartment_number, floor_number, apartment_owner_id, building_id) values (19, 3, 2, 40, 5);
+insert into kts_test.residence (id, apartment_number, floor_number, apartment_owner_id, building_id) values (20, 4, 2, 40, 5);
+
+truncate kts_test.resident_residence;
+insert into kts_test.resident_residence (residence_id, resident_id) values (1, 16);
+insert into kts_test.resident_residence (residence_id, resident_id) values (1, 17);
+insert into kts_test.resident_residence (residence_id, resident_id) values (2, 18);
+insert into kts_test.resident_residence (residence_id, resident_id) values (2, 19);
+insert into kts_test.resident_residence (residence_id, resident_id) values (3, 20);
+insert into kts_test.resident_residence (residence_id, resident_id) values (3, 21);
+insert into kts_test.resident_residence (residence_id, resident_id) values (4, 22);
+insert into kts_test.resident_residence (residence_id, resident_id) values (4, 23);
+insert into kts_test.resident_residence (residence_id, resident_id) values (5, 24);
+insert into kts_test.resident_residence (residence_id, resident_id) values (5, 25);
+insert into kts_test.resident_residence (residence_id, resident_id) values (6, 26);
+insert into kts_test.resident_residence (residence_id, resident_id) values (6, 27);
+insert into kts_test.resident_residence (residence_id, resident_id) values (7, 28);
+insert into kts_test.resident_residence (residence_id, resident_id) values (8, 29);
+insert into kts_test.resident_residence (residence_id, resident_id) values (9, 30);
+insert into kts_test.resident_residence (residence_id, resident_id) values (10, 31);
+insert into kts_test.resident_residence (residence_id, resident_id) values (11, 32);
+insert into kts_test.resident_residence (residence_id, resident_id) values (12, 33);
+insert into kts_test.resident_residence (residence_id, resident_id) values (13, 34);
+insert into kts_test.resident_residence (residence_id, resident_id) values (14, 35);
+
+truncate kts_test.report;
+insert into kts_test.report (id, description, status, current_holder_id, location_id, sender_id) values (1, "report1", "OPEN", 1, 1, 16);
+insert into kts_test.report (id, description, status, current_holder_id, location_id, sender_id) values (2, "report2", "OPEN", 2, 2, 18);
+insert into kts_test.report (id, description, status, current_holder_id, location_id, sender_id) values (3, "report3", "OPEN", 3, 3, 20);
+insert into kts_test.report (id, description, status, current_holder_id, location_id, sender_id) values (4, "report4", "OPEN", 4, 4, 22);
+insert into kts_test.report (id, description, status, current_holder_id, location_id, sender_id) values (5, "report5", "OPEN", 5, 5, 24);
 
 truncate kts_test.forward;
-insert into kts_test.forward (forwarded_report_id, forwarded_to_id, forwarder_id) 
-values (1, 3, null);
-insert into kts_test.forward (forwarded_report_id, forwarded_to_id, forwarder_id) 
-values (2, 3, null);
-insert into kts_test.forward (forwarded_report_id, forwarded_to_id, forwarder_id) 
-values (3, 3, null);
-
-truncate kts_test.report; 
-insert into kts_test.report (description, status, current_holder_id, location_id, sender_id) values ('Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero. Nullam sit amet turpis elementum ligula vehicula consequat. Morbi a ipsum. Integer a nibh. In quis justo. Maecenas rhoncus aliquam lacus. Morbi quis tortor id nulla ultrices aliquet.', 
-'OPEN', 1, 2, 34);
-insert into kts_test.report (description, status, current_holder_id, location_id, sender_id) values ('Duis bibendum. Morbi non quam nec dui luctus rutrum. Nulla tellus. In sagittis dui vel nisl. Duis ac nibh. Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus.', 
-'OPEN', 2, 9, 30);
-insert into kts_test.report (description, status, current_holder_id, location_id, sender_id) values ('In hac habitasse platea dictumst. Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo. Aliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis. Sed ante. Vivamus tortor. Duis mattis egestas metus.', 
-'OPEN', 3, 3, 31);
-insert into kts_test.report (description, status, location_id, sender_id) values ('Curabitur gravida nisi at nibh. In hac habitasse platea dictumst. Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem. Integer tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat.nPraesent blandit. Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede.', 
-'CLOSED', 7, 42);
-insert into kts_test.report (description, status, location_id, sender_id) values ('Maecenas ut massa quis augue luctus tincidunt. Nulla mollis molestie lorem. Quisque ut erat.', 
-'CLOSED', 4, 19);
-insert into kts_test.report (description, status, location_id, sender_id) values ('In hac habitasse platea dictumst. Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo. Aliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis. Sed ante. Vivamus tortor. Duis mattis egestas metus.', 
-'OPEN', 7, 23);
-insert into kts_test.report (description, status, location_id, sender_id) values ('Aenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum. Curabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est.', 
-'OPEN', 2, 21);
-insert into kts_test.report (description, status, location_id, sender_id) values ('Duis consequat dui nec nisi volutpat eleifend. Donec ut dolor. Morbi vel lectus in quam fringilla rhoncus. Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero. Nullam sit amet turpis elementum ligula vehicula consequat. Morbi a ipsum. Integer a nibh.', 
-'CLOSED', 9, 40);
-insert into kts_test.report (description, status, location_id, sender_id) values ('Integer ac leo. Pellentesque ultrices mattis odio. Donec vitae nisi. Nam ultrices, libero non mattis pulvinar, nulla pede ullamcorper augue, a suscipit nulla elit ac nulla. Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus. Curabitur at ipsum ac tellus semper interdum. Mauris ullamcorper purus sit amet nulla. Quisque arcu libero, rutrum ac, lobortis vel, dapibus at, diam.', 
-'CLOSED', 1, 39);
-insert into kts_test.report (description, status, location_id, sender_id) values ('Maecenas tristique, est et tempus semper, est quam pharetra magna, ac consequat metus sapien ut nunc. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Mauris viverra diam vitae quam. Suspendisse potenti. Nullam porttitor lacus at turpis. Donec posuere metus vitae ipsum. Aliquam non mauris.', 
-'CLOSED', 4, 38);
-
-truncate kts_test.meeting; 
-insert into kts_test.meeting (location, record, starts_at, building_id) values ('Florida', 'Haliaetus vocifer', '2016-12-19 09:24:43', 4);
-insert into kts_test.meeting (location, record, starts_at, building_id) values ('Ohio', 'Oryx gazella', '2017-03-25 15:05:35', 8);
-insert into kts_test.meeting (location, record, starts_at, building_id) values ('Pennsylvania', 'Threskionis aethiopicus', '2016-12-18 10:12:19', 6);
-insert into kts_test.meeting (location, record, starts_at, building_id) values ('Oklahoma', 'Echimys chrysurus', '2017-04-21 15:52:13', 5);
-insert into kts_test.meeting (location, record, starts_at, building_id) values ('California', 'Tauraco porphyrelophus', '2017-07-14 17:10:42', 7);
-
-truncate kts_test.comment;
+insert into kts_test.forward (id, forwarded_report_id, forwarded_to_id) values (1, 1, 11);
+insert into kts_test.forward (id, forwarded_report_id, forwarded_to_id) values (2, 2, 12);
+insert into kts_test.forward (id, forwarded_report_id, forwarded_to_id) values (3, 3, 13);
+insert into kts_test.forward (id, forwarded_report_id, forwarded_to_id) values (4, 4, 14);
+insert into kts_test.forward (id, forwarded_report_id, forwarded_to_id) values (5, 5, 15);
 
 truncate kts_test.bid;
-insert into kts_test.bid (description, status, price, company_id, report_bid_id) values ('Moze?', 
-'OPEN', 5000, 26, 1);
-insert into kts_test.bid (description, status, price, company_id, report_bid_id) values ('Moze?', 
-'OPEN', 4500, 27, 1);
-insert into kts_test.bid (description, status, price, company_id, report_bid_id) values ('Moze?', 
-'ACCEPTED', 480, 27, 3);
+insert into kts_test.bid (id, description, price, status, company_id, report_bid_id) values (1, "bid1", 1, "OPEN", 6, 1);
+insert into kts_test.bid (id, description, price, status, company_id, report_bid_id) values (2, "bid2", 1, "OPEN", 7, 2);
+insert into kts_test.bid (id, description, price, status, company_id, report_bid_id) values (3, "bid3", 1, "OPEN", 8, 3);
+insert into kts_test.bid (id, description, price, status, company_id, report_bid_id) values (4, "bid4", 1, "OPEN", 9, 4);
+insert into kts_test.bid (id, description, price, status, company_id, report_bid_id) values (5, "bid5", 1, "CLOSED", 10, 5);
 
-truncate kts_test.proposal; 
-insert into kts_test.proposal (content, status, suggested_at, attached_report_id, meeting_id, proposer_id, building_id) values 
-('Crataegus wootoniana Eggl.', 'ACCEPTED', '2017-06-29 15:10:02', 1, 1, 53, 6);
-insert into kts_test.proposal (content, status, suggested_at, attached_report_id, proposer_id, building_id) values 
-('Adiantum capillus-veneris L.', 'OPEN', '2017-01-18 00:19:23', 2, 53, 9);
-insert into kts_test.proposal (content, status, suggested_at, attached_report_id, proposer_id, building_id) values 
-('Orthotrichum speciosum Nees var. elegans (Schwägr. ex Hook. & Grev.) Warnst.', 'OPEN', '2017-08-25 19:43:02', 3, 51, 2);
-insert into kts_test.proposal (content, status, suggested_at, attached_report_id, meeting_id, proposer_id, building_id) values 
-('Asplenium unilaterale Lam.', 'ACCEPTED', '2017-08-20 19:09:22', 4, 2, 50, 7);
-insert into kts_test.proposal (content, status, suggested_at, attached_report_id, meeting_id, proposer_id, building_id) values 
-('Spiraea alba Du Roi var. latifolia (Aiton) Dippel', 'ACCEPTED', '2017-02-21 00:39:13', 5, 3, 49, 6);
+truncate kts_test.proposal;
+insert into kts_test.proposal (id, content, status, suggested_at, building_id, proposer_id) values (1, "proposal", "OPEN", "2018-01-23 14:48:46", 1, 16);
+insert into kts_test.proposal (id, content, status, suggested_at, building_id, proposer_id) values (2, "proposal", "OPEN", "2018-01-23 14:48:46", 2, 18);
+insert into kts_test.proposal (id, content, status, suggested_at, building_id, proposer_id) values (3, "proposal", "OPEN", "2018-01-23 14:48:46", 3, 20);
+insert into kts_test.proposal (id, content, status, suggested_at, building_id, proposer_id) values (4, "proposal", "OPEN", "2018-01-23 14:48:46", 4, 22);
+insert into kts_test.proposal (id, content, status, suggested_at, building_id, proposer_id) values (5, "proposal", "OPEN", "2018-01-23 14:48:46", 5, 24);
 
-SET FOREIGN_KEY_CHECKS = 1;
+truncate kts_test.proposal_vote;
+truncate kts_test.proposal_votes;
+
+truncate kts_test.announcement;
+insert into kts_test.announcement (id, content, posted_at, building_id, poster_id) values (1, "announcement", "2018-01-23 14:48:46", 1, 16);
+insert into kts_test.announcement (id, content, posted_at, building_id, poster_id) values (2, "announcement", "2018-01-23 14:48:46", 2, 24);
+insert into kts_test.announcement (id, content, posted_at, building_id, poster_id) values (3, "announcement", "2018-01-23 14:48:46", 3, 30);
+insert into kts_test.announcement (id, content, posted_at, building_id, poster_id) values (4, "announcement", "2018-01-23 14:48:46", 4, 34);

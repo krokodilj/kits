@@ -12,10 +12,13 @@ public class Forward {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+	
 	@ManyToOne
 	private User forwarder;
+	
 	@ManyToOne
 	private User forwardedTo;
+	
 	@ManyToOne
 	private Report forwardedReport;
 	

@@ -12,7 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.ManyToOne;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -29,8 +29,8 @@ public class User {
 	private String email;
 	@ElementCollection
 	private List<String> pictures;   
-    @ManyToOne
-    private Role role;
+    @ManyToMany
+    private List<Role> roles;
     @OneToMany(mappedBy = "reportCommented")
     private List<Comment> comments;
     
@@ -38,14 +38,14 @@ public class User {
 		super();
 	}
 
-	public User(String username, String password, String email, List<String> pictures, Role role,
+	public User(String username, String password, String email, List<String> pictures, List<Role> roles,
 			List<Comment> comments) {
 		super();
 		this.username = username;
 		this.password = password;
 		this.email = email;
 		this.pictures = pictures;
-		this.role = role;
+		this.roles = roles;
 		this.comments = comments;
 	}
 
@@ -89,12 +89,12 @@ public class User {
 		this.pictures = pictures;
 	}
 
-	public Role getRole() {
-		return role;
+	public List<Role> getRoles() {
+		return roles;
 	}
 
-	public void setRole(Role role) {
-		this.role = role;
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
 	}
 
 	public List<Comment> getComments() {
@@ -107,8 +107,7 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", password=" + password + ", email=" + email
-				+ ", pictures=" + pictures + ", role=" + role + ", comments=" + comments + "]";
+		return "User [id=" + id + ", username=" + username + ", password=" + password + ", email=" + email + "]";
 	}
-    
+   
 }

@@ -2,10 +2,6 @@ package com.timsedam.buildingmanagement.controller;
 
 import static org.junit.Assert.assertEquals;
 
-import java.time.LocalDateTime;
-
-import javax.persistence.ValidationMode;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +14,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.timsedam.buildingmanagement.dto.MeetingDTO;
-import com.timsedam.buildingmanagement.dto.ProposalVoteCastDTO;
-import com.timsedam.buildingmanagement.dto.ProposalVoteDTO;
-import com.timsedam.buildingmanagement.dto.UserLoginDTO;
+import com.timsedam.buildingmanagement.dto.request.ProposalVoteCastDTO;
+import com.timsedam.buildingmanagement.dto.request.UserLoginDTO;
+import com.timsedam.buildingmanagement.model.ProposalVote;
 import com.timsedam.buildingmanagement.model.ProposalVoteValue;
+import com.timsedam.buildingmanagement.repository.ProposalVoteRepository;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -30,21 +26,22 @@ public class ProposalVoteControllerTest {
 	
 	@Autowired
 	private TestRestTemplate restTemplate;
+	
+	@Autowired
+	private ProposalVoteRepository proposalVoteRepository;
 
 	private static final String URL_PREFIX = "/api/proposal_votes/";
 	
-	private ProposalVoteCastDTO validProposalVoteCastDTO = new ProposalVoteCastDTO(ProposalVoteValue.FOR, 2L);
-
-	private String getApartmentOwnerToken() {
-		UserLoginDTO userLoginData = new UserLoginDTO("akondratyuk1", "OgI0uDPrYye");
+	private String getToken(String username, String password) {
+		UserLoginDTO userLoginData = new UserLoginDTO(username, password);
 		ResponseEntity<String> responseEntity = 
 				restTemplate.postForEntity("/api/auth/login", userLoginData, String.class);
 		return responseEntity.getBody();
 	}
 	
-	private HttpEntity<Object> getRequestEntity(Object params) {
+	private HttpEntity<Object> getRequestEntity(Object params, String username, String password) {
 		HttpHeaders headers = new HttpHeaders();
-		headers.add("X-Auth-Token", getApartmentOwnerToken());
+		headers.add("X-Auth-Token", getToken(username, password));
 		
 		HttpEntity<Object> requestEntity = new HttpEntity<Object>(params, headers);
 		return requestEntity;
@@ -52,17 +49,20 @@ public class ProposalVoteControllerTest {
 
 	/**
 	 * POST request to "/api/proposal_votes/" with valid ProposalVoteCastDTO parameter
-	 * Expected: new ProposalVoteDTO is returned to the client, HTTP Status 201
+	 * Expected: ProposalVote id is returned to the client, HTTP Status 201
 	 */
 	@Test
 	public void castProposalVote() throws Exception {
+		ProposalVoteCastDTO proposalVoteDTO = new ProposalVoteCastDTO(ProposalVoteValue.FOR, 1L);
+		ResponseEntity<Long> responseEntity = 
+				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(proposalVoteDTO, "owner1", "owner1"), Long.class);
 		
-		ResponseEntity<ProposalVoteDTO> responseEntity = 
-				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(validProposalVoteCastDTO), ProposalVoteDTO.class);
-		
-		ProposalVoteDTO responseDTO = responseEntity.getBody();
+		Long proposalVoteId = responseEntity.getBody();
+		ProposalVote proposalVote = proposalVoteRepository.findOne(proposalVoteId);
 		assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-		assertEquals(responseDTO.getVote(), validProposalVoteCastDTO.getValue());		
+		assertEquals(proposalVote.getVote(), proposalVoteDTO.getValue());
+		
+		proposalVoteRepository.delete(proposalVoteId);
     }
 	
 	/**
@@ -72,17 +72,13 @@ public class ProposalVoteControllerTest {
 	 */
 	@Test
 	public void castProposalVoteInvalidProposalId() throws Exception {
+		ProposalVoteCastDTO proposalVoteDTO = new ProposalVoteCastDTO(ProposalVoteValue.FOR, 5L);
+		ResponseEntity<String> responseEntity = 
+				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(proposalVoteDTO, "owner1", "owner1"), String.class);
 		
-		ProposalVoteCastDTO invalidRequestData = new ProposalVoteCastDTO(validProposalVoteCastDTO);
-		invalidRequestData.setProposalId(4L);
-		
-		ResponseEntity<ProposalVoteDTO> responseEntity = 
-				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(invalidRequestData), ProposalVoteDTO.class);
-		
-		ProposalVoteDTO responseDTO = responseEntity.getBody();
-		assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+		assertEquals("User with id: 36 is not an ApartmentOwner in Building with id: 5", responseEntity.getBody());
     }
-	
 	
 	/**
 	 * POST request to "/api/proposal_votes/" with invalid ProposalVoteCastDTO parameter - no ProposalId
@@ -90,15 +86,12 @@ public class ProposalVoteControllerTest {
 	 */
 	@Test
 	public void castProposalVoteNoProposalId() throws Exception {
+		ProposalVoteCastDTO proposalVoteDTO = new ProposalVoteCastDTO(ProposalVoteValue.FOR, null);
+		ResponseEntity<String> responseEntity = 
+				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(proposalVoteDTO, "owner1", "owner1"), String.class);
 		
-		ProposalVoteCastDTO invalidRequestData = new ProposalVoteCastDTO(validProposalVoteCastDTO);
-		invalidRequestData.setProposalId(null);
-		
-		ResponseEntity<ProposalVoteDTO> responseEntity = 
-				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(invalidRequestData), ProposalVoteDTO.class);
-		
-		ProposalVoteDTO responseDTO = responseEntity.getBody();
 		assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
+		assertEquals("'proposalId' not provided", responseEntity.getBody());
     }
 	
 	/**
@@ -108,15 +101,12 @@ public class ProposalVoteControllerTest {
 	@Test
 	public void castProposalVoteNoValue() throws Exception {
 		
-		ProposalVoteCastDTO invalidRequestData = new ProposalVoteCastDTO(validProposalVoteCastDTO);
-		invalidRequestData.setValue(null);
+		ProposalVoteCastDTO proposalVoteDTO = new ProposalVoteCastDTO(null, 1L);
+		ResponseEntity<String> responseEntity = 
+				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(proposalVoteDTO, "owner1", "owner1"), String.class);
 		
-		ResponseEntity<ProposalVoteDTO> responseEntity = 
-				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(invalidRequestData), ProposalVoteDTO.class);
-		
-		ProposalVoteDTO responseDTO = responseEntity.getBody();
 		assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
+		assertEquals("'value' not provided", responseEntity.getBody());
     }
 	
-
 }

@@ -1,23 +1,30 @@
 package com.timsedam.buildingmanagement.service;
 
-import com.timsedam.buildingmanagement.model.Announcement;
-import com.timsedam.buildingmanagement.model.Building;
-import com.timsedam.buildingmanagement.model.Meeting;
-import com.timsedam.buildingmanagement.model.Report;
-import com.timsedam.buildingmanagement.repository.AnnouncementRepository;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import com.timsedam.buildingmanagement.exceptions.UserNotResidentException;
+import com.timsedam.buildingmanagement.model.Announcement;
+import com.timsedam.buildingmanagement.model.Building;
+import com.timsedam.buildingmanagement.model.Meeting;
+import com.timsedam.buildingmanagement.model.Report;
+import com.timsedam.buildingmanagement.model.User;
+import com.timsedam.buildingmanagement.repository.AnnouncementRepository;
 
 @Service
 public class AnnouncementService {
 
     @Autowired
     private AnnouncementRepository announcementRepository;
+    
+    @Autowired
+    private BuildingService buildingService;
 
     public Announcement save(Announcement announcement){
         try{
@@ -27,15 +34,20 @@ public class AnnouncementService {
             return null;
         }
     }
+    
+    public Announcement create(Announcement announcement) throws UserNotResidentException {
+    	if(!buildingService.isResidentOrApartmentOwner(announcement.getPoster(), announcement.getBuilding()))
+    		throw new UserNotResidentException(announcement.getPoster().getId(), announcement.getBuilding().getId());
+    	
+    	return announcementRepository.save(announcement);
+    }
 
-    public List<Announcement> findAllByBuilding(Building b, int page, int count){
-        try{
-            Page<Announcement> announcementPage= announcementRepository.findAllByBuilding(b,new PageRequest(page,count));
-            return announcementPage.getContent();
-        }catch (Exception e){
-            e.printStackTrace();
-            return null;
-        }
+    public List<Announcement> findAllByBuilding(User user, Building building, int page, int count) throws UserNotResidentException {
+        if(!buildingService.isResident(user, building))
+        	throw new UserNotResidentException(user.getId(), building.getId());
+        
+        Page<Announcement> announcementPage = announcementRepository.findAllByBuilding(building, new PageRequest(page, count));
+        return announcementPage.getContent();
     }
 
     public Announcement createFromReport(Report report){
