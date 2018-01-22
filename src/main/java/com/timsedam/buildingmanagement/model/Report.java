@@ -20,19 +20,27 @@ public class Report {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
-	@ManyToOne
-	private User sender;
+	
 	private String status;
+	
 	@Lob
 	private String description;
-	@ManyToOne
-	private Building location;
+
 	@ElementCollection
 	private List<String> pictures;
+	
+	@ManyToOne
+	private User sender;
+	
+	@ManyToOne
+	private Building location;
+	
 	@OneToMany(mappedBy = "reportCommented", fetch = FetchType.LAZY)
 	private List<Comment> comments;
+	
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Forward currentHolder;
+	
 	@OneToMany(mappedBy = "reportBid")
 	private List<Bid> bids;
 	

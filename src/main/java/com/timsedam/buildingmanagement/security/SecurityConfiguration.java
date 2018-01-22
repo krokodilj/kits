@@ -22,9 +22,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	private UserDetailsService userDetailsService;
 
 	@Autowired
-	private PasswordEncoder passwordEncoder;
-
-	@Autowired
 	public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
 		authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
 	}
@@ -71,13 +68,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 						"/api/reports/acceptBid/")
 				.permitAll()
 
-				.antMatchers("/api/admins/**", "/api/users/**", "/api/companies/**", "/api/residents/")
+				.antMatchers("/api/admins/", "/api/companies/", "/api/managers/",  "/api/residents/", "/api/owners/")
 				.hasAuthority("REGISTER")
 
-				.antMatchers("/api/reports/create/").hasAuthority("CREATE_REPORT")
+				.antMatchers("/api/reports/").hasAuthority("CREATE_REPORT")
 
+				.antMatchers("/api/reports/forward").hasAnyAuthority("FORWARD_REPORT")
+				
 				.antMatchers("/api/reports/bid/").hasAuthority("SEND_BID")
-
+				
 				.antMatchers("/api/meetings/**").hasAuthority("CREATE_MEETING")
 				
 				.antMatchers("/api/proposals/**").hasAnyAuthority("CREATE_PROPOSAL")

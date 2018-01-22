@@ -1,28 +1,37 @@
 package com.timsedam.buildingmanagement.service;
 
-import com.timsedam.buildingmanagement.dto.UserLoginDTO;
-import com.timsedam.buildingmanagement.model.User;
-import com.timsedam.buildingmanagement.repository.UserRepository;
-import com.timsedam.buildingmanagement.security.JsonWebToken;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/**
- * Created by sirko on 12/7/17.
- */
+import com.timsedam.buildingmanagement.dto.request.UserLoginDTO;
+import com.timsedam.buildingmanagement.exceptions.UserMissingException;
+import com.timsedam.buildingmanagement.model.Role;
+import com.timsedam.buildingmanagement.model.User;
+import com.timsedam.buildingmanagement.repository.UserRepository;
+import com.timsedam.buildingmanagement.security.JsonWebToken;
+
 @Service
 public class AuthService {
 
     @Autowired
-    JsonWebToken jwt;
-
+    private JsonWebToken jwt;
+    
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
-    public String login(UserLoginDTO dto){
-        User user = userRepository.findOneByUsernameAndPassword(dto.getUsername(),dto.getPassword());
-        if(user==null) return null;
-        String token = jwt.generateToken(user.getUsername(),"role");
+    public String login(UserLoginDTO dto) throws UserMissingException{
+        User user = userRepository.findOneByUsernameAndPassword(dto.getUsername(), dto.getPassword());
+        
+        if(user == null) 
+        	throw new UserMissingException();
+        
+        List<String> roles = new ArrayList<String>();
+        for(Role role : user.getRoles())
+        	roles.add(role.getName());
+        String token = jwt.generateToken(user.getUsername(), roles);
         return token;
     }
 

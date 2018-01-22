@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.timsedam.buildingmanagement.dto.ProposalVoteCastDTO;
-import com.timsedam.buildingmanagement.dto.ProposalVoteDTO;
+import com.timsedam.buildingmanagement.dto.request.ProposalVoteCastDTO;
+import com.timsedam.buildingmanagement.dto.response.ProposalVoteDTO;
+import com.timsedam.buildingmanagement.exceptions.ProposalMissingException;
+import com.timsedam.buildingmanagement.exceptions.UserMissingException;
+import com.timsedam.buildingmanagement.mapper.ProposalVoteMapper;
 import com.timsedam.buildingmanagement.model.Proposal;
 import com.timsedam.buildingmanagement.model.ProposalVote;
 import com.timsedam.buildingmanagement.model.User;
@@ -22,7 +25,6 @@ import com.timsedam.buildingmanagement.service.BuildingService;
 import com.timsedam.buildingmanagement.service.ProposalService;
 import com.timsedam.buildingmanagement.service.ProposalVoteService;
 import com.timsedam.buildingmanagement.service.UserService;
-import com.timsedam.buildingmanagement.util.mappers.ProposalVoteMapper;
 
 @RestController
 @RequestMapping(value="/api/proposal_votes")
@@ -41,14 +43,14 @@ public class ProposalVoteController {
 	
 	@PostMapping(consumes = "application/json", produces = "application/json")
 	public ResponseEntity<ProposalVoteDTO> cast(@Valid @RequestBody ProposalVoteCastDTO proposalVoteCastDTO,
-			BindingResult validationResult, Principal principal) throws ClassNotFoundException {
+			BindingResult validationResult, Principal principal) throws ClassNotFoundException, UserMissingException, ProposalMissingException {
 		
 		User requestSender = userService.findOneByUsername(principal.getName());
 		
 		Proposal proposal = null;
 		
 		if(proposalVoteCastDTO.getProposalId() != null)
-			proposal = proposalService.get(proposalVoteCastDTO.getProposalId());
+			proposal = proposalService.findOne(proposalVoteCastDTO.getProposalId());
 		
 		if(validationResult.hasErrors()) {
 			return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);

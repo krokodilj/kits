@@ -1,7 +1,9 @@
 package com.timsedam.buildingmanagement.security;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -57,15 +59,15 @@ public class JsonWebToken {
 		return expirationDate;
 	}
 
-	public String getRoleFromToken(String token){
-		String role;
+	public List<String> getRolesFromToken(String token){
+		List<String> roles;
 		try {
 			Claims claims = getClaimsFromToken(token);
-			role = (String) claims.get("role");
+			roles = (List<String>) claims.get("roles");
 		} catch (Exception e) {
-			role = null;
+			roles = new ArrayList<String>();
 		}
-		return role;
+		return roles;
 	}
 	
 	private boolean isTokenExpired(String token) {
@@ -87,11 +89,11 @@ public class JsonWebToken {
 				.signWith(SignatureAlgorithm.HS512, signingKey).compact();
 	}
 
-	public String generateToken(String username,String role){
+	public String generateToken(String username, List<String> roles){
 		Map<String, Object> claims = new HashMap<String, Object>();
 		claims.put("sub", username);
 		claims.put("created", new Date(System.currentTimeMillis()));
-		claims.put("role",role);
+		claims.put("roles", roles);
 		return Jwts.builder().setClaims(claims)
 				.setExpiration(new Date(System.currentTimeMillis() + expiration * 1000))
 				.signWith(SignatureAlgorithm.HS512, signingKey).compact();
