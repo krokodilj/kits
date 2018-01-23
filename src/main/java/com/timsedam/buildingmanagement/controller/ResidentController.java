@@ -1,37 +1,44 @@
 package com.timsedam.buildingmanagement.controller;
 
-import com.timsedam.buildingmanagement.dto.UserDTO;
-import com.timsedam.buildingmanagement.dto.UserRegisterDTO;
-import com.timsedam.buildingmanagement.model.*;
-import com.timsedam.buildingmanagement.service.BuildingService;
-import com.timsedam.buildingmanagement.service.ResidenceService;
-import com.timsedam.buildingmanagement.service.RoleService;
-import com.timsedam.buildingmanagement.service.UserService;
-import org.modelmapper.ModelMapper;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
+import com.timsedam.buildingmanagement.dto.request.UserRegisterDTO;
+import com.timsedam.buildingmanagement.exceptions.ResidenceExistsException;
+import com.timsedam.buildingmanagement.exceptions.ResidenceMissingException;
+import com.timsedam.buildingmanagement.exceptions.RoleInvalidException;
+import com.timsedam.buildingmanagement.exceptions.UserExistsException;
+import com.timsedam.buildingmanagement.exceptions.UserMissingException;
+import com.timsedam.buildingmanagement.mapper.UserMapper;
+import com.timsedam.buildingmanagement.model.Residence;
+import com.timsedam.buildingmanagement.model.User;
+import com.timsedam.buildingmanagement.service.ResidenceService;
+import com.timsedam.buildingmanagement.service.ResidentService;
 
 
 @RestController
 @RequestMapping(value = "/api/residents/")
 public class ResidentController {
-
+	
+	@Autowired
+	private ResidentService residentService;
+	
+	@Autowired
+	private ResidenceService residenceService;	
+	
     @Autowired
-    private RoleService roleService;
-
-    @Autowired
-    private ResidenceService residenceService;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private ModelMapper modelMapper;
+    private UserMapper userMapper;
 
     /**
      * Register new resident
@@ -39,57 +46,37 @@ public class ResidentController {
      * @return resident id
      */
     @PostMapping
-    public ResponseEntity create(
-            @Valid @RequestBody UserRegisterDTO userRegisterDTO,
-            BindingResult validationResult
-            )
+    public ResponseEntity<?> create(@Valid @RequestBody UserRegisterDTO userRegisterDTO, BindingResult validationResult) 
+    		throws UserExistsException, RoleInvalidException
     {
-        //if dto has invalid input
-        if (validationResult.hasErrors())
-            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+        if (validationResult.hasErrors()) {
+        	String errorMessage = validationResult.getFieldError().getDefaultMessage();
+            return new ResponseEntity<String>(errorMessage, HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+        else {
+            User resident = userMapper.toModel(userRegisterDTO);
+            resident = residentService.save(resident);
 
-        //if username already in use
-        if(userService.exists(userRegisterDTO.getUsername()))
-            return new ResponseEntity<>("Username in use",HttpStatus.CONFLICT);
-
-        Resident resident = (Resident) modelMapper.map(userRegisterDTO, Resident.class);
-        resident = (Resident) userService.createResident(resident);
-
-        if (resident == null)
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-
-        return new ResponseEntity(resident.getId(),HttpStatus.CREATED);
+            return new ResponseEntity<>(resident.getId(), HttpStatus.CREATED);
+        }
     }
-
 
     /**
      * Set new residence to its new resident
      * if resident has another residence delete it
      * @param residentId
      * @param residenceId
-     * @return ResidentDTO
+     * @return
+     * @throws UserExistsException
+     * @throws RoleInvalidException
+     * @throws UserMissingException
+     * @throws ResidenceMissingException
      */
     @PutMapping(value = "/{residentId}/add_to_residence/{residenceId}")
-    public ResponseEntity addBuilding(
-            @PathVariable long residentId,
-            @PathVariable long residenceId
-    ){
-        //if resident exists
-        Resident resident =(Resident) userService.findOne(residentId);
-        if (resident == null)
-            return new ResponseEntity("User not found",HttpStatus.NOT_FOUND);
-
-        //if residence exists
-        Residence residence = residenceService.findOneById(residenceId);
-        if (residence == null)
-            return new ResponseEntity("Residence not found", HttpStatus.NOT_FOUND);
-
-
-        residence.getResidents().add(resident);
-        resident.getResidences().add(residence);
-        userService.save(resident);
-
-        return new ResponseEntity(HttpStatus.OK);
+    public ResponseEntity<?> addBuilding(@PathVariable long residentId, @PathVariable long residenceId) 
+    		throws UserExistsException, RoleInvalidException, UserMissingException, ResidenceMissingException {
+    	residenceService.addResident(residenceId, residentId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
@@ -98,26 +85,52 @@ public class ResidentController {
      * @param residentId
      * @param residenceId
      * @return
+     * @throws UserExistsException 
+     * @throws RoleInvalidException 
+     * @throws UserMissingException 
+     * @throws ResidenceMissingException 
+     * @throws ResidenceExistsException 
      */
     @PutMapping(value = "/{residentId}/add_to_owner/{residenceId}")
-    public ResponseEntity addToOwned(
-            @PathVariable long residentId,
-            @PathVariable long residenceId
-    ){
-        //if resident exists
-        Resident resident =(Resident) userService.findOne(residentId);
-        if (resident == null)
-            return new ResponseEntity("User not found",HttpStatus.NOT_FOUND);
+    public ResponseEntity<?> addToOwner(@PathVariable long residentId, @PathVariable long residenceId) 
+    		throws UserExistsException, RoleInvalidException, UserMissingException, ResidenceMissingException, ResidenceExistsException {
 
-        //if residence exists
+    	User resident = residentService.findOne(residentId);
         Residence residence = residenceService.findOneById(residenceId);
-        if (residence == null)
-            return new ResponseEntity("Residence not found", HttpStatus.NOT_FOUND);
 
-        residence.setApartmentOwner(resident);
-        resident.getOwnedApartments().add(residence);
-        userService.save(resident);
-
-        return new ResponseEntity(HttpStatus.OK);
+        residence.setApartmentOwner(resident);        
+        residenceService.save(residence);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
+    
+    
+    /**
+	 * Handles UserMissingException that can happen when calling:
+	 * - ResidenceService.addResident(residenceId, userId)
+	 * - ResidentService.findOne(userId)
+	 */
+	@ExceptionHandler(UserMissingException.class)
+	public ResponseEntity<String> userMissingException(final UserMissingException e) {
+		return new ResponseEntity<String>("User with ID: " + e.getId() + " doesn't exist.", HttpStatus.NOT_FOUND);
+	}
+	
+    /**
+	 * Handles ResidenceMissingException that can happen when calling:
+	 * - ResidenceService.addResident(residenceId, userId)
+	 * - ResidenceService.findOne(residenceId)
+	 */
+	@ExceptionHandler(ResidenceMissingException.class)
+	public ResponseEntity<String> residenceMissingException(final ResidenceMissingException e) {
+		return new ResponseEntity<String>("Residence with ID: " + e.getId() + " doesn't exist.", HttpStatus.NOT_FOUND);
+	}
+	
+	/**
+	 * Handles UserExistsException that can happen when calling UserService.save(user)
+	 */
+	@ExceptionHandler(UserExistsException.class)
+	public ResponseEntity<String> userExistsException(final UserExistsException e) {
+		return new ResponseEntity<String>("Resident with username: " + e.getUsername() + " already exists.", HttpStatus.NOT_FOUND);
+	}
+    
+
 }
