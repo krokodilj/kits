@@ -38,3 +38,9 @@ transaction-logs
 secrets.yml 
 mvnw
 mvnw.cmd
+
+####CLIENT
+/client/node_modules
+/client/bower_components
+/client/dist.dev
+/client/dist.prod
