@@ -1,0 +1,39 @@
+{
+  "name": "kits_client",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "body-parser": "^1.18.2",
+    "del": "^3.0.0",
+    "express": "^4.16.2",
+    "fs-extra": "~1.0.0",
+    "gulp": "^4.0.0",
+    "gulp-angular-filesort": "^1.1.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-htmlhint": "^1.0.0",
+    "gulp-htmlmin": "^4.0.0",
+    "gulp-inject": "^4.3.0",
+    "gulp-jshint": "^2.1.0",
+    "gulp-livereload": "^3.8.1",
+    "gulp-load-plugins": "^1.5.0",
+    "gulp-minify-css": "^1.2.4",
+    "gulp-ng-html2js": "^0.2.2",
+    "gulp-nodemon": "^2.2.1",
+    "gulp-order": "^1.1.1",
+    "gulp-print": "^2.0.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^3.1.0",
+    "gulp-sourcemaps": "^1.12.1",
+    "gulp-uglify": "^3.0.0",
+    "jshint": "^2.9.5",
+    "jshint-stylish": "^2.2.1",
+    "main-bower-files": "^2.13.1",
+    "method-override": "^2.3.10",
+    "nodemon": "^1.14.11",
+    "q": "^1.5.1",
+    "wiredep": "^4.0.0"
+  }
+}
