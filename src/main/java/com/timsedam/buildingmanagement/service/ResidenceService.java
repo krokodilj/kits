@@ -23,7 +23,7 @@ public class ResidenceService {
     private ResidenceRepository residenceRepository;
     
     //if there exists a Residence on the specified apartmentNumber
-    public boolean exists(Building building, int apartmentNumber) { 
+    private boolean exists(Building building, int apartmentNumber) { 
         if (building.getResidences() != null)
             for(Residence residence : building.getResidences())
                 if(residence.getApartmentNumber() == apartmentNumber)
@@ -47,15 +47,6 @@ public class ResidenceService {
     		throw new ResidenceMissingException(id);
     	else
     		return residence;
-    }
-
-    public List<Residence> getAllByBuilding(Building b){
-        try{
-            return residenceRepository.findAllByBuilding(b);
-        }catch (Exception e){
-            e.printStackTrace();
-            return null;
-        }
     }
     
     public void addResident(Long residenceId, Long userId) throws UserMissingException, ResidenceMissingException {

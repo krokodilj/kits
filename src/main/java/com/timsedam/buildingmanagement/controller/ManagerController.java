@@ -51,7 +51,7 @@ public class ManagerController {
 	 */
 	@ExceptionHandler(UserExistsException.class)
 	public ResponseEntity<String> userExistsException(final UserExistsException e) {
-		return new ResponseEntity<String>("Manager with username: " + e.getUsername() + " already exists.", HttpStatus.NOT_FOUND);
+		return new ResponseEntity<String>("Manager with username: " + e.getUsername() + " already exists.", HttpStatus.CONFLICT);
 	}
 
 }

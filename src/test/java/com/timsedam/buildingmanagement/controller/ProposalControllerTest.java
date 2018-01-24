@@ -25,16 +25,16 @@ import com.timsedam.buildingmanagement.model.Proposal;
 import com.timsedam.buildingmanagement.repository.ProposalRepository;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class ProposalControllerTest {
+	
+	private static final String URL_PREFIX = "/api/proposals/";
 	
 	@Autowired
     private TestRestTemplate restTemplate;
 	
 	@Autowired
 	private ProposalRepository proposalRepository;
-	
-	private static final String URL_PREFIX = "/api/proposals/";
 	
 	private String getToken(String username, String password) {
 		UserLoginDTO userLoginData = new UserLoginDTO(username, password);
@@ -53,7 +53,7 @@ public class ProposalControllerTest {
 	
 	/**
 	 * POST request to "/api/proposals/" with valid ProposalCreateDTO
-	 * Expected: proposalId is returned to the client, HTTP Status 201
+	 * Expected: new Proposal's id is returned, HTTP Status 201 CREATED
 	 */
 	@Test
 	public void createProposalWithReport() throws Exception {
@@ -78,7 +78,7 @@ public class ProposalControllerTest {
 	
 	/**
 	 * POST request to "/api/proposals/" with valid ProposalCreateDTO parameter without Report attached
-	 * Expected: proposalId is returned to the client, HTTP Status 201
+	 * Expected: new Proposal's id is returned, HTTP Status 201 CREATED
 	 */
 	@Test
 	public void createProposalWithoutReport() throws Exception {
@@ -103,7 +103,7 @@ public class ProposalControllerTest {
 	
 	/**
 	 * POST request to "/api/proposals/" with invalid ProposalCreateDTO parameter - no content
-	 * Expected: error message is returned, HTTP Status 422
+	 * Expected: error message is returned, HTTP Status 422 UNPROCESSABLE_ENTITY
 	 */
 	@Test
 	public void createProposalWithoutContent() throws Exception {
@@ -131,7 +131,7 @@ public class ProposalControllerTest {
 	
 	/**
 	 * POST request to "/api/meetings/" with invalid ProposalCreateDTO parameter - Report attached doesn't concern sender's Building
-	 * Expected: no ProposalDTO is returned to the client, HTTP Status 400
+	 * Expected: error message is returned, HTTP Status 422 UNPROCESSABLE_ENTITY
 	 */
 	@Test
 	public void createProposalWithBadAttachedReport() throws Exception {
@@ -139,13 +139,13 @@ public class ProposalControllerTest {
 		ResponseEntity<String> responseEntity = 
 				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(proposalCreateDTO, "resident1", "resident1"), String.class);
 		
-		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+		assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
 		assertEquals("Report with id: 5 is not attached to Building with id: 1", responseEntity.getBody());
     }
 	
 	/**
 	 * POST request to "/api/meetings/" with invalid ProposalCreateDTO parameter - User is not an Owner or Resident in Building
-	 * Expected: no ProposalDTO is returned to the client, HTTP Status 400
+	 * Expected: error message is returned, HTTP Status 422 UNPROCESSABLE_ENTITY
 	 */
 	@Test
 	public void createProposalUserNotResidentOrOwner() throws Exception {
@@ -153,13 +153,13 @@ public class ProposalControllerTest {
 		ResponseEntity<String> responseEntity = 
 				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(proposalCreateDTO, "resident1", "resident1"), String.class);
 		
-		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+		assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
 		assertEquals("User with id: 16 is not a Resident or Owner in Building with id: 5", responseEntity.getBody());
 	}
 	
 	/**
-	 * GET request to "/api/proposals/{proposalId}" with valid proposalId parameter 
-	 * Expected: ProposalDTO is returned to the client, HTTP Status 200
+	 * GET request to "/api/proposals/{proposalId}" with valid proposalId parameter
+	 * Expected: ProposalDTO is returned, HTTP Status 200 OK
 	 */
 	@Test
 	public void getProposal() throws Exception {
@@ -171,7 +171,7 @@ public class ProposalControllerTest {
 	
 	/**
 	 * GET request to "/api/proposals/{proposalId}" with invalid proposalId parameter - Proposal with specified id doesnt exist 
-	 * Expected: no ProposalDTO is returned to the client, HTTP Status 204
+	 * Expected: error message is returned, HTTP Status 404 NOT_FOUND
 	 */
 	@Test
 	public void invalidMeetingIdGetMeeting() throws Exception {
@@ -184,7 +184,7 @@ public class ProposalControllerTest {
 	
 	/**
 	 * GET request to "/api/proposals?buildingId=1"
-	 * Expected: ProposalDTO array is returned to the client, HTTP Status 200
+	 * Expected: ProposalDTO Array is returned, HTTP Status 200 OK
 	 */
 	@Test
 	public void getProposalsByBuildingId() throws Exception {

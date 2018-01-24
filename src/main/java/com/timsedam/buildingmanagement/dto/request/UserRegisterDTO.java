@@ -9,14 +9,17 @@ import org.hibernate.validator.constraints.Email;
 
 public class UserRegisterDTO {
 	
-	@NotNull(message = "{user.username.empty}")
-	@Size(min = 4, message = "{user.username.short}")
+	@NotNull(message = "'username' not provided")
+	@Size(min = 4, message = "'username' must be at least 4 characters long")
 	private String username;
-	@NotNull(message = "{user.password.empty}")
-	@Size(min = 6, message = "{user.password.short}")
+	
+	@NotNull(message = "'password' not provided")
+	@Size(min = 6, message = "'password' must be at least 6 characters long")
 	private String password;
-	@Email(message = "{user.email.format}")
+	
+	@Email(message = "'email' must be of valid format")
 	private String email;
+	
 	private ArrayList<String> pictures;
     
 	public UserRegisterDTO() {

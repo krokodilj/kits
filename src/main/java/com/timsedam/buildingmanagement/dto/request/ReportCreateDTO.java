@@ -4,19 +4,19 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
-public class CreateReportDTO {
+public class ReportCreateDTO {
 	
-	@NotNull(message = "{description.empty}")
+	@NotNull(message = "'description' not provided")
 	private String description;
 	
-	@NotNull(message = "{buildingId.empty}")
+	@NotNull(message = "'buildingId' not provided")
 	private long building;
 	
 	private List<String> photos;
 	
-	public CreateReportDTO(){}
+	public ReportCreateDTO(){}
 
-	public CreateReportDTO(String description, long building, List<String> photos) {
+	public ReportCreateDTO(String description, long building, List<String> photos) {
 		super();
 		this.description = description;
 		this.building = building;

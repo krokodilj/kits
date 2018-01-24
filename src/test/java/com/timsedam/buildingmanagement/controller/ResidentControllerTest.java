@@ -24,8 +24,10 @@ import com.timsedam.buildingmanagement.repository.ResidenceRepository;
 import com.timsedam.buildingmanagement.repository.UserRepository;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ResidentControllerTest {
+	
+	private static final String URL = "/api/residents/";
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -36,10 +38,6 @@ public class ResidentControllerTest {
     @Autowired
     private ResidenceRepository residenceRepository;
 
-    private static final String URL = "/api/residents/";
-    
-    private UserRegisterDTO validUserRegisterDTO = new UserRegisterDTO("USERNAME", "PASSWORD", "test@gmail.com", new ArrayList<String>());
-    
     private String getUserToken(String username, String password) {
         UserLoginDTO userLoginData = new UserLoginDTO(username, password);
         ResponseEntity<String> responseEntity = 
@@ -57,48 +55,50 @@ public class ResidentControllerTest {
 
     /**
      * POST request to '/api/residents' with valid UserRegisterDTO
-     * Expected:  residents id and HttpStatus.CREATED
+     * Expected:  new REsident's id is returned and HTTP Status CREATED 201
      */
     @Test
     public void registerResident() {
-        
-        ResponseEntity<Long> responseEntity = restTemplate.postForEntity(URL, getRequestEntity(validUserRegisterDTO, "admin1", "admin1"), Long.class);
+    	UserRegisterDTO userRegisterDTO = new UserRegisterDTO("USERNAME", "PASSWORD", "test@gmail.com", new ArrayList<String>());
+        ResponseEntity<Long> responseEntity = restTemplate.postForEntity(URL, getRequestEntity(userRegisterDTO, "admin1", "admin1"), Long.class);
         Long id = responseEntity.getBody();
         User user = userRepository.findOne(id);
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        assertEquals(user.getUsername(), validUserRegisterDTO.getUsername());
-        assertEquals(user.getPassword(), validUserRegisterDTO.getPassword());
-        assertEquals(user.getEmail(), validUserRegisterDTO.getEmail());
+        assertEquals(user.getUsername(), userRegisterDTO.getUsername());
+        assertEquals(user.getPassword(), userRegisterDTO.getPassword());
+        assertEquals(user.getEmail(), userRegisterDTO.getEmail());
 
         userRepository.delete(id);
     }
 
     /**
      * POST request to '/api/residents/' sent by unauthorised user
-     * Expected: HttpStatus.FORBIDDEN
+     * Expected: HTTP Status FORBIDDEN 403
      */
     @Test
     public void registerResidentUnauthorised(){
+    	UserRegisterDTO userRegisterDTO = new UserRegisterDTO("USERNAME", "PASSWORD", "test@gmail.com", new ArrayList<String>());
         ResponseEntity<?> responseEntity = 
-        		restTemplate.postForEntity(URL, getRequestEntity(validUserRegisterDTO, "resident1", "resident1"), Object.class);
+        		restTemplate.postForEntity(URL, getRequestEntity(userRegisterDTO, "resident1", "resident1"), Object.class);
         assertEquals(HttpStatus.FORBIDDEN,responseEntity.getStatusCode());
     }
     
 	/**
 	 * POST request to "/api/admins/" twice with the same UserRegisterDTO parameter
-	 * Expected: error message is returned, HTTP Status 404
+	 * Expected: error message is returned, HTTP Status NOT_FOUND 404
 	 */
 	@Test
 	public void registerDuplicate() throws Exception {
+		UserRegisterDTO userRegisterDTO = new UserRegisterDTO("USERNAME", "PASSWORD", "test@gmail.com", new ArrayList<String>());
 		ResponseEntity<Long> responseEntityValidRequest = 
-				restTemplate.postForEntity(URL, getRequestEntity(validUserRegisterDTO, "admin1", "admin1"), Long.class);
+				restTemplate.postForEntity(URL, getRequestEntity(userRegisterDTO, "admin1", "admin1"), Long.class);
 
 		Long residentId = responseEntityValidRequest.getBody();
 		assertEquals(HttpStatus.CREATED, responseEntityValidRequest.getStatusCode());
 		
 		ResponseEntity<String> responseEntityDuplicateRequest = 
-				restTemplate.postForEntity(URL, getRequestEntity(validUserRegisterDTO, "admin1", "admin1"), String.class);
+				restTemplate.postForEntity(URL, getRequestEntity(userRegisterDTO, "admin1", "admin1"), String.class);
 		assertEquals(HttpStatus.NOT_FOUND, responseEntityDuplicateRequest.getStatusCode());
 		assertEquals("Resident with username: USERNAME already exists.", responseEntityDuplicateRequest.getBody());
 		
@@ -107,15 +107,13 @@ public class ResidentControllerTest {
 	
 	/**
 	 * POST request to "/api/residents/" with invalid UserRegisterDTO - username missing
-	 * Expected: error message is returned, HTTP Status 422
+	 * Expected: error message is returned, HTTP Status UNPROCESSABLE_ENTITY 422
 	 */
 	@Test
 	public void registerUsernameMissing() throws Exception {
-		UserRegisterDTO requestObject = new UserRegisterDTO(validUserRegisterDTO);
-		requestObject.setUsername(null);
-		
+		UserRegisterDTO userRegisterDTO = new UserRegisterDTO(null, "PASSWORD", "test@gmail.com", new ArrayList<String>());
 		ResponseEntity<String> responseEntity = 
-				restTemplate.postForEntity(URL, getRequestEntity(requestObject, "admin1", "admin1"), String.class);
+				restTemplate.postForEntity(URL, getRequestEntity(userRegisterDTO, "admin1", "admin1"), String.class);
 		
 		assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
 		assertEquals("'username' not provided", responseEntity.getBody());
@@ -123,15 +121,13 @@ public class ResidentControllerTest {
 	
 	/**
 	 * POST request to "/api/residents/" with invalid UserRegisterDTO parameter - username too short
-	 * Expected: error message is returned, HTTP Status 422
+	 * Expected: error message is returned, HTTP Status UNPROCESSABLE_ENTITY 422
 	 */
 	@Test
 	public void registerUsernameInvalid() throws Exception {
-		UserRegisterDTO requestObject = new UserRegisterDTO(validUserRegisterDTO);
-		requestObject.setUsername("123");
-		
+		UserRegisterDTO userRegisterDTO = new UserRegisterDTO("123", "PASSWORD", "test@gmail.com", new ArrayList<String>());
 		ResponseEntity<String> responseEntity = 
-				restTemplate.postForEntity(URL, getRequestEntity(requestObject, "admin1", "admin1"), String.class);
+				restTemplate.postForEntity(URL, getRequestEntity(userRegisterDTO, "admin1", "admin1"), String.class);
 		
 		assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
 		assertEquals("'username' must be at least 4 characters long", responseEntity.getBody());
@@ -139,15 +135,13 @@ public class ResidentControllerTest {
 	
 	/**
 	 * POST request to "/api/residents/" with invalid UserRegisterDTO parameter - password missing
-	 * Expected: error message is returned, HTTP Status 422
+	 * Expected: error message is returned, HTTP Status UNPROCESSABLE_ENTITY 422
 	 */
 	@Test
 	public void registerPasswordMissing() throws Exception {
-		UserRegisterDTO requestObject = new UserRegisterDTO(validUserRegisterDTO);
-		requestObject.setPassword(null);
-		
+		UserRegisterDTO userRegisterDTO = new UserRegisterDTO("USERNAME", null, "test@gmail.com", new ArrayList<String>());
 		ResponseEntity<String> responseEntity = 
-				restTemplate.postForEntity(URL, getRequestEntity(requestObject, "admin1", "admin1"), String.class);
+				restTemplate.postForEntity(URL, getRequestEntity(userRegisterDTO, "admin1", "admin1"), String.class);
 		
 		assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
 		assertEquals("'password' not provided", responseEntity.getBody());
@@ -155,15 +149,13 @@ public class ResidentControllerTest {
 	
 	/**
 	 * POST request to "/api/residents/" with invalid UserRegisterDTO parameter - password too short
-	 * Expected: error message is returned, HTTP Status 422
+	 * Expected: error message is returned, HTTP Status UNPROCESSABLE_ENTITY 422
 	 */
 	@Test
 	public void registerPasswordInvalid() throws Exception {
-		UserRegisterDTO requestObject = new UserRegisterDTO(validUserRegisterDTO);
-		requestObject.setPassword("123");
-		
+		UserRegisterDTO userRegisterDTO = new UserRegisterDTO("USERNAME", "123", "test@gmail.com", new ArrayList<String>());
 		ResponseEntity<String> responseEntity = 
-				restTemplate.postForEntity(URL, getRequestEntity(requestObject, "admin1", "admin1"), String.class);
+				restTemplate.postForEntity(URL, getRequestEntity(userRegisterDTO, "admin1", "admin1"), String.class);
 		
 		assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
 		assertEquals("'password' must be at least 6 characters long", responseEntity.getBody());
@@ -171,15 +163,13 @@ public class ResidentControllerTest {
 
 	/**
 	 * POST request to "/api/residents/" with invalid UserRegisterDTO parameter - email of invalid format
-	 * Expected: no AdminDTO is returned, HTTP Status 422
+	 * Expected: error message is returned, HTTP Status UNPROCESSABLE_ENTITY 422
 	 */
 	@Test
 	public void registerEmailInvalid() throws Exception {
-		UserRegisterDTO requestObject = new UserRegisterDTO(validUserRegisterDTO);
-		requestObject.setEmail("INVALID_EMAIL_FORMAT");
-		
+		UserRegisterDTO userRegisterDTO = new UserRegisterDTO("USERNAME", "PASSWORD", "INVALID_EMAIL_FORMAT", new ArrayList<String>());
 		ResponseEntity<String> responseEntity = 
-				restTemplate.postForEntity(URL, getRequestEntity(requestObject, "admin1", "admin1"), String.class);
+				restTemplate.postForEntity(URL, getRequestEntity(userRegisterDTO, "admin1", "admin1"), String.class);
 		
 		assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
 		assertEquals("'email' must be of valid format", responseEntity.getBody());
@@ -187,7 +177,7 @@ public class ResidentControllerTest {
     
     /**
      * PUT request to 'api/residents/{residentId}/add_to_residence/{residenceId} with valid path params
-     * Expected: HttpStatus.OK
+     * Expected: HTTP Status 200 OK
      */
     @Test
     public void setResidence(){
@@ -213,7 +203,7 @@ public class ResidentControllerTest {
     /**
      * PUT request to 'api/residents/{residentId}/add_to_residence/{residenceId}
      *  to non existing resident
-     * Expected: error message and HttpStatus.NOT_FOUND
+     * Expected: error message is returned, HTTP Status NOT_FOUND 404
      */
     @Test
     public void setResidenceWithInvalidResidentId() {
@@ -233,7 +223,7 @@ public class ResidentControllerTest {
 
     /**
      * PUT request to 'api/residents/{residentId}/add_to_residence/{residenceId} - non existing residence 
-     * Expected: error message and HttpStatus.NOT_FOUND
+     * Expected: error message is returned, HTTP Status NOT_FOUND 404
      */
     @Test
     public void setResidenceWithInvalidResidenceId() {
@@ -254,6 +244,7 @@ public class ResidentControllerTest {
     /**
      * PUT request to 'api/residents/{residentId}/add_to_owner/{residenceId} with valid path params
      * Expected: HttpStatus.OK
+     * Expected: HTTP Status OK 200
      */
     @Test
     public void setResidenceOwner(){
@@ -279,7 +270,7 @@ public class ResidentControllerTest {
 
     /**
      * PUT request to 'api/residents/{residentId}/add_to_owner/{residenceId} - non existing residence
-     * Expected: error message and HttpStatus.NOT_FOUND
+     * Expected: error message is returned, HTTP Status NOT_FOUND 404
      */
     @Test
     public void setResidenceOwnerWithInvalidResidenceId() {
@@ -299,7 +290,7 @@ public class ResidentControllerTest {
 
     /**
      * PUT request to 'api/residents/{residentId}/add_to_owner/{residenceId} - non existing resident 
-     * Expected: error message and HttpStatus.NOT_FOUND
+     * Expected: error message is returned, HTTP Status NOT_FOUND 404
      */
     @Test
     public void setResidencOwnereWithInvalidResidentId() {

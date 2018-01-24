@@ -12,8 +12,10 @@ public class Answer {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
+	
 	@ManyToOne
 	private User respondant;
+	
 	@ManyToOne
 	private Question questionAnswered;
 	

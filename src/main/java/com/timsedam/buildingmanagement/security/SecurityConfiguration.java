@@ -10,8 +10,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -23,12 +21,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-		authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-	}
-
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
+		authenticationManagerBuilder.userDetailsService(userDetailsService);
 	}
 
 	@Bean
@@ -45,7 +38,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	}
 	
 	private static final String[] AUTH_WHITELIST = {
-
             // -- swagger ui
             "/swagger-resources/**",
             "/swagger-ui.html",
@@ -70,6 +62,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 				.antMatchers("/api/admins/", "/api/companies/", "/api/managers/",  "/api/residents/", "/api/owners/")
 				.hasAuthority("REGISTER")
+				
+				.antMatchers("/api/announcements/").hasAnyAuthority("CREATE_ANNOUNCEMENT")
 
 				.antMatchers("/api/reports/").hasAuthority("CREATE_REPORT")
 
@@ -77,9 +71,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				
 				.antMatchers("/api/reports/bid/").hasAuthority("SEND_BID")
 				
-				.antMatchers("/api/meetings/**").hasAuthority("CREATE_MEETING")
+				.antMatchers("/api/meetings/").hasAuthority("CREATE_MEETING")
 				
-				.antMatchers("/api/proposals/**").hasAnyAuthority("CREATE_PROPOSAL")
+				.antMatchers("/api/proposals/").hasAnyAuthority("CREATE_PROPOSAL")
+				
+				.antMatchers("/api/proposal_votes/").hasAnyAuthority("PROPOSAL_VOTE")
 
 				.antMatchers("/api/residents/**").hasAuthority("UPDATE_RESIDENT")
 

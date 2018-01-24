@@ -21,10 +21,6 @@ public class ProposalVoteService {
 	@Autowired
 	private BuildingService buildingService;
 	
-	public void save(ProposalVote proposalVote) {
-		proposalVoteRepository.save(proposalVote);
-	}
-	
 	public ProposalVote create(ProposalVote vote, Proposal proposal) throws UserNotApartmentOwnerException {
 		if(!buildingService.isApartmentOwner(vote.getVoter(), proposal.getBuilding()))
 			throw new UserNotApartmentOwnerException(vote.getVoter().getId(), proposal.getBuilding().getId());

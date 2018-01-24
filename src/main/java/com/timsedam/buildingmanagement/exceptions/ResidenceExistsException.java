@@ -4,7 +4,6 @@ public class ResidenceExistsException extends Exception {
 
 	private Long buildingId;
 	private int apartmentNumber;
-	private static final long serialVersionUID = 7250267963439748482L;
 	
 	public ResidenceExistsException(Long buildingId, int apartmentNumber) {
 		super();

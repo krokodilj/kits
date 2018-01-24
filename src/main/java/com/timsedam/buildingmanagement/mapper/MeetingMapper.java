@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.timsedam.buildingmanagement.dto.request.CreateMeetingDTO;
+import com.timsedam.buildingmanagement.dto.request.MeetingCreateDTO;
 import com.timsedam.buildingmanagement.dto.response.MeetingDTO;
 import com.timsedam.buildingmanagement.model.Building;
 import com.timsedam.buildingmanagement.model.Meeting;
@@ -19,7 +19,7 @@ public class MeetingMapper {
 	@Autowired
 	private BuildingRepository buildingRepository;
 	
-	public Meeting toModel(CreateMeetingDTO meetingCreateDTO) {
+	public Meeting toModel(MeetingCreateDTO meetingCreateDTO) {
 		Building building = buildingRepository.getOne(meetingCreateDTO.getBuildingId());
 		
 		Meeting meeting = new Meeting();

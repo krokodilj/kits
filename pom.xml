@@ -80,12 +80,6 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 		</dependency>
-		<!-- dto to model and vice-versa -->
-		<dependency>
-			<groupId>org.modelmapper</groupId>
-			<artifactId>modelmapper</artifactId>
-			<version>0.7.5</version>
-		</dependency>
 		<!-- util libs -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>

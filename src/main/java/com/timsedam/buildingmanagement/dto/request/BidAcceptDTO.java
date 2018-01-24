@@ -1,12 +1,12 @@
 package com.timsedam.buildingmanagement.dto.request;
 
-public class AcceptBidDTO {
+public class BidAcceptDTO {
 
 	private long bid;
 	
-	public AcceptBidDTO(){}
+	public BidAcceptDTO(){}
 	
-	public AcceptBidDTO(long bid){
+	public BidAcceptDTO(long bid){
 		this.bid = bid;
 	}
 

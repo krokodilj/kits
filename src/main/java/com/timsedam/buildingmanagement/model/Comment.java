@@ -13,11 +13,15 @@ public class Comment {
 	@Id
 	@GeneratedValue
 	private long id;
+	
 	private String data;
+	
 	@ManyToOne
 	private User commenter;
+	
 	@ManyToOne
 	private Report reportCommented;
+	
 	private LocalDateTime postedAt;
 	
 	public Comment() {

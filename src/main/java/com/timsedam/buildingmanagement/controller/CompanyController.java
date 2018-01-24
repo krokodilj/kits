@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.timsedam.buildingmanagement.dto.request.CompanyRegisterDTO;
+import com.timsedam.buildingmanagement.dto.request.CompanyCreateDTO;
 import com.timsedam.buildingmanagement.exceptions.RoleInvalidException;
 import com.timsedam.buildingmanagement.exceptions.UserExistsException;
 import com.timsedam.buildingmanagement.mapper.CompanyMapper;
@@ -30,16 +30,15 @@ public class CompanyController {
 	private CompanyMapper companyMapper;
 		
 	@PostMapping(consumes = "application/json", produces = "application/json")
-	public ResponseEntity<?> register(@Valid @RequestBody CompanyRegisterDTO companyRegisterDTO,
-			BindingResult validationResult) throws ClassNotFoundException, UserExistsException, RoleInvalidException {
+	public ResponseEntity<?> create(@Valid @RequestBody CompanyCreateDTO companyDTO, BindingResult validationResult)
+			throws ClassNotFoundException, UserExistsException, RoleInvalidException {
 		
 		if (validationResult.hasErrors()) {
 			String errorMessage = validationResult.getFieldError().getDefaultMessage();
-			System.out.println(validationResult.getFieldErrors());
 			return new ResponseEntity<>(errorMessage, HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 		else {
-			Company company = companyMapper.toModel(companyRegisterDTO);
+			Company company = companyMapper.toModel(companyDTO);
 			Company savedCompany = companyService.save(company);
 			
 			return new ResponseEntity<Long>(savedCompany.getId(), HttpStatus.CREATED);
@@ -52,7 +51,7 @@ public class CompanyController {
 	 */
 	@ExceptionHandler(UserExistsException.class)
 	public ResponseEntity<String> userExistsException(final UserExistsException e) {
-		return new ResponseEntity<String>("Company with username: " + e.getUsername() + " already exists.", HttpStatus.NOT_FOUND);
+		return new ResponseEntity<String>("Company with username: " + e.getUsername() + " already exists.", HttpStatus.CONFLICT);
 	}
 
 }

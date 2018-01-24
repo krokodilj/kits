@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.timsedam.buildingmanagement.dto.request.CreateBuildingDTO;
+import com.timsedam.buildingmanagement.dto.request.BuildingCreateDTO;
 import com.timsedam.buildingmanagement.dto.response.BuildingDTO;
 import com.timsedam.buildingmanagement.model.Building;
 import com.timsedam.buildingmanagement.model.Residence;
@@ -14,7 +14,7 @@ import com.timsedam.buildingmanagement.model.Residence;
 @Component
 public class BuildingMapper {
 
-    public Building toModel(CreateBuildingDTO cb){
+    public Building toModel(BuildingCreateDTO cb){
     	Building building = new Building();
     	
     	building.setAddress(cb.getAddress());

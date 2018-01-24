@@ -1,7 +1,6 @@
 package com.timsedam.buildingmanagement.controller;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -19,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.timsedam.buildingmanagement.dto.request.CreateMeetingDTO;
+import com.timsedam.buildingmanagement.dto.request.MeetingCreateDTO;
 import com.timsedam.buildingmanagement.dto.response.MeetingDTO;
 import com.timsedam.buildingmanagement.exceptions.InvalidTimeException;
 import com.timsedam.buildingmanagement.exceptions.MeetingMissingException;
@@ -45,7 +44,7 @@ public class MeetingController {
 	private MeetingMapper meetingMapper;
 				
 	@PostMapping(consumes = "application/json", produces = "application/json")
-	public ResponseEntity<?> create(@Valid @RequestBody CreateMeetingDTO meetingCreateDTO, BindingResult validationResult, Principal principal)
+	public ResponseEntity<?> create(@Valid @RequestBody MeetingCreateDTO meetingCreateDTO, BindingResult validationResult, Principal principal)
 			throws ClassNotFoundException, UserMissingException, UserNotManagerException, InvalidTimeException {
 		
 		User requestSender = userService.findOneByUsername(principal.getName());
@@ -93,7 +92,7 @@ public class MeetingController {
 	@ExceptionHandler(UserNotManagerException.class)
 	public ResponseEntity<String> userNotManagerException(final UserNotManagerException e) {
 		return new ResponseEntity<String>("User with id: " + e.getUserId() + 
-				" is not the Manager of Building with id: " + e.getBuildingId(), HttpStatus.NOT_FOUND);
+				" is not the Manager of Building with id: " + e.getBuildingId(), HttpStatus.UNPROCESSABLE_ENTITY);
 	}
 	
 	/**
@@ -101,7 +100,7 @@ public class MeetingController {
 	 */
 	@ExceptionHandler(InvalidTimeException.class)
 	public ResponseEntity<String> invalidTimeException(final InvalidTimeException e) {
-		return new ResponseEntity<String>("Time provided is in the past.", HttpStatus.NOT_FOUND);
+		return new ResponseEntity<String>("Time provided is in the past.", HttpStatus.UNPROCESSABLE_ENTITY);
 	}
 	
 	/**

@@ -17,37 +17,28 @@ public class Proposal {
 	@Id
 	@GeneratedValue
 	private Long id;
+	
 	private String content;
+	
 	@Enumerated(EnumType.STRING)
 	private ProposalStatus status;
+	
 	@ManyToOne
 	private User proposer;
+	
 	@ManyToOne
 	private Meeting meeting;
+	
 	private LocalDateTime suggestedAt;
+	
 	@OneToMany
 	private List<ProposalVote> votes;
+	
 	@ManyToOne
 	private Report attachedReport;
+	
 	@ManyToOne
 	private Building building;
-	
-	public Proposal() {
-		super();
-	}
-
-	public Proposal(String content, ProposalStatus status, User proposer, Meeting meeting, LocalDateTime suggestedAt,
-			List<ProposalVote> votes, Report attachedReport, Building building) {
-		super();
-		this.content = content;
-		this.status = status;
-		this.proposer = proposer;
-		this.meeting = meeting;
-		this.suggestedAt = suggestedAt;
-		this.votes = votes;
-		this.attachedReport = attachedReport;
-		this.building = building;
-	}
 
 	public Long getId() {
 		return id;

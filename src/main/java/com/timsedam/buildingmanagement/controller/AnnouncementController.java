@@ -19,10 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.timsedam.buildingmanagement.dto.request.CreateAnnouncementDTO;
+import com.timsedam.buildingmanagement.dto.request.AnnouncementCreateDTO;
 import com.timsedam.buildingmanagement.dto.response.AnnouncementDTO;
 import com.timsedam.buildingmanagement.exceptions.BuildingMissingException;
-import com.timsedam.buildingmanagement.exceptions.UserExistsException;
 import com.timsedam.buildingmanagement.exceptions.UserMissingException;
 import com.timsedam.buildingmanagement.exceptions.UserNotResidentException;
 import com.timsedam.buildingmanagement.mapper.AnnouncementMapper;
@@ -49,18 +48,8 @@ public class AnnouncementController {
 
     private AnnouncementMapper announcementMapper = new AnnouncementMapper();
 
-
-    /**
-     * Create announcement
-     * @param principal
-     * @param createAnnouncementDTO
-     * @return AnnouncementDTO
-     * @throws BuildingMissingException 
-     * @throws UserMissingException 
-     * @throws UserNotResidentException 
-     */
     @PostMapping(consumes = "application/json")
-    public ResponseEntity<?> create(Principal principal, @Valid @RequestBody CreateAnnouncementDTO createAnnouncementDTO,
+    public ResponseEntity<?> create(Principal principal, @Valid @RequestBody AnnouncementCreateDTO createAnnouncementDTO,
     		BindingResult validationResult)	throws BuildingMissingException, UserMissingException, UserNotResidentException {
     	
     	if (validationResult.hasErrors()) {
@@ -77,16 +66,6 @@ public class AnnouncementController {
         return new ResponseEntity<Long>(announcement.getId(), HttpStatus.CREATED);
     }
 
-    /**
-     * Get announcements by building
-     * @param buildingId
-     * @param page default 0
-     * @param count default 5
-     * @return List<AnnouncementDTO>
-     * @throws BuildingMissingException 
-     * @throws UserMissingException 
-     * @throws UserNotResidentException 
-     */
     @GetMapping(value="/by_building/{buildingId}")
     public ResponseEntity<?> getByBuilding(Principal principal, @PathVariable long buildingId, 
     		@RequestParam(defaultValue = "0")int page, @RequestParam(defaultValue = "5") int count) 
@@ -123,7 +102,7 @@ public class AnnouncementController {
 	@ExceptionHandler(UserNotResidentException.class)
 	public ResponseEntity<String> userNotResidentException(final UserNotResidentException e) {
 		return new ResponseEntity<String>("User with id: " + e.getUserId() + " is not a Resident or Owner "
-				+ "in Building with id: " + e.getBuildingId(), HttpStatus.NOT_FOUND);
+				+ "in Building with id: " + e.getBuildingId(), HttpStatus.UNPROCESSABLE_ENTITY);
 	}
 	
 }

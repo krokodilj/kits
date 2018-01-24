@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.springframework.stereotype.Component;
 
-import com.timsedam.buildingmanagement.dto.request.CreateResidenceDTO;
+import com.timsedam.buildingmanagement.dto.request.ResidenceCreateDTO;
 import com.timsedam.buildingmanagement.dto.response.ResidenceDTO;
 import com.timsedam.buildingmanagement.model.Residence;
 import com.timsedam.buildingmanagement.model.User;
@@ -12,7 +12,7 @@ import com.timsedam.buildingmanagement.model.User;
 @Component
 public class ResidenceMapper {
 
-    public Residence toModel(CreateResidenceDTO r){
+    public Residence toModel(ResidenceCreateDTO r){
         Residence residence = 
         	new Residence(null, r.getFloorNumber(), r.getApartmentNumber(), new ArrayList<User>());
         return residence;

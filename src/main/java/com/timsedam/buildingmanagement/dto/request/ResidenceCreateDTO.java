@@ -4,20 +4,20 @@ package com.timsedam.buildingmanagement.dto.request;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-public class CreateResidenceDTO {
+public class ResidenceCreateDTO {
 
-    @NotNull(message = "{buildingId.empty}")
+    @NotNull(message = "'buildingId' not provided")
     private long building;
     
-    @Min(value = 1, message = "{residence.floorNumber.negative}")
+    @Min(value = 1, message = "'floorNumber' cannot be a negative value")
     private int floorNumber;
     
-    @Min(value = 1, message = "{residence.apartmentNumber.negative}")
+    @Min(value = 1, message = "'apartmentNumber' cannot be a negative value")
     private int apartmentNumber;
 
-    public CreateResidenceDTO(){}
+    public ResidenceCreateDTO(){}
 
-    public CreateResidenceDTO(long building, int floorNumber, int apartmentNumber) {
+    public ResidenceCreateDTO(long building, int floorNumber, int apartmentNumber) {
         this.building = building;
         this.floorNumber = floorNumber;
         this.apartmentNumber = apartmentNumber;

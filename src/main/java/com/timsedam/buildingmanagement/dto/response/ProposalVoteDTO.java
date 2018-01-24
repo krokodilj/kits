@@ -7,16 +7,6 @@ public class ProposalVoteDTO {
 	private Long id;
 	private Long voter;
 	private ProposalVoteValue vote;
-	
-	public ProposalVoteDTO() {
-		super();
-	}
-
-	public ProposalVoteDTO(Long voter, ProposalVoteValue vote) {
-		super();
-		this.voter = voter;
-		this.vote = vote;
-	}
 
 	public Long getId() {
 		return id;

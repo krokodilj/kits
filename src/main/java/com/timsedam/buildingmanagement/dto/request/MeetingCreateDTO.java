@@ -4,31 +4,25 @@ import java.time.LocalDateTime;
 
 import javax.validation.constraints.NotNull;
 
-public class CreateMeetingDTO {
+public class MeetingCreateDTO {
 	
-	@NotNull(message = "{startTime.emtpy}")
+	@NotNull(message = "'startTime' not provided")
 	private LocalDateTime startsAt;
 	
-	@NotNull(message = "{buildingId.empty}")
+	@NotNull(message = "'buildingId' not provided")
 	private Long buildingId;
 	
 	private String location;
 	
-	public CreateMeetingDTO() {
+	public MeetingCreateDTO() {
 		super();
 	}
 
-	public CreateMeetingDTO(LocalDateTime startsAt, Long buildingId, String location) {
+	public MeetingCreateDTO(LocalDateTime startsAt, Long buildingId, String location) {
 		super();
 		this.startsAt = startsAt;
 		this.buildingId = buildingId;
 		this.location = location;
-	}
-	
-	public CreateMeetingDTO(CreateMeetingDTO meetingCreateDTO) {
-		this.startsAt = meetingCreateDTO.getStartsAt();
-		this.buildingId = new Long(meetingCreateDTO.getBuildingId());
-		this.location = new String(meetingCreateDTO.getLocation());
 	}
 
 	public LocalDateTime getStartsAt() {

@@ -11,19 +11,6 @@ public class MeetingDTO {
 	private String location;
 	private List<Long> acceptedProposals;
 	
-	public MeetingDTO() {
-		super();
-	}
-
-	public MeetingDTO(Long id, LocalDateTime startsAt, String record, String location, List<Long> acceptedProposals) {
-		super();
-		this.id = id;
-		this.startsAt = startsAt;
-		this.record = record;
-		this.location = location;
-		this.acceptedProposals = acceptedProposals;
-	}
-
 	public Long getId() {
 		return id;
 	}

@@ -15,15 +15,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.timsedam.buildingmanagement.dto.request.CreateResidenceDTO;
+import com.timsedam.buildingmanagement.dto.request.ResidenceCreateDTO;
 import com.timsedam.buildingmanagement.dto.request.UserLoginDTO;
 import com.timsedam.buildingmanagement.dto.response.ResidenceDTO;
 import com.timsedam.buildingmanagement.model.Residence;
 import com.timsedam.buildingmanagement.repository.ResidenceRepository;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ResidenceControllerTest {
+	
+	private static final String URL_PREFIX = "/api/residences/";
 
     @Autowired
     private  ResidenceRepository residenceRepository;
@@ -31,8 +33,6 @@ public class ResidenceControllerTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    private static final String URL_PREFIX = "/api/residences/";
-    
     private String getUserToken(String username, String password) {
         UserLoginDTO userLoginData = new UserLoginDTO(username, password);
         ResponseEntity<String> responseEntity = 
@@ -50,38 +50,38 @@ public class ResidenceControllerTest {
 
     /**
      * POST request to '/api/residences/' with valid CreateResidentDTO
-     * Expected: ResidenceDTO and HttpStatus.CREATED
+     * Expected: new Residence's id is returned, HTTP Status 201 CREATED
 	*/
     @Test
     public void createResidence(){
-        CreateResidenceDTO createResidenceDTO = new CreateResidenceDTO(1, 4, 99);
+        ResidenceCreateDTO residenceCreateDTO = new ResidenceCreateDTO(1, 4, 99);
         ResponseEntity<Long> responseEntity = restTemplate.exchange(
                 URL_PREFIX,
                 HttpMethod.POST,
-                getRequestEntity(createResidenceDTO, "admin1", "admin1"),
+                getRequestEntity(residenceCreateDTO, "admin1", "admin1"),
                 Long.class);
         
         Long residenceId = responseEntity.getBody();
         Residence residence = residenceRepository.findOne(residenceId);
         
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        assertEquals(createResidenceDTO.getApartmentNumber(), residence.getApartmentNumber());
-        assertEquals(createResidenceDTO.getFloorNumber(), residence.getFloorNumber());
+        assertEquals(residenceCreateDTO.getApartmentNumber(), residence.getApartmentNumber());
+        assertEquals(residenceCreateDTO.getFloorNumber(), residence.getFloorNumber());
         
         residenceRepository.delete(residence.getId());
     }
     
     /**
      * POST request to '/api/residences/' with invalid CreateResidentDTO - taken apartmentNumber in the Building
-     * Expected: error message and HttpStatus.CREATED
+     * Expected: error message is returned, HTTP Status 422 UNPROCESSABLE_ENTITY
 	*/
     @Test
     public void createResidenceTakenLocation(){
-        CreateResidenceDTO createResidenceDTO = new CreateResidenceDTO(1, 4, 99);
+        ResidenceCreateDTO residenceCreateDTO = new ResidenceCreateDTO(1, 4, 99);
         ResponseEntity<Long> responseEntity = restTemplate.exchange(
                 URL_PREFIX,
                 HttpMethod.POST,
-                getRequestEntity(createResidenceDTO, "admin1", "admin1"),
+                getRequestEntity(residenceCreateDTO, "admin1", "admin1"),
                 Long.class);
         
         Long residenceId = responseEntity.getBody();
@@ -90,10 +90,10 @@ public class ResidenceControllerTest {
         ResponseEntity<String> responseEntityDuplicate = restTemplate.exchange(
                 URL_PREFIX,
                 HttpMethod.POST,
-                getRequestEntity(createResidenceDTO, "admin1", "admin1"),
+                getRequestEntity(residenceCreateDTO, "admin1", "admin1"),
                 String.class);
 
-        assertEquals(HttpStatus.NOT_FOUND, responseEntityDuplicate.getStatusCode());
+        assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntityDuplicate.getStatusCode());
         assertEquals("Residence with apartmentNumber: 99 already exists in Building with id: 1", responseEntityDuplicate.getBody());
         
         residenceRepository.delete(residenceId);
@@ -101,33 +101,33 @@ public class ResidenceControllerTest {
     
     /**
      * POST request to '/api/residences/'sent by unauthorized user
-     * Expected: HttpStatus.FORBIDDEN
+     * Expected: HTTP Status FORBIDDEN 403 
      */
     @Test
     public void createResidenceUnauthorized(){
-        CreateResidenceDTO createResidenceDTO = new CreateResidenceDTO(1, 4, 4);
+        ResidenceCreateDTO residenceCreateDTO = new ResidenceCreateDTO(1, 4, 4);
         ResponseEntity<Object> responseEntity = 
         	restTemplate.exchange(
                 URL_PREFIX,
                 HttpMethod.POST,
-                getRequestEntity(createResidenceDTO, "resident1", "resident1"),
+                getRequestEntity(residenceCreateDTO, "resident1", "resident1"),
                 Object.class);
 
-        assertEquals(HttpStatus.FORBIDDEN,responseEntity.getStatusCode());
+        assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
     }
 
     /**
      * POST request to '/api/residences/' with invalid building in createResidenceDTO
-     * Expected: error message and HttpStatus.NOT_FOUND
+     * Expected: error message is returned, HTTP Status 404 NOT_FOUND
      */
     @Test
     public void createResidenceInvalidBuilding(){
-        CreateResidenceDTO createResidenceDTO = new CreateResidenceDTO(999, 4, 4);
+        ResidenceCreateDTO residenceCreateDTO = new ResidenceCreateDTO(999, 4, 4);
         ResponseEntity<String> responseEntity = 
         	restTemplate.exchange(
                 URL_PREFIX,
                 HttpMethod.POST,
-                getRequestEntity(createResidenceDTO, "admin1", "admin1"),
+                getRequestEntity(residenceCreateDTO, "admin1", "admin1"),
                 String.class);
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
@@ -136,26 +136,26 @@ public class ResidenceControllerTest {
 
     /**
      * POST request to '/api/residences/' where apartment number is taken
-     * Expected: error message and HttpStatus.CONFLICT
+     * Expected: error message is returned, HTTP Status 422 UNPROCESSABLE_ENTITY
      */
     @Test
     public void createResidenceApartmentNumTaken(){
-        CreateResidenceDTO createResidenceDTO = new CreateResidenceDTO(1, 1, 1);
+        ResidenceCreateDTO residenceCreateDTO = new ResidenceCreateDTO(1, 1, 1);
         
         ResponseEntity<String> responseEntity = 
         	restTemplate.exchange(
         		URL_PREFIX,
                 HttpMethod.POST,
-                getRequestEntity(createResidenceDTO, "admin1", "admin1"),
+                getRequestEntity(residenceCreateDTO, "admin1", "admin1"),
                 String.class);
 
-        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
         assertEquals("Residence with apartmentNumber: 1 already exists in Building with id: 1", responseEntity.getBody());
     }
 
     /**
      * GET request to '/api/residences/{residenceId}'
-     * Expected: ResidentDTO and HttpStatus.OK
+     * Expected: HTTP Status 200 OK
      */
     @Test
     public void getResidenceById() {
@@ -174,7 +174,7 @@ public class ResidenceControllerTest {
 
     /**
      * GET request to '/api/residences/{residenceId}' - invalid residenceId
-     * Expected: message and HttpStatus.NOT_FOUND
+     * Expected: error message is returned, HTTP Status 404 NOT_FOUND
      */
     @Test
     public void getResidenceByIdNotfound(){

@@ -24,14 +24,14 @@ import com.timsedam.buildingmanagement.repository.ProposalVoteRepository;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class ProposalVoteControllerTest {
 	
+	private static final String URL_PREFIX = "/api/proposal_votes/";
+	
 	@Autowired
 	private TestRestTemplate restTemplate;
 	
 	@Autowired
 	private ProposalVoteRepository proposalVoteRepository;
 
-	private static final String URL_PREFIX = "/api/proposal_votes/";
-	
 	private String getToken(String username, String password) {
 		UserLoginDTO userLoginData = new UserLoginDTO(username, password);
 		ResponseEntity<String> responseEntity = 
@@ -49,7 +49,7 @@ public class ProposalVoteControllerTest {
 
 	/**
 	 * POST request to "/api/proposal_votes/" with valid ProposalVoteCastDTO parameter
-	 * Expected: ProposalVote id is returned to the client, HTTP Status 201
+	 * Expected: new Proposal's id is returned, HTTP Status 201 CREATED
 	 */
 	@Test
 	public void castProposalVote() throws Exception {
@@ -61,14 +61,12 @@ public class ProposalVoteControllerTest {
 		ProposalVote proposalVote = proposalVoteRepository.findOne(proposalVoteId);
 		assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
 		assertEquals(proposalVote.getVote(), proposalVoteDTO.getValue());
-		
-		proposalVoteRepository.delete(proposalVoteId);
     }
 	
 	/**
 	 * POST request to "/api/proposal_votes/" with invalid ProposalVoteCastDTO parameter
 	 * User doesn't own an Apartment in the Building Proposal is bound to
-	 * Expected:  HTTP Status 400
+	 * Expected: error message is returned, HTTP Status 404 NOT_FOUND
 	 */
 	@Test
 	public void castProposalVoteInvalidProposalId() throws Exception {
@@ -82,7 +80,7 @@ public class ProposalVoteControllerTest {
 	
 	/**
 	 * POST request to "/api/proposal_votes/" with invalid ProposalVoteCastDTO parameter - no ProposalId
-	 * Expected:  HTTP Status 422
+	 * Expected: error message is returned, HTTP Status 422 UNPROCESSABLE_ENTITY
 	 */
 	@Test
 	public void castProposalVoteNoProposalId() throws Exception {
@@ -96,7 +94,7 @@ public class ProposalVoteControllerTest {
 	
 	/**
 	 * POST request to "/api/proposal_votes/" with invalid ProposalVoteCastDTO parameter - no value
-	 * Expected:  HTTP Status 422
+	 * Expected: error message is returned, HTTP Status 422 UNPROCESSABLE_ENTITY
 	 */
 	@Test
 	public void castProposalVoteNoValue() throws Exception {

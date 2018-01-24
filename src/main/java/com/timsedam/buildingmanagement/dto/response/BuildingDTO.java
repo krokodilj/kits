@@ -1,9 +1,6 @@
 package com.timsedam.buildingmanagement.dto.response;
 
 
-import com.timsedam.buildingmanagement.model.Residence;
-import com.timsedam.buildingmanagement.model.User;
-
 import java.util.List;
 
 public class BuildingDTO {

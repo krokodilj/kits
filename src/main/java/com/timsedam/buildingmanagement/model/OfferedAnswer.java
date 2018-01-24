@@ -12,7 +12,9 @@ public class OfferedAnswer {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
+	
 	private String content;
+	
 	@ManyToOne
 	private ChoiceQuestion questionAnswered;
 	

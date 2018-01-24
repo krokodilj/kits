@@ -21,16 +21,6 @@ public class ProposalVote {
 	@Enumerated(EnumType.STRING)
 	private ProposalVoteValue vote;
 	
-	public ProposalVote() {
-		super();
-	}
-
-	public ProposalVote(User voter, ProposalVoteValue vote) {
-		super();
-		this.voter = voter;
-		this.vote = vote;
-	}
-
 	public long getId() {
 		return id;
 	}

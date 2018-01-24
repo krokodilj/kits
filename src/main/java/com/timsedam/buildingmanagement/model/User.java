@@ -24,31 +24,22 @@ public class User {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+	
 	private String username;
+	
 	private String password;
+	
 	private String email;
+	
 	@ElementCollection
-	private List<String> pictures;   
+	private List<String> pictures;
+	
     @ManyToMany
     private List<Role> roles;
+    
     @OneToMany(mappedBy = "reportCommented")
     private List<Comment> comments;
     
-	public User() {
-		super();
-	}
-
-	public User(String username, String password, String email, List<String> pictures, List<Role> roles,
-			List<Comment> comments) {
-		super();
-		this.username = username;
-		this.password = password;
-		this.email = email;
-		this.pictures = pictures;
-		this.roles = roles;
-		this.comments = comments;
-	}
-
 	public Long getId() {
 		return id;
 	}

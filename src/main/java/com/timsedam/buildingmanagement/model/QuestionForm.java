@@ -16,15 +16,22 @@ public class QuestionForm {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
+	
 	@OneToMany(mappedBy = "questionForm")
 	private List<Question> questions;
+	
 	@ManyToOne
 	private User creator;
+	
 	@ManyToOne
 	private Building building;
+	
 	private QuestionFormStatus status;
+	
 	private LocalDateTime openedAt;
+	
 	private LocalDateTime startedAt;
+	
 	private LocalDateTime closedAt;
 	
 	public QuestionForm() {

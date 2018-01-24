@@ -6,15 +6,15 @@ import javax.validation.constraints.NotNull;
 
 public class ProposalCreateDTO {
 	
+	@NotNull(message = "'content' not provided")
+	private String content;
+	
+	@NotNull(message = "'suggestedAt' not provided")
+	private LocalDateTime suggestedAt;
+	
 	private Long attachedReport;
 	
 	private Long buildingId;
-	
-	@NotNull(message = "{content.empty}")
-	private String content;
-	
-	@NotNull(message = "{suggestedAt.empty}")
-	private LocalDateTime suggestedAt;
 	
 	public ProposalCreateDTO() {
 		super();
@@ -26,13 +26,6 @@ public class ProposalCreateDTO {
 		this.suggestedAt = suggestedAt;
 		this.attachedReport = attachedReport;
 		this.buildingId = buildingId;
-	}
-
-	public ProposalCreateDTO(ProposalCreateDTO proposalCreateDTO) {
-		this.content = new String(proposalCreateDTO.getContent());
-		this.suggestedAt = proposalCreateDTO.getSuggestedAt();
-		this.attachedReport = proposalCreateDTO.getAttachedReport();
-		this.buildingId = proposalCreateDTO.getBuildingId();
 	}
 
 	public String getContent() {

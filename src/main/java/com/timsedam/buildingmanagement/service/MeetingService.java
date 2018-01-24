@@ -24,10 +24,6 @@ public class MeetingService {
 	@Autowired
 	private MeetingRepository meetingRepository;
 	
-	public void save(Meeting meeting) {
-		meetingRepository.save(meeting);
-	}
-	
 	public Meeting create(Meeting meeting, User meetingScheduler) throws UserNotManagerException, InvalidTimeException {
 		if(!buildingService.isManager(meeting.getBuilding(), meetingScheduler))
 			throw new UserNotManagerException(meetingScheduler.getId(), meeting.getBuilding().getId());

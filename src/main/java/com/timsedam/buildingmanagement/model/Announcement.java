@@ -14,10 +14,14 @@ public class Announcement {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id; 
+	
 	private String content;
+	
 	private LocalDateTime postedAt;
+	
 	@ManyToOne
 	private User poster;
+	
 	@ManyToOne
 	private Building building;
 	

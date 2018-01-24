@@ -16,35 +16,26 @@ public class Building {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
+	
 	private String city;
+	
 	private String address;
+	
 	private String country;
+	
 	private int apartmentCount;
+	
 	private String description;
+	
 	@ElementCollection
 	private List<String> pictures;
+	
 	@ManyToOne
 	private User manager;
+	
 	@OneToMany(mappedBy = "building")
 	private List<Residence> residences;
 	
-	public Building() {
-		super();
-	}
-
-	public Building(String city, String address, String country, int apartmentCount, String description,
-			List<String> pictures, User manager, List<Residence> residences) {
-		super();
-		this.city = city;
-		this.address = address;
-		this.country = country;
-		this.apartmentCount = apartmentCount;
-		this.description = description;
-		this.pictures = pictures;
-		this.manager = manager;
-		this.residences = residences;
-	}
-
 	public long getId() {
 		return id;
 	}

@@ -2,16 +2,16 @@ package com.timsedam.buildingmanagement.dto.request;
 
 import javax.validation.constraints.NotNull;
 
-public class CommentDTO {
+public class CommentCreateDTO {
 
-	@NotNull(message = "{data.empty}")
+	@NotNull(message = "'data' not provided")
 	private String data;
 	
 	private long report;
 	
-	public CommentDTO(){}
+	public CommentCreateDTO(){}
 	
-	public CommentDTO(String data, long report){
+	public CommentCreateDTO(String data, long report){
 		this.data = data;
 		this.report = report;
 	}

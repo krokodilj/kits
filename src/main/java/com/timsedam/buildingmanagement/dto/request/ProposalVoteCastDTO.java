@@ -22,11 +22,6 @@ public class ProposalVoteCastDTO {
 		this.proposalId = proposalId;
 	}
 	
-	public ProposalVoteCastDTO(ProposalVoteCastDTO proposalVoteCastDTO) {
-		this.value = proposalVoteCastDTO.getValue();
-		this.proposalId = proposalVoteCastDTO.getProposalId();
-	}
-
 	public ProposalVoteValue getValue() {
 		return value;
 	}

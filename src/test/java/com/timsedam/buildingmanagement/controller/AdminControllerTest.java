@@ -22,18 +22,16 @@ import com.timsedam.buildingmanagement.model.User;
 import com.timsedam.buildingmanagement.repository.UserRepository;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class AdminControllerTest {
+	
+	private static final String URL = "/api/admins/";
 	
 	@Autowired
     private TestRestTemplate restTemplate;
 	
 	@Autowired
 	private UserRepository userRepository;
-	
-	private static final String URL = "/api/admins/";
-		
-	private UserRegisterDTO validUserRegisterDTO = new UserRegisterDTO("USERNAME", "PASSWORD", "test@gmail.com", new ArrayList<String>());
 	
 	private String getToken(String username, String password) {
 		UserLoginDTO userLoginData = new UserLoginDTO(username, password);
@@ -52,50 +50,52 @@ public class AdminControllerTest {
 	
 	/**
 	 * POST request to "/api/admins/" with valid UserRegisterDTO parameter
-	 * Expected: new Admin's id is returned, HTTP Status 201
+	 * Expected: new Admin's id is returned, HTTP Status 201 CREATED
 	 */
 	@Test
 	public void registerAdmin() throws Exception {
+		UserRegisterDTO userRegisterDTO = new UserRegisterDTO("USERNAME", "PASSWORD", "test@gmail.com", new ArrayList<String>());
 		ResponseEntity<Long> responseEntity = 
-				restTemplate.postForEntity(URL, getRequestEntity(validUserRegisterDTO, "admin1", "admin1"), Long.class);
+				restTemplate.postForEntity(URL, getRequestEntity(userRegisterDTO, "admin1", "admin1"), Long.class);
 			
 		Long adminId = responseEntity.getBody();
 		User admin = userRepository.findOne(adminId);
 		assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-		assertEquals(validUserRegisterDTO.getUsername(), admin.getUsername());
-		assertEquals(validUserRegisterDTO.getEmail(), admin.getEmail());
+		assertEquals(userRegisterDTO.getUsername(), admin.getUsername());
+		assertEquals(userRegisterDTO.getEmail(), admin.getEmail());
 		
 		userRepository.delete(adminId);
     }
 	
     /**
      * POST request to "/api/admins/" sent by unauthorised user
-     * Expected: HttpStatus.FORBIDDEN
+     * Expected: HttpStatus 403 FORBIDDEN
      */
     @Test
     public void registerAdminUnauthorised(){
-
+    	UserRegisterDTO userRegisterDTO = new UserRegisterDTO("USERNAME", "PASSWORD", "test@gmail.com", new ArrayList<String>());
         ResponseEntity<?> responseEntity = 
-        		restTemplate.postForEntity(URL, getRequestEntity(validUserRegisterDTO, "resident1", "resident1"), Object.class);
+        		restTemplate.postForEntity(URL, getRequestEntity(userRegisterDTO, "resident1", "resident1"), Object.class);
 
-        assertEquals(HttpStatus.FORBIDDEN,responseEntity.getStatusCode());
+        assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
     }
 	
 	/**
 	 * POST request to "/api/admins/" twice with the same UserRegisterDTO parameter
-	 * Expected: error message is returned, HTTP Status 404
+	 * Expected: error message is returned, HTTP Status 409 CONFLICT
 	 */
 	@Test
 	public void registerDuplicate() throws Exception {
+		UserRegisterDTO userRegisterDTO = new UserRegisterDTO("USERNAME", "PASSWORD", "test@gmail.com", new ArrayList<String>());
 		ResponseEntity<Long> responseEntityValidRequest = 
-				restTemplate.postForEntity(URL, getRequestEntity(validUserRegisterDTO, "admin1", "admin1"), Long.class);
+				restTemplate.postForEntity(URL, getRequestEntity(userRegisterDTO, "admin1", "admin1"), Long.class);
 
 		Long adminId = responseEntityValidRequest.getBody();
 		assertEquals(HttpStatus.CREATED, responseEntityValidRequest.getStatusCode());
 		
 		ResponseEntity<String> responseEntityDuplicateRequest = 
-				restTemplate.postForEntity(URL, getRequestEntity(validUserRegisterDTO, "admin1", "admin1"), String.class);
-		assertEquals(HttpStatus.NOT_FOUND, responseEntityDuplicateRequest.getStatusCode());
+				restTemplate.postForEntity(URL, getRequestEntity(userRegisterDTO, "admin1", "admin1"), String.class);
+		assertEquals(HttpStatus.CONFLICT, responseEntityDuplicateRequest.getStatusCode());
 		assertEquals("Admin with username: USERNAME already exists.", responseEntityDuplicateRequest.getBody());
 		
 		userRepository.delete(adminId);
@@ -103,15 +103,14 @@ public class AdminControllerTest {
 	
 	/**
 	 * POST request to "/api/admins/" with invalid UserRegisterDTO - username missing
-	 * Expected: error message is returned, HTTP Status 422
+	 * Expected: error message is returned, HTTP Status UNPROCESSABLE_ENTITY 422
 	 */
 	@Test
 	public void registerUsernameMissing() throws Exception {
-		UserRegisterDTO requestObject = new UserRegisterDTO(validUserRegisterDTO);
-		requestObject.setUsername(null);
+		UserRegisterDTO userRegisterDTO = new UserRegisterDTO(null, "PASSWORD", "test@gmail.com", new ArrayList<String>());
 		
 		ResponseEntity<String> responseEntity = 
-				restTemplate.postForEntity(URL, getRequestEntity(requestObject, "admin1", "admin1"), String.class);
+				restTemplate.postForEntity(URL, getRequestEntity(userRegisterDTO, "admin1", "admin1"), String.class);
 		
 		assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
 		assertEquals("'username' not provided", responseEntity.getBody());
@@ -119,15 +118,13 @@ public class AdminControllerTest {
 	
 	/**
 	 * POST request to "/api/admins/" with invalid UserRegisterDTO parameter - username too short
-	 * Expected: error message is returned, HTTP Status 422
+	 * Expected: error message is returned, HTTP Status UNPROCESSABLE_ENTITY 422
 	 */
 	@Test
 	public void registerUsernameInvalid() throws Exception {
-		UserRegisterDTO requestObject = new UserRegisterDTO(validUserRegisterDTO);
-		requestObject.setUsername("123");
-		
+		UserRegisterDTO userRegisterDTO = new UserRegisterDTO("123", "PASSWORD", "test@gmail.com", new ArrayList<String>());
 		ResponseEntity<String> responseEntity = 
-				restTemplate.postForEntity(URL, getRequestEntity(requestObject, "admin1", "admin1"), String.class);
+				restTemplate.postForEntity(URL, getRequestEntity(userRegisterDTO, "admin1", "admin1"), String.class);
 		
 		assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
 		assertEquals("'username' must be at least 4 characters long", responseEntity.getBody());
@@ -135,15 +132,13 @@ public class AdminControllerTest {
 	
 	/**
 	 * POST request to "/api/admins/" with invalid UserRegisterDTO parameter - password missing
-	 * Expected: error message is returned, HTTP Status 422
+	 * Expected: error message is returned, HTTP Status UNPROCESSABLE_ENTITY 422
 	 */
 	@Test
 	public void registerPasswordMissing() throws Exception {
-		UserRegisterDTO requestObject = new UserRegisterDTO(validUserRegisterDTO);
-		requestObject.setPassword(null);
-		
+		UserRegisterDTO userRegisterDTO = new UserRegisterDTO("USERNAME", null, "test@gmail.com", new ArrayList<String>());
 		ResponseEntity<String> responseEntity = 
-				restTemplate.postForEntity(URL, getRequestEntity(requestObject, "admin1", "admin1"), String.class);
+				restTemplate.postForEntity(URL, getRequestEntity(userRegisterDTO, "admin1", "admin1"), String.class);
 		
 		assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
 		assertEquals("'password' not provided", responseEntity.getBody());
@@ -151,11 +146,12 @@ public class AdminControllerTest {
 	
 	/**
 	 * POST request to "/api/admins/" with invalid UserRegisterDTO parameter - password too short
-	 * Expected: error message is returned, HTTP Status 422
+	 * Expected: error message is returned, HTTP Status UNPROCESSABLE_ENTITY 422
 	 */
 	@Test
 	public void registerPasswordInvalid() throws Exception {
-		UserRegisterDTO requestObject = new UserRegisterDTO(validUserRegisterDTO);
+		UserRegisterDTO userRegisterDTO = new UserRegisterDTO("USERNAME", "123", "test@gmail.com", new ArrayList<String>());
+		UserRegisterDTO requestObject = new UserRegisterDTO(userRegisterDTO);
 		requestObject.setPassword("123");
 		
 		ResponseEntity<String> responseEntity = 
@@ -167,15 +163,13 @@ public class AdminControllerTest {
 
 	/**
 	 * POST request to "/api/admins/" with invalid UserRegisterDTO parameter - email of invalid format
-	 * Expected: no AdminDTO is returned, HTTP Status 422
+	 * Expected: error message is returned, HTTP Status 422
 	 */
 	@Test
 	public void registerEmailInvalid() throws Exception {
-		UserRegisterDTO requestObject = new UserRegisterDTO(validUserRegisterDTO);
-		requestObject.setEmail("INVALID_EMAIL_FORMAT");
-		
+		UserRegisterDTO userRegisterDTO = new UserRegisterDTO("USERNAME", "PASSWORD", "INVALID_EMAIL_FORMAT", new ArrayList<String>());
 		ResponseEntity<String> responseEntity = 
-				restTemplate.postForEntity(URL, getRequestEntity(requestObject, "admin1", "admin1"), String.class);
+				restTemplate.postForEntity(URL, getRequestEntity(userRegisterDTO, "admin1", "admin1"), String.class);
 		
 		assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
 		assertEquals("'email' must be of valid format", responseEntity.getBody());

@@ -15,21 +15,6 @@ public class UserDTO {
     private Role role;
     private List<Comment> comments;
     
-	public UserDTO() {
-		super();
-	}
-
-	public UserDTO(Long id, String username, String email, ArrayList<String> pictures, Role role,
-			List<Comment> comments) {
-		super();
-		this.id = id;
-		this.username = username;
-		this.email = email;
-		this.pictures = pictures;
-		this.role = role;
-		this.comments = comments;
-	}
-
 	public Long getId() {
 		return id;
 	}

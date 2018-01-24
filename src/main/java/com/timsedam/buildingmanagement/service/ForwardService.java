@@ -11,7 +11,7 @@ import com.timsedam.buildingmanagement.repository.ForwardRepository;
 public class ForwardService {
 
 	@Autowired
-    ForwardRepository forwardRepository;
+    private ForwardRepository forwardRepository;
 	
 	public Forward save(Forward forward) {
 		return forwardRepository.save(forward);

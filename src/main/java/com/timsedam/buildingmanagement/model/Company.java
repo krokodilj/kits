@@ -12,18 +12,6 @@ public class Company extends User {
 	private String PIB;
 	private String phoneNumber;
 	
-	public Company() {
-		super();
-	}
-
-	public Company(String name, String location, String pIB, String phoneNumber) {
-		super();
-		this.name = name;
-		this.location = location;
-		PIB = pIB;
-		this.phoneNumber = phoneNumber;
-	}
-
 	public String getName() {
 		return name;
 	}

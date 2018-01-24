@@ -11,16 +11,10 @@ public class Permission {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public Long id;
+    private Long id;
 
     @Column(unique = true)
-    public String name;
-
-    public Permission() {}
-
-    public Permission(String name) {
-        this.name = name;
-    }
+    private  String name;
 
 	public Long getId() {
 		return id;

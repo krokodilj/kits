@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.timsedam.buildingmanagement.dto.request.AcceptBidDTO;
-import com.timsedam.buildingmanagement.dto.request.CommentDTO;
-import com.timsedam.buildingmanagement.dto.request.CreateReportDTO;
-import com.timsedam.buildingmanagement.dto.request.ForwardDTO;
-import com.timsedam.buildingmanagement.dto.response.BidDTO;
+import com.timsedam.buildingmanagement.dto.request.BidAcceptDTO;
+import com.timsedam.buildingmanagement.dto.request.BidSendDTO;
+import com.timsedam.buildingmanagement.dto.request.CommentCreateDTO;
+import com.timsedam.buildingmanagement.dto.request.ForwardCreateDTO;
+import com.timsedam.buildingmanagement.dto.request.ReportCreateDTO;
 import com.timsedam.buildingmanagement.exceptions.BidMissingException;
 import com.timsedam.buildingmanagement.exceptions.BuildingMissingException;
 import com.timsedam.buildingmanagement.exceptions.InvalidStatusException;
@@ -65,7 +65,7 @@ public class ReportController {
 	private BidService bidService;
 
 	@PostMapping(consumes = "application/json")
-	public ResponseEntity<?> create(Principal principal, @Valid @RequestBody CreateReportDTO reportDTO, BindingResult validationResult) 
+	public ResponseEntity<?> create(Principal principal, @Valid @RequestBody ReportCreateDTO reportDTO, BindingResult validationResult) 
 			throws BuildingMissingException, UserNotResidentException, UserMissingException {
 
 		if (validationResult.hasErrors()) {
@@ -88,7 +88,7 @@ public class ReportController {
 	}
 
 	@PostMapping(value = "forward", consumes = "application/json")
-	public ResponseEntity<?> forward(Principal principal, @Valid @RequestBody ForwardDTO forwardDTO, BindingResult validationResult)
+	public ResponseEntity<?> forward(Principal principal, @Valid @RequestBody ForwardCreateDTO forwardCreateDTO, BindingResult validationResult)
 			throws UserMissingException, ReportMissingException, UserNotReportHolderException {
 		
 		if (validationResult.hasErrors()) {
@@ -97,8 +97,8 @@ public class ReportController {
 		} 
 		
 		User sender = userService.findOneByUsername(principal.getName());
-		Report report = reportService.findOne(forwardDTO.getReport());
-		User receiver = userService.findOne(forwardDTO.getTo());
+		Report report = reportService.findOne(forwardCreateDTO.getReport());
+		User receiver = userService.findOne(forwardCreateDTO.getTo());
 
 		Forward forward = new Forward(sender, receiver, report);
 		forward = forwardService.create(forward);
@@ -108,7 +108,7 @@ public class ReportController {
 	}
 
 	@PostMapping(value = "comment", consumes = "application/json")
-	public ResponseEntity<?> comment(Principal principal, @Valid @RequestBody CommentDTO commentDTO, BindingResult validationResult)
+	public ResponseEntity<?> comment(Principal principal, @Valid @RequestBody CommentCreateDTO commentDTO, BindingResult validationResult)
 			throws UserMissingException, ReportMissingException {
 
 		if (validationResult.hasErrors()) {
@@ -126,7 +126,7 @@ public class ReportController {
 	}
 
 	@PostMapping(value = "bid", consumes = "application/json")
-	public ResponseEntity<?> sendBid(Principal principal, @Valid @RequestBody BidDTO bidDTO, BindingResult validationResult) 
+	public ResponseEntity<?> sendBid(Principal principal, @Valid @RequestBody BidSendDTO bidSendDTO, BindingResult validationResult) 
 			throws UserMissingException, ReportMissingException {
 		
 		if (validationResult.hasErrors()) {
@@ -135,20 +135,20 @@ public class ReportController {
 		} 
 		
 		Company company = (Company) userService.findOneByUsername(principal.getName());
-		Report report = reportService.findOne(bidDTO.getReport());
+		Report report = reportService.findOne(bidSendDTO.getReport());
 
-		Bid bid = new Bid(bidDTO.getDescription(), bidDTO.getPrice(), company, report, "OPEN");
+		Bid bid = new Bid(bidSendDTO.getDescription(), bidSendDTO.getPrice(), company, report, "OPEN");
 		bidService.save(bid);
 		
 		return new ResponseEntity<Long>(bid.getId(), HttpStatus.OK);
 	}
 
 	@PostMapping(value = "acceptBid", consumes = "application/json")
-	public ResponseEntity<?> acceptBid(Principal principal, @RequestBody AcceptBidDTO acceptBidDTO) 
+	public ResponseEntity<?> acceptBid(Principal principal, @RequestBody BidAcceptDTO bidAcceptDTO) 
 			throws UserMissingException, BidMissingException, UserNotReportHolderException, InvalidStatusException {
 		
 		User user = userService.findOneByUsername(principal.getName());
-		Bid bid = bidService.findOne(acceptBidDTO.getBid());
+		Bid bid = bidService.findOne(bidAcceptDTO.getBid());
 
 		bidService.acceptBid(user, bid);
 		return new ResponseEntity<>("The bid is accepted.", HttpStatus.OK);
@@ -160,7 +160,7 @@ public class ReportController {
 	@ExceptionHandler(UserNotResidentException.class)
 	public ResponseEntity<String> userNotResidentException(final UserNotResidentException e) {
 		return new ResponseEntity<String>("User with id: " + e.getUserId() + " is not resident in Building"
-				+ " with id: " + e.getBuildingId(), HttpStatus.NOT_FOUND);
+				+ " with id: " + e.getBuildingId(), HttpStatus.UNPROCESSABLE_ENTITY);
 	}
 	
 	/**
@@ -188,7 +188,7 @@ public class ReportController {
 	@ExceptionHandler(UserNotReportHolderException.class)
 	public ResponseEntity<String> userNotReportHolderException(final UserNotReportHolderException e) {
 		return new ResponseEntity<String>("User with id: " + e.getUserId() + 
-				" is not current holder of report with id: " + e.getReportId(), HttpStatus.NOT_FOUND);
+				" is not current holder of report with id: " + e.getReportId(), HttpStatus.UNPROCESSABLE_ENTITY);
 	}
 	
 	/**
@@ -204,7 +204,7 @@ public class ReportController {
 	 */
 	@ExceptionHandler(InvalidStatusException.class)
 	public ResponseEntity<String> invalidStatusException(final InvalidStatusException e) {
-		return new ResponseEntity<String>("Bid must have status 'OPEN'.", HttpStatus.NOT_FOUND);
+		return new ResponseEntity<String>("Bid must have status 'OPEN'.", HttpStatus.UNPROCESSABLE_ENTITY);
 	}
 	
 }

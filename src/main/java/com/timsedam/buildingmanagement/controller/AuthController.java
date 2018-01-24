@@ -33,9 +33,9 @@ public class AuthController {
         String token = authService.login(userLoginDTO);
 
         if(token == null){
-            return new ResponseEntity<String>("user not authenticated",HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<String>("user not authenticated", HttpStatus.UNAUTHORIZED);
         }
-        return new ResponseEntity<String>(token,HttpStatus.OK);
+        return new ResponseEntity<String>(token, HttpStatus.OK);
     }
     
 	/**

@@ -4,7 +4,6 @@ public class UserNotResidentException extends Exception {
 	
 	private Long userId;
 	private Long buildingId;
-	private static final long serialVersionUID = 8529176239346608854L;
 	
 	public UserNotResidentException(Long userId, Long buildingId) {
 		super();

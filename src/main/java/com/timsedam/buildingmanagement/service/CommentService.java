@@ -10,7 +10,7 @@ import com.timsedam.buildingmanagement.repository.CommentRepository;
 public class CommentService {
 
 	@Autowired
-    CommentRepository commentRepository;
+    private CommentRepository commentRepository;
 	
 	public Comment save(Comment comment) {
 		return commentRepository.save(comment);

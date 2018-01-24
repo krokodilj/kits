@@ -4,35 +4,30 @@ import java.util.ArrayList;
 
 import javax.validation.constraints.NotNull;
 
-public class CompanyRegisterDTO extends UserRegisterDTO {
-	
-	@NotNull(message = "{company.name.empty}")
+public class CompanyCreateDTO extends UserRegisterDTO {
+
+	@NotNull(message = "'name' not provided")
 	private String name;
+	
 	private String location;
-	@NotNull(message = "{company.pib.empty}")
+	
+	@NotNull(message = "'PIB' not provided")
 	private String PIB;
-	@NotNull(message = "{company.phoneNumber.empty}")
+	
+	@NotNull(message = "'phoneNumber' not provided")
 	private String phoneNumber;
 
-	public CompanyRegisterDTO() {
+	public CompanyCreateDTO() {
 		super();
 	}
 
-	public CompanyRegisterDTO(String username, String password, String email, ArrayList<String> pictures, String name,
+	public CompanyCreateDTO(String username, String password, String email, ArrayList<String> pictures, String name,
 			String location, String pIB, String phoneNumber) {
 		super(username, password, email, pictures);
 		this.name = name;
 		this.location = location;
 		this.PIB = pIB;
 		this.phoneNumber = phoneNumber;
-	}
-
-	public CompanyRegisterDTO(CompanyRegisterDTO companyRegisterDTO) throws CloneNotSupportedException {
-		super(companyRegisterDTO);
-		this.name = new String(companyRegisterDTO.getName());
-		this.location = new String(companyRegisterDTO.getLocation());
-		this.PIB = new String(companyRegisterDTO.getPIB());
-		this.phoneNumber = new String(companyRegisterDTO.getPhoneNumber());
 	}
 
 	public String getName() {

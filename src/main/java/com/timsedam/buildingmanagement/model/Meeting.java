@@ -15,27 +15,18 @@ public class Meeting {
 	@Id
 	@GeneratedValue
 	private Long id;
+	
 	private LocalDateTime startsAt;
+	
 	private String record;
+	
 	@ManyToOne
 	private Building building;
+	
 	private String location;
+	
 	@OneToMany
 	private List<Proposal> acceptedProposals;
-	
-	public Meeting() {
-		super();
-	}
-
-	public Meeting(LocalDateTime startsAt, String record, Building building, String location,
-			List<Proposal> acceptedProposals) {
-		super();
-		this.startsAt = startsAt;
-		this.record = record;
-		this.building = building;
-		this.location = location;
-		this.acceptedProposals = acceptedProposals;
-	}
 
 	public Long getId() {
 		return id;

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.springframework.stereotype.Component;
 
-import com.timsedam.buildingmanagement.dto.request.CompanyRegisterDTO;
+import com.timsedam.buildingmanagement.dto.request.CompanyCreateDTO;
 import com.timsedam.buildingmanagement.model.Comment;
 import com.timsedam.buildingmanagement.model.Company;
 import com.timsedam.buildingmanagement.model.Role;
@@ -12,7 +12,7 @@ import com.timsedam.buildingmanagement.model.Role;
 @Component
 public class CompanyMapper {
 	
-	public Company toModel(CompanyRegisterDTO dto) {
+	public Company toModel(CompanyCreateDTO dto) {
 		Company company = new Company();
 		company.setUsername(dto.getUsername());
 		company.setPassword(dto.getPassword());

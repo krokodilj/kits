@@ -1,10 +1,8 @@
 package com.timsedam.buildingmanagement.controller;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,7 +126,7 @@ public class ProposalController {
 	@ExceptionHandler(UserNotResidentException.class)
 	public ResponseEntity<String> userNotResidentException(final UserNotResidentException e) {
 		return new ResponseEntity<String>("User with id: " + e.getUserId() + " is not a Resident or Owner"
-				+ " in Building with id: " + e.getBuildingId(), HttpStatus.NOT_FOUND);
+				+ " in Building with id: " + e.getBuildingId(), HttpStatus.UNPROCESSABLE_ENTITY);
 	} 
 	
 	/**
@@ -137,7 +135,7 @@ public class ProposalController {
 	@ExceptionHandler(ReportNotAttachedToBuildingException.class)
 	public ResponseEntity<String> reportNotAttachedToBuildingException(final ReportNotAttachedToBuildingException e) {
 		return new ResponseEntity<String>("Report with id: " + e.getReportId() + " is not attached to"
-				+ " Building with id: " + e.getBuildingId(), HttpStatus.NOT_FOUND);
+				+ " Building with id: " + e.getBuildingId(), HttpStatus.UNPROCESSABLE_ENTITY);
 	} 
 	
 	/**

@@ -19,7 +19,7 @@ public class ResidentService {
 	@Autowired
 	private RoleRepository roleRepository;
 	
-	public boolean exists(String username) {
+	private boolean exists(String username) {
 		return userRepository.existsByUsername(username);
 	}
 	

@@ -4,14 +4,15 @@ import javax.validation.constraints.NotNull;
 
 public class UserLoginDTO {
 
-    @NotNull(message = "{user.username.empty}")
+    @NotNull(message = "'username' not provided")
     private String username;
-    @NotNull(message = "{user.password.empty}")
+    
+    @NotNull(message = "'password' not provided")
     private String password;
 
     public UserLoginDTO(){}
 
-    public UserLoginDTO(String username,String password){
+    public UserLoginDTO(String username, String password){
         this.username = username;
         this.password = password;
     }

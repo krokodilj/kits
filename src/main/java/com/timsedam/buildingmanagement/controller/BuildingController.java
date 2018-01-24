@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.timsedam.buildingmanagement.dto.request.CreateBuildingDTO;
+import com.timsedam.buildingmanagement.dto.request.BuildingCreateDTO;
 import com.timsedam.buildingmanagement.dto.response.BuildingDTO;
 import com.timsedam.buildingmanagement.exceptions.BuildingExistsException;
 import com.timsedam.buildingmanagement.exceptions.BuildingMissingException;
@@ -32,34 +32,26 @@ public class BuildingController {
     @Autowired
     private BuildingService buildingService;
 
-    private BuildingMapper buildingMapper = new BuildingMapper();
+    @Autowired
+    private BuildingMapper buildingMapper;
 
-    /**
-     *Create new building
-     * @param createBuildingDTO
-     * @return List<BuildingDTO>
-     * @throws BuildingExistsException 
-     */
     @PostMapping(consumes = "application/json")
     public ResponseEntity<?> create(
-            @Valid @RequestBody CreateBuildingDTO createBuildingDTO, BindingResult validationResult) throws BuildingExistsException{
+            @Valid @RequestBody BuildingCreateDTO buildingCreateDTO, BindingResult validationResult) 
+            		throws BuildingExistsException {
 
     	if (validationResult.hasErrors()) {
         	String errorMessage = validationResult.getFieldError().getDefaultMessage();
             return new ResponseEntity<String>(errorMessage, HttpStatus.UNPROCESSABLE_ENTITY);
     	}
     	else {
-    		Building building = buildingMapper.toModel(createBuildingDTO);
+    		Building building = buildingMapper.toModel(buildingCreateDTO);
     		Building savedBuilding = buildingService.create(building);
 
     		return new ResponseEntity<Long>(savedBuilding.getId(), HttpStatus.CREATED);
     	}
     }
     
-    /**
-     * Get all buildings
-     * @return List<BuildingDTO>
-     */
     @GetMapping(produces = "application/json")
     public ResponseEntity<?> get() {
         List<Building> buildings = buildingService.findAll();
@@ -67,12 +59,6 @@ public class BuildingController {
         return new ResponseEntity<List<BuildingDTO>>(buildingsDTO, HttpStatus.OK);
     }
 
-    /**
-     * Get building by id
-     * @param buildinId
-     * @return BuildingDTO
-     * @throws BuildingMissingException 
-     */
     @GetMapping(value = "/{buildinId}", produces = "application/json")
     public ResponseEntity<?> get(@PathVariable long buildinId) throws BuildingMissingException {
         Building building = buildingService.findOne(buildinId);
@@ -87,10 +73,8 @@ public class BuildingController {
 	@ExceptionHandler(BuildingExistsException.class)
 	public ResponseEntity<String> buildingExistsException(final BuildingExistsException e) {
 		return new ResponseEntity<String>(
-				"Building with address: " + e.getAddress() + 
-				", city: " + e.getCity() + 
-				", country: " + e.getCountry() + 
-				" already exists.", HttpStatus.NOT_FOUND);
+				"Building with address: " + e.getAddress() + ", city: " + e.getCity() + 
+				", country: " + e.getCountry() + " already exists.", HttpStatus.CONFLICT);
 	}
 	
 	/**

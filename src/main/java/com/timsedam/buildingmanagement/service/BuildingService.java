@@ -16,9 +16,9 @@ import com.timsedam.buildingmanagement.repository.BuildingRepository;
 public class BuildingService {
 
     @Autowired
-    BuildingRepository buildingRepository;
+    private BuildingRepository buildingRepository;
     
-    public boolean exists(String address, String city, String country) {
+    private boolean exists(String address, String city, String country) {
     	if(buildingRepository.existsByAddressAndCityAndCountry(
     			address.toLowerCase().trim(),
     			city.toLowerCase().trim(),
@@ -27,11 +27,6 @@ public class BuildingService {
     	else
     		return false;
     }
-    
-    public Building save(Building building) {
-    	return buildingRepository.save(building);
-    }
-    
 
     public List<Building> findAll(){
     	return buildingRepository.findAll();

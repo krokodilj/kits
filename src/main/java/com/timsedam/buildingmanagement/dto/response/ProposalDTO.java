@@ -16,22 +16,6 @@ public class ProposalDTO {
 	private List<Long> votes;
 	private Long attachedReport;
 	
-	public ProposalDTO() {
-		super();
-	}
-
-	public ProposalDTO(String content, ProposalStatus status, Long proposer, Long meeting, LocalDateTime suggestedAt,
-			List<Long> votes, Long attachedReport) {
-		super();
-		this.content = content;
-		this.status = status;
-		this.proposer = proposer;
-		this.meeting = meeting;
-		this.suggestedAt = suggestedAt;
-		this.votes = votes;
-		this.attachedReport = attachedReport;
-	}
-
 	public Long getId() {
 		return id;
 	}

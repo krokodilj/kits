@@ -41,6 +41,7 @@ insert into kts_test.role_permissions (role_id, permissions_id) values (5, 3);
 insert into kts_test.role_permissions (role_id, permissions_id) values (5, 8);
 insert into kts_test.role_permissions (role_id, permissions_id) values (5, 9);
 insert into kts_test.role_permissions (role_id, permissions_id) values (5, 10);
+insert into kts_test.role_permissions (role_id, permissions_id) values (5, 11);
 
 truncate kts_test.user; 
 insert into kts_test.user (id, user_type, email, username, password) values (1, 'USER', 'admin1@gmail.com', 'admin1', 'admin1');
@@ -228,3 +229,6 @@ insert into kts_test.announcement (id, content, posted_at, building_id, poster_i
 insert into kts_test.announcement (id, content, posted_at, building_id, poster_id) values (2, "announcement", "2018-01-23 14:48:46", 2, 24);
 insert into kts_test.announcement (id, content, posted_at, building_id, poster_id) values (3, "announcement", "2018-01-23 14:48:46", 3, 30);
 insert into kts_test.announcement (id, content, posted_at, building_id, poster_id) values (4, "announcement", "2018-01-23 14:48:46", 4, 34);
+
+truncate kts_test.meeting;
+insert into kts_test.meeting (id, location, `record`, starts_at, building_id) values (1, "location", "record", "2019-01-23 14:48:46", 1);

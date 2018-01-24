@@ -15,9 +15,12 @@ public class Question {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
+	
 	private String questionText;
+	
 	@ManyToOne
 	private QuestionForm questionForm;
+	
 	@OneToMany(mappedBy = "questionAnswered")
 	private List<Answer> usersAnswers;
 

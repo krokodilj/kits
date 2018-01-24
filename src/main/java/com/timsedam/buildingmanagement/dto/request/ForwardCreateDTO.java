@@ -2,17 +2,17 @@ package com.timsedam.buildingmanagement.dto.request;
 
 import javax.validation.constraints.NotNull;
 
-public class ForwardDTO {
+public class ForwardCreateDTO {
 
-	@NotNull(message = "{senderId.empty}")
+	@NotNull(message = "senderId not provided")
 	private long to;
 	
-	@NotNull(message = "{receiverId.empty}")
+	@NotNull(message = "receiverId not provided")
 	private long report;
 	
-	public ForwardDTO(){}
+	public ForwardCreateDTO(){}
 	
-	public ForwardDTO(long to, long report){
+	public ForwardCreateDTO(long to, long report){
 		this.to = to;
 		this.report = report;
 	}

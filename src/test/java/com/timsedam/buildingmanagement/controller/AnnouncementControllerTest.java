@@ -4,9 +4,6 @@ package com.timsedam.buildingmanagement.controller;
 import static org.junit.Assert.assertEquals;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-
-import javax.persistence.Entity;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,15 +17,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.timsedam.buildingmanagement.dto.request.CreateAnnouncementDTO;
+import com.timsedam.buildingmanagement.dto.request.AnnouncementCreateDTO;
 import com.timsedam.buildingmanagement.dto.request.UserLoginDTO;
 import com.timsedam.buildingmanagement.dto.response.AnnouncementDTO;
 import com.timsedam.buildingmanagement.model.Announcement;
 import com.timsedam.buildingmanagement.repository.AnnouncementRepository;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AnnouncementControllerTest {
+	
+	private static final String URL_PREFIX = "/api/announcements/";
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -36,7 +35,6 @@ public class AnnouncementControllerTest {
     @Autowired
     private AnnouncementRepository announcementRepository;
 
-    private static final String URL_PREFIX="/api/announcements/";
     private String getUserToken(String username, String password) {
         UserLoginDTO userLoginData = new UserLoginDTO(username, password);
         ResponseEntity<String> responseEntity = restTemplate.postForEntity("/api/auth/login", userLoginData,
@@ -54,11 +52,11 @@ public class AnnouncementControllerTest {
 
     /**
      * POST method to '/api/announcements/' with valid AnnouncementDTO
-     * Expected: AnnouncementDTO and HttpStatus.CREATED
+     * Expected: announcement's id is returned, HTTP Status 201 CREATED
      */
     @Test
     public void createAnnouncement(){
-        CreateAnnouncementDTO createAnnouncementDTO = new CreateAnnouncementDTO("deste drugari", 1 , LocalDateTime.now());
+        AnnouncementCreateDTO createAnnouncementDTO = new AnnouncementCreateDTO("deste drugari", 1 , LocalDateTime.now());
         ResponseEntity<Long> responseEntity = restTemplate.exchange(URL_PREFIX,  HttpMethod.POST, 
         		getRequestEntity(createAnnouncementDTO, "resident1", "resident1"), Long.class);
 
@@ -66,19 +64,17 @@ public class AnnouncementControllerTest {
         Announcement announcement = announcementRepository.findOne(announcementId);
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertEquals(announcement.getContent(), createAnnouncementDTO.getContent());
-        assertEquals(announcement.getPostedAt().truncatedTo(ChronoUnit.MINUTES), 
-        		createAnnouncementDTO.getPostedAt().truncatedTo(ChronoUnit.MINUTES));
         
         announcementRepository.delete(announcementId);
     }
 
     /**
      * POST method to '/api/announcements/' with invalid AnnouncementDTO - missing postedAt
-     * Expected: error message and HttpStatus.UNPROCESSABLE_ENTITY
+     * Expected: error message is returned, HTTP Status 422 UNPROCESSABLE_ENTITY
      */
     @Test
     public void createAnnouncemenInvalidDto(){
-        CreateAnnouncementDTO createAnnouncementDTO = new CreateAnnouncementDTO("deste drugari", 1, null);
+        AnnouncementCreateDTO createAnnouncementDTO = new AnnouncementCreateDTO("deste drugari", 1, null);
         ResponseEntity<String> responseEntity = restTemplate.exchange(URL_PREFIX, HttpMethod.POST,
                 getRequestEntity(createAnnouncementDTO, "resident1", "resident1"), String.class);
 
@@ -88,11 +84,11 @@ public class AnnouncementControllerTest {
 
     /**
      * POST method to '/api/announcements/' with invalid buildinId - invalid buildingId 
-     * Expected: message and HttpStatus.NOT_FOUND
+     * Expected:* Expected: error message is returned, HTTP Status 404 NOT_FOUND
      */
     @Test
     public void createAnnouncemenInvalidBuilding(){
-        CreateAnnouncementDTO createAnnouncementDTO = new CreateAnnouncementDTO("deste drugari", 999, LocalDateTime.now());
+        AnnouncementCreateDTO createAnnouncementDTO = new AnnouncementCreateDTO("deste drugari", 999, LocalDateTime.now());
         ResponseEntity<String> responseEntity = restTemplate.exchange(URL_PREFIX, HttpMethod.POST,
                 getRequestEntity(createAnnouncementDTO, "resident1", "resident1"), String.class);
 
@@ -102,21 +98,21 @@ public class AnnouncementControllerTest {
 
     /**
      * POST method to '/api/announcements/' with invalid user - user not resident in building
-     * Expected: message and HttpStatus.CONFLICT
+     * Expected: message and HttpStatus.UNPROCESSABLE_ENTITY 422
      */
     @Test
     public void createAnnouncemenInvalidUser() {
-        CreateAnnouncementDTO createAnnouncementDTO = new CreateAnnouncementDTO("deste drugari", 5, LocalDateTime.now());
+        AnnouncementCreateDTO createAnnouncementDTO = new AnnouncementCreateDTO("deste drugari", 5, LocalDateTime.now());
         ResponseEntity<String> responseEntity = restTemplate.exchange(URL_PREFIX, HttpMethod.POST,
                 getRequestEntity(createAnnouncementDTO, "resident1", "resident1"), String.class);
 
-        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
         assertEquals("User with id: 16 is not a Resident or Owner in Building with id: 5", responseEntity.getBody());
     }
 
     /**
      * GET method to '/api/announcements/by_building/{buildingId}'
-     * Expected: List<AnnouncementDTO> and HttpStatus.OK
+     * Expected: List<AnnouncementDTO> and HTTP Status 200 OK
      */
     @Test
     public void getAnnouncementsByBuilding(){
@@ -129,7 +125,7 @@ public class AnnouncementControllerTest {
 
     /**
      * GET method to '/api/announcements/by_building/{buildingId}'
-     * Expected: error message and HttpStatus.CONFLICT
+     * Expected: error message is returned, HTTP Status 422 UNPROCESSABLE_ENTITY
      */
     @Test
     public void getAnnouncementsByBuildingForbidden(){
@@ -137,13 +133,13 @@ public class AnnouncementControllerTest {
         ResponseEntity<String> responseEntity = restTemplate.exchange(URL_PREFIX + "by_building/" + buiildingId,
                 HttpMethod.GET, getRequestEntity(null, "resident1", "resident1"), String.class);
 
-        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
         assertEquals("User with id: 16 is not a Resident or Owner in Building with id: 3", responseEntity.getBody());
     }
 
     /**
      * GET method to '/api/announcements/by_building/{buildingId}'
-     * Expected: error message and HttpStatus.NOT_FOUND
+     * Expected: error message is returned, HTTP Status 404 NOT_FOUND
      */
     @Test
     public void getAnnouncementsByNoBuilding(){

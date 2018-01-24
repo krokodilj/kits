@@ -17,15 +17,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.timsedam.buildingmanagement.dto.request.CreateBuildingDTO;
+import com.timsedam.buildingmanagement.dto.request.BuildingCreateDTO;
 import com.timsedam.buildingmanagement.dto.request.UserLoginDTO;
 import com.timsedam.buildingmanagement.dto.response.BuildingDTO;
 import com.timsedam.buildingmanagement.model.Building;
 import com.timsedam.buildingmanagement.repository.BuildingRepository;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class BuildingControllerTest {
+	
+	private static final String URL_PREFIX = "/api/buildings/";
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -33,7 +35,6 @@ public class BuildingControllerTest {
     @Autowired
     private BuildingRepository buildingRepository;
 
-    private static final String URL_PREFIX="/api/buildings/";
     private String getUserToken(String username, String password) {
         UserLoginDTO userLoginData = new UserLoginDTO(username, password);
         ResponseEntity<String> responseEntity = restTemplate.postForEntity("/api/auth/login", userLoginData,
@@ -49,20 +50,19 @@ public class BuildingControllerTest {
         return requestEntity;
     }
 
-
     /**
      * POST request to '/api/buildings/ with valid CreateBuildingDTO
-     * Expects: BuildingDTO and HttpStatus.CREATED
+     * Expected: BuildingDTO, HTTP Status 201 CREATED
      */
     @Test
     public void createBuilding(){
-        CreateBuildingDTO createBuildingDTO = 
-        	new CreateBuildingDTO("sabac", "ps541", "serbia", 123, "zelenazgrada");
+        BuildingCreateDTO buildingCreateDTO = 
+        	new BuildingCreateDTO("sabac", "ps541", "serbia", 123, "zelenazgrada");
         
         ResponseEntity<Long> responseEntity = 
         	restTemplate.postForEntity(
                 URL_PREFIX,
-                getRequestEntity(createBuildingDTO, "admin1", "admin1"),
+                getRequestEntity(buildingCreateDTO, "admin1", "admin1"),
                 Long.class
         	);
 
@@ -70,28 +70,28 @@ public class BuildingControllerTest {
         Building building = buildingRepository.findOne(id);
         
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        assertEquals(building.getCity(), createBuildingDTO.getCity());
-        assertEquals(building.getAddress(), createBuildingDTO.getAddress());
-        assertEquals(building.getCountry(), createBuildingDTO.getCountry());
-        assertEquals(building.getApartmentCount(), createBuildingDTO.getApartmentCount());
-        assertEquals(building.getDescription(), createBuildingDTO.getDescription());
+        assertEquals(building.getCity(), buildingCreateDTO.getCity());
+        assertEquals(building.getAddress(), buildingCreateDTO.getAddress());
+        assertEquals(building.getCountry(), buildingCreateDTO.getCountry());
+        assertEquals(building.getApartmentCount(), buildingCreateDTO.getApartmentCount());
+        assertEquals(building.getDescription(), buildingCreateDTO.getDescription());
         
         buildingRepository.delete(id);
     }
 
     /**
      * POST request to '/api/buildings/ sent by unauthorized user
-     * Expects: HttpStatus.FORBIDDEN
+     * Expected: HTTP Status 403 FORBIDDEN
      */
     @Test
     public void createBuildingUnauthorized(){
-        CreateBuildingDTO createBuildingDTO = 
-        	new CreateBuildingDTO("sabac", "ps541", "macva", 123, "zelenazgrada");
+        BuildingCreateDTO buildingCreateDTO = 
+        	new BuildingCreateDTO("sabac", "ps541", "macva", 123, "zelenazgrada");
         
         ResponseEntity responseEntity = 
         	restTemplate.postForEntity(
                 URL_PREFIX,
-                getRequestEntity(createBuildingDTO, "resident1", "resident1"),
+                getRequestEntity(buildingCreateDTO, "resident1", "resident1"),
                 Object.class);
 
         assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
@@ -99,17 +99,17 @@ public class BuildingControllerTest {
     
 	/**
 	 * POST request to "/api/buildings/" twice with the same CreateBuildingDTO parameter
-	 * Expected: error message is returned, HTTP Status 404
+	 * Expected: error message is returned, HTTP Status 409 CONFLICT
 	 */
 	@Test
 	public void registerDuplicate() throws Exception {
-        CreateBuildingDTO createBuildingDTO = 
-            	new CreateBuildingDTO("sabac", "ps541", "macva", 123, "zelenazgrada");
+        BuildingCreateDTO buildingCreateDTO = 
+            	new BuildingCreateDTO("sabac", "ps541", "macva", 123, "zelenazgrada");
 		
 		ResponseEntity<Long> responseEntityValidRequest = 
 			restTemplate.postForEntity(
 				URL_PREFIX, 
-				getRequestEntity(createBuildingDTO, "admin1", "admin1"), 
+				getRequestEntity(buildingCreateDTO, "admin1", "admin1"), 
 				Long.class);
 
 		Long buildingId = responseEntityValidRequest.getBody();
@@ -118,10 +118,10 @@ public class BuildingControllerTest {
 		ResponseEntity<String> responseEntityDuplicateRequest = 
 			restTemplate.postForEntity(
 				URL_PREFIX, 
-				getRequestEntity(createBuildingDTO, "admin1", "admin1"), 
+				getRequestEntity(buildingCreateDTO, "admin1", "admin1"), 
 				String.class);
 		
-		assertEquals(HttpStatus.NOT_FOUND, responseEntityDuplicateRequest.getStatusCode());
+		assertEquals(HttpStatus.CONFLICT, responseEntityDuplicateRequest.getStatusCode());
 		assertEquals("Building with address: ps541, city: sabac, country: macva already exists.",
 				responseEntityDuplicateRequest.getBody());
 		buildingRepository.delete(buildingId);
@@ -129,15 +129,15 @@ public class BuildingControllerTest {
 	
 	/**
 	 * POST request to '/api/buildings/' with invalid CreateBuildingDTO - city missing
-	 * Expected: error message is returned, HTTP Status 422
+	 * Expected: error message is returned, HTTP Status 422 UNPROCESSABLE_ENTITY
 	 */
 	@Test
 	public void registerUsernameMissing() throws Exception {
-        CreateBuildingDTO createBuildingDTO = 
-        	new CreateBuildingDTO(null, "ps541", "macva", 123, "zelenazgrada");
+        BuildingCreateDTO buildingCreateDTO = 
+        	new BuildingCreateDTO(null, "ps541", "macva", 123, "zelenazgrada");
 		
 		ResponseEntity<String> responseEntity = 
-				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(createBuildingDTO, "admin1", "admin1"), String.class);
+				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(buildingCreateDTO, "admin1", "admin1"), String.class);
 		
 		assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
 		assertEquals("'city' not provided", responseEntity.getBody());
@@ -145,15 +145,15 @@ public class BuildingControllerTest {
 	
 	/**
 	 * POST request to '/api/buildings/' with invalid CreateBuildingDTO - address missing
-	 * Expected: error message is returned, HTTP Status 422
+	 * Expected: error message is returned, HTTP Status 422 UNPROCESSABLE_ENTITY
 	 */
 	@Test
 	public void registerAddressMissing() throws Exception {
-        CreateBuildingDTO createBuildingDTO = 
-        	new CreateBuildingDTO("sabac", null, "macva", 123, "zelenazgrada");
+        BuildingCreateDTO buildingCreateDTO = 
+        	new BuildingCreateDTO("sabac", null, "macva", 123, "zelenazgrada");
 		
 		ResponseEntity<String> responseEntity = 
-				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(createBuildingDTO, "admin1", "admin1"), String.class);
+				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(buildingCreateDTO, "admin1", "admin1"), String.class);
 		
 		assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
 		assertEquals("'address' not provided", responseEntity.getBody());
@@ -161,15 +161,15 @@ public class BuildingControllerTest {
 	
 	/**
 	 * POST request to '/api/buildings/' with invalid CreateBuildingDTO - state missing
-	 * Expected: error message is returned, HTTP Status 422
+	 * Expected: error message is returned, HTTP Status 422 UNPROCESSABLE_ENTITY
 	 */
 	@Test
 	public void registerContryMissing() throws Exception {
-        CreateBuildingDTO createBuildingDTO = 
-        	new CreateBuildingDTO("sabac", "ps541", null, 123, "zelenazgrada");
+        BuildingCreateDTO buildingCreateDTO = 
+        	new BuildingCreateDTO("sabac", "ps541", null, 123, "zelenazgrada");
 		
 		ResponseEntity<String> responseEntity = 
-				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(createBuildingDTO, "admin1", "admin1"), String.class);
+				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(buildingCreateDTO, "admin1", "admin1"), String.class);
 		
 		assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
 		assertEquals("'country' not provided", responseEntity.getBody());
@@ -177,15 +177,15 @@ public class BuildingControllerTest {
 	
 	/**
 	 * POST request to '/api/buildings/' with invalid CreateBuildingDTO - apartmentCount negative number
-	 * Expected: error message is returned, HTTP Status 422
+	 * Expected: error message is returned, HTTP Status 422 UNPROCESSABLE_ENTITY
 	 */
 	@Test
 	public void registerApartmentCountNegative() throws Exception {
-        CreateBuildingDTO createBuildingDTO = 
-        	new CreateBuildingDTO("sabac", "ps541", "macva", -1, "zelenazgrada");
+        BuildingCreateDTO buildingCreateDTO = 
+        	new BuildingCreateDTO("sabac", "ps541", "macva", -1, "zelenazgrada");
 		
 		ResponseEntity<String> responseEntity = 
-				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(createBuildingDTO, "admin1", "admin1"), String.class);
+				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(buildingCreateDTO, "admin1", "admin1"), String.class);
 		
 		assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
 		assertEquals("'apartmentCount' cannot be a negative value", responseEntity.getBody());
@@ -193,15 +193,15 @@ public class BuildingControllerTest {
 	
 	/**
 	 * POST request to '/api/buildings/' with invalid CreateBuildingDTO - description missing
-	 * Expected: error message is returned, HTTP Status 422
+	 * Expected: error message is returned, HTTP Status 422 UNPROCESSABLE_ENTITY
 	 */
 	@Test
 	public void registerDescriptionMissing() throws Exception {
-        CreateBuildingDTO createBuildingDTO = 
-        	new CreateBuildingDTO("sabac", "ps541", "macva", 123, null);
+        BuildingCreateDTO buildingCreateDTO = 
+        	new BuildingCreateDTO("sabac", "ps541", "macva", 123, null);
 		
 		ResponseEntity<String> responseEntity = 
-				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(createBuildingDTO, "admin1", "admin1"), String.class);
+				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(buildingCreateDTO, "admin1", "admin1"), String.class);
 		
 		assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
 		assertEquals("'description' not provided", responseEntity.getBody());
@@ -209,7 +209,7 @@ public class BuildingControllerTest {
 
     /**
      * GET request to '/api/buildings/all'
-     * Expected: List<BuildingDTO> and HttpStatus.OK
+     * Expected: List<BuildingDTO>, HTTP Status OK 200
      */
     @Test
     public void getAllBuildings(){
@@ -226,7 +226,7 @@ public class BuildingControllerTest {
     
     /**
      * GET request to '/api/buildings/1'
-     * Expected: BuildingDTO and HttpStatus.OK
+     * Expected: List<BuildingDTO>, HTTP Status OK 200
      */
     @Test
     public void getBuildingById(){
@@ -243,7 +243,7 @@ public class BuildingControllerTest {
 
     /**
      * GET request to '/api/buildings/9999'
-     * Expected: error message is returned, HttpStatus.NOT_FOUND
+     * Expected: error message is returned, HTTP Status 404 NOT_FOUND
      */
     @Test
     public void getBuildingByIdInvalid(){

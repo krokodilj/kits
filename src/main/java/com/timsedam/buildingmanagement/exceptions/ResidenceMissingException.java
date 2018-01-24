@@ -4,8 +4,6 @@ public class ResidenceMissingException extends Exception {
 	
 	private Long id;
 
-	private static final long serialVersionUID = 1294407092223808017L;
-
 	public ResidenceMissingException(Long id) {
 		super();
 		this.id = id;
@@ -19,8 +17,4 @@ public class ResidenceMissingException extends Exception {
 		this.id = id;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-	
 }

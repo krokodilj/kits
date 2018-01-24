@@ -3,7 +3,6 @@ package com.timsedam.buildingmanagement.controller;
 import static org.junit.Assert.assertEquals;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,26 +17,23 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.timsedam.buildingmanagement.dto.request.CreateMeetingDTO;
+import com.timsedam.buildingmanagement.dto.request.MeetingCreateDTO;
 import com.timsedam.buildingmanagement.dto.request.UserLoginDTO;
 import com.timsedam.buildingmanagement.dto.response.MeetingDTO;
 import com.timsedam.buildingmanagement.model.Meeting;
 import com.timsedam.buildingmanagement.repository.MeetingRepository;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class MeetingControllerTest {
+	
+	private static final String URL_PREFIX = "/api/meetings/";
 	
 	@Autowired
     private TestRestTemplate restTemplate;
 	
 	@Autowired
 	private MeetingRepository meetingRepository;
-	
-	private static final String URL_PREFIX = "/api/meetings/";
-	
-	private CreateMeetingDTO validMeetingCreateDTO = 
-			new CreateMeetingDTO(LocalDateTime.now().plusDays(1), 1L, "Stan broj 19.");
 	
 	private String getToken(String username, String password) {
 		UserLoginDTO userLoginData = new UserLoginDTO(username, password);
@@ -56,70 +52,63 @@ public class MeetingControllerTest {
 	
 	/**
 	 * POST request to "/api/meetings/" with valid CreateMeetingDTO
-	 * Expected: Meeting's id is returned to the client, HTTP Status 201
+	 * Expected: Meeting's id is returned to the client, HTTP Status 201 CREATED
 	 */
 	@Test
 	public void createMeeting() throws Exception {
-		
+		MeetingCreateDTO meetingCreateDTO = 
+				new MeetingCreateDTO(LocalDateTime.now().plusDays(1), 1L, "Stan broj 19.");
 		ResponseEntity<Long> responseEntity = 
-				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(validMeetingCreateDTO, "manager1", "manager1"), Long.class);
+				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(meetingCreateDTO, "manager1", "manager1"), Long.class);
 		
 		Long meetingId = responseEntity.getBody();
 		Meeting meeting = meetingRepository.findOne(meetingId);
 		assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-		assertEquals(validMeetingCreateDTO.getStartsAt().truncatedTo(ChronoUnit.MINUTES), 
-				meeting.getStartsAt().truncatedTo(ChronoUnit.MINUTES));
-		assertEquals(validMeetingCreateDTO.getLocation(), meeting.getLocation());
+		assertEquals(meetingCreateDTO.getLocation(), meeting.getLocation());
 
 		meetingRepository.delete(meetingId);
     }
 	
 	/**
 	 * POST request to "/api/meetings/" with invalid MeetingCreate parameter - request sender is not the Building Manager 
-	 * Expected: error message, HTTP Status 404
+	 * Expected: error message is returned, HTTP Status 422 UNPROCESSABLE_ENTITY
 	 */
 	@Test
 	public void userNotManagerCreateMeeting() throws Exception {
-		
-		CreateMeetingDTO invalidMeetingCreateDTO = new CreateMeetingDTO(validMeetingCreateDTO);
-		invalidMeetingCreateDTO.setBuildingId(5L);
-		
+		MeetingCreateDTO meetingCreateDTO = 
+				new MeetingCreateDTO(LocalDateTime.now().plusDays(1), 5L, "Stan broj 19.");
 		ResponseEntity<String> responseEntity = 
-				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(invalidMeetingCreateDTO, "manager1", "manager1"), String.class);
+				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(meetingCreateDTO, "manager1", "manager1"), String.class);
 		
-		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+		assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
 		assertEquals("User with id: 11 is not the Manager of Building with id: 5", responseEntity.getBody());
     }
 	
 	/**
 	 * POST request to "/api/meetings/" with invalid MeetingCreate parameter - request parameter is in the past 
-	 * Expected: error message, HTTP Status 404
+	 * Expected: error message is returned, HTTP Status 422 UNPROCESSABLE_ENTITY
 	 */
 	@Test
 	public void startsAtInPastCreateMeeting() throws Exception {
-		
-		CreateMeetingDTO invalidMeetingCreateDTO = new CreateMeetingDTO(validMeetingCreateDTO);
-		invalidMeetingCreateDTO.setStartsAt(LocalDateTime.now().minusDays(1));
-		
+		MeetingCreateDTO meetingCreateDTO = 
+				new MeetingCreateDTO(LocalDateTime.now().minusDays(1), 1L, "Stan broj 19.");
 		ResponseEntity<String> responseEntity = 
-				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(invalidMeetingCreateDTO, "manager1", "manager1"), String.class);
+				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(meetingCreateDTO, "manager1", "manager1"), String.class);
 		
-		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+		assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
 		assertEquals("Time provided is in the past.", responseEntity.getBody());
     }
 	
 	/**
 	 * POST request to "/api/meetings/" with invalid MeetingCreate parameter - missing startsAt parameter 
-	 * Expected: no MeetingDTO is returned to the client, HTTP Status 400
+	 * Expected: error message is returned, HTTP Status 422 UNPROCESSABLE_ENTITY
 	 */
 	@Test
 	public void nullLocationCreateMeeting() throws Exception {
-		
-		CreateMeetingDTO invalidMeetingCreateDTO = new CreateMeetingDTO(validMeetingCreateDTO);
-		invalidMeetingCreateDTO.setStartsAt(null);
-		
+		MeetingCreateDTO meetingCreateDTO = 
+				new MeetingCreateDTO(null, 1L, "Stan broj 19.");
 		ResponseEntity<String> responseEntity = 
-				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(invalidMeetingCreateDTO, "manager1", "manager1"), String.class);
+				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(meetingCreateDTO, "manager1", "manager1"), String.class);
 		
 		assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
 		assertEquals("'startTime' not provided", responseEntity.getBody());
@@ -127,7 +116,7 @@ public class MeetingControllerTest {
 	
 	/**
 	 * GET request to "/api/meetings/{meetingId}" with valid meetingId parameter 
-	 * Expected: MeetingDTO is returned to the client, HTTP Status 200
+	 * Expected: MeetingDTO is returned, HTTP Status 200 OK
 	 */
 	@Test
 	public void getMeeting() throws Exception {
@@ -140,7 +129,7 @@ public class MeetingControllerTest {
 	
 	/**
 	 * GET request to "/api/meetings/{meetingId}" with invalid meetingId parameter - Meeting with specified id doesnt exist 
-	 * Expected: error message, HTTP Status 404
+	 * Expected: error message is returned, HTTP Status 404 NOT_FOUND
 	 */
 	@Test
 	public void invalidMeetingIdGetMeeting() throws Exception {
@@ -154,7 +143,7 @@ public class MeetingControllerTest {
 	
 	/**
 	 * GET request to "/api/meetings?buildingId=6"
-	 * Expected: MeetingDTO array is returned to the client, HTTP Status 200
+	 * Expected: MeetingDTO Array is returned, HTTP Status 200 OK
 	 */
 	@Test
 	public void getMeetingsByBuildingId() throws Exception {
@@ -166,7 +155,7 @@ public class MeetingControllerTest {
 	
 	/**
 	 * GET request to "/api/meetings?buildingId=123" - invalid buildingId parameter
-	 * Expected: empty MeetingDTO array is returned to the client, HTTP Status 200
+	 * Expected: MeetingDTO Array is returned, HTTP Status 200 OK
 	 */
 	@Test
 	public void getMeetingsByBuildingIdInvalidBuildId() throws Exception {

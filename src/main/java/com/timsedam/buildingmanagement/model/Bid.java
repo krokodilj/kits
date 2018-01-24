@@ -12,12 +12,17 @@ public class Bid {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
+	
 	private String description;
+	
 	private double price;
+	
 	@ManyToOne
 	private Company company;
+	
 	@ManyToOne
 	private Report reportBid;
+	
 	private String status;
 
 	public Bid() {

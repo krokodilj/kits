@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import javax.validation.constraints.NotNull;
 
-public class CreateAnnouncementDTO {
+public class AnnouncementCreateDTO {
 
     @NotNull(message = "'content' not provided")
     private String content;
@@ -15,9 +15,9 @@ public class CreateAnnouncementDTO {
     @NotNull(message = "'postedAt' not provided")
     private LocalDateTime postedAt;
 
-    public CreateAnnouncementDTO(){}
+    public AnnouncementCreateDTO(){}
 
-    public CreateAnnouncementDTO(String content, long building, LocalDateTime postedAt) {
+    public AnnouncementCreateDTO(String content, long building, LocalDateTime postedAt) {
         this.content = content;
         this.building = building;
         this.postedAt = postedAt;

@@ -5,7 +5,6 @@ public class BuildingExistsException extends Exception {
 	private String address;
 	private String city;
 	private String country;
-	private static final long serialVersionUID = 4101207182271731800L;
 	
 	public BuildingExistsException(String address, String city, String country) {
 		super();

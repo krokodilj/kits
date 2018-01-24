@@ -32,8 +32,7 @@ public class Residence {
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "resident_residence", 
 		joinColumns = @JoinColumn(name="residence_id"), 
-		inverseJoinColumns = @JoinColumn(name="resident_id")
-	) 
+		inverseJoinColumns = @JoinColumn(name="resident_id")) 
 	private List<User> residents;
 	
 	

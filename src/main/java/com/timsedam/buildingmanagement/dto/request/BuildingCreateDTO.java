@@ -4,22 +4,26 @@ package com.timsedam.buildingmanagement.dto.request;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-public class CreateBuildingDTO {
+public class BuildingCreateDTO {
 
-    @NotNull(message = "{building.city.empty}")
+    @NotNull(message = "'city' not provided")
     private String city;
-    @NotNull(message = "{building.address.empty}")
+    
+    @NotNull(message = "'address' not provided")
     private String address;
-    @NotNull(message = "{building.country.empty}")
+    
+    @NotNull(message = "'country' not provided")
     private String country;
-    @Min(value = 0, message = "{building.apartmentCount.negative}")
+    
+    @Min(value = 0, message = "'apartmentCount' cannot be a negative value")
     private int apartmentCount;
-    @NotNull(message = "{description.empty}")
+    
+    @NotNull(message = "'description' not provided")
     private String description;
 
-    public CreateBuildingDTO(){}
+    public BuildingCreateDTO(){}
 
-    public CreateBuildingDTO(String city, String address, String country, int apartmentCount, String description){
+    public BuildingCreateDTO(String city, String address, String country, int apartmentCount, String description){
         this.city = city;
         this.address = address;
         this.country = country;

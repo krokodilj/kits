@@ -17,10 +17,6 @@ public class ReportService {
 
 	@Autowired
 	private ReportRepository reportRepository;
-	
-	public Report save(Report report) {
-		return reportRepository.save(report);
-	}
 
 	public Report findOne(long id) throws ReportMissingException {
 		Report report = reportRepository.findOne(id);

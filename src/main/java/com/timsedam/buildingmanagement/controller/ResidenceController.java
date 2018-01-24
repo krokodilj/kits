@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.timsedam.buildingmanagement.dto.request.CreateResidenceDTO;
+import com.timsedam.buildingmanagement.dto.request.ResidenceCreateDTO;
 import com.timsedam.buildingmanagement.dto.response.ResidenceDTO;
 import com.timsedam.buildingmanagement.exceptions.BuildingMissingException;
 import com.timsedam.buildingmanagement.exceptions.ResidenceExistsException;
@@ -38,35 +38,22 @@ public class ResidenceController {
     @Autowired
     private ResidenceMapper residenceMapper;
 
-    /**
-     * Create resident
-     * @param createResidenceDTO
-     * @return ResidentDTO
-     * @throws BuildingMissingException 
-     * @throws ResidenceExistsException 
-     */
     @PostMapping(consumes = "application/json")
-    public ResponseEntity<?> create(@Valid @RequestBody CreateResidenceDTO createResidenceDTO,
+    public ResponseEntity<?> create(@Valid @RequestBody ResidenceCreateDTO residenceCreateDTO,
     		BindingResult validationResult) throws BuildingMissingException, ResidenceExistsException {
         if (validationResult.hasErrors()) {
         	String errorMessage = validationResult.getFieldError().getDefaultMessage();
         	return new ResponseEntity<>(errorMessage, HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
-        Building building = buildingService.findOne(createResidenceDTO.getBuilding());
-        Residence residence = residenceMapper.toModel(createResidenceDTO);
+        Building building = buildingService.findOne(residenceCreateDTO.getBuilding());
+        Residence residence = residenceMapper.toModel(residenceCreateDTO);
         residence.setBuilding(building);
         residence = residenceService.create(residence);
 
         return new ResponseEntity<Long>(residence.getId(), HttpStatus.CREATED);
     }
 
-    /**
-     * Get residence by id
-     * @param id
-     * @return ResidenceDTO
-     * @throws ResidenceMissingException 
-     */
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> get(@PathVariable long id) throws ResidenceMissingException{
         Residence residence = residenceService.findOneById(id);
@@ -89,7 +76,7 @@ public class ResidenceController {
 	@ExceptionHandler(ResidenceExistsException.class)
 	public ResponseEntity<String> residenceExistsException(final ResidenceExistsException e) {
 		return new ResponseEntity<String>("Residence with apartmentNumber: " + e.getApartmentNumber() + 
-				" already exists in Building with id: " + e.getBuildingId(), HttpStatus.NOT_FOUND);
+				" already exists in Building with id: " + e.getBuildingId(), HttpStatus.UNPROCESSABLE_ENTITY);
 	}
 	
 	/**

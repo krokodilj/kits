@@ -1,6 +1,5 @@
 package com.timsedam.buildingmanagement.security;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +23,7 @@ public class JsonWebToken {
 	@Value("18000") //in seconds (5 hours)
 	private Long expiration;
 	
-	public String getUsernameFromToken(String token) {
+	String getUsernameFromToken(String token) {
 		String username;
 		try {
 			Claims claims = getClaimsFromToken(token);
@@ -48,7 +47,7 @@ public class JsonWebToken {
 		return claims;
 	}
 	
-	public Date getExpirationDateFromToken(String token) {
+	private Date getExpirationDateFromToken(String token) {
 		Date expirationDate;
 		try {
 			Claims claims = getClaimsFromToken(token);
@@ -58,35 +57,15 @@ public class JsonWebToken {
 		}
 		return expirationDate;
 	}
-
-	public List<String> getRolesFromToken(String token){
-		List<String> roles;
-		try {
-			Claims claims = getClaimsFromToken(token);
-			roles = (List<String>) claims.get("roles");
-		} catch (Exception e) {
-			roles = new ArrayList<String>();
-		}
-		return roles;
-	}
 	
 	private boolean isTokenExpired(String token) {
 	    Date expirationDate = getExpirationDateFromToken(token);
 	    return expirationDate.before(new Date(System.currentTimeMillis()));
 	  }
 	
-	public boolean validateToken(String token, UserDetails userDetails) {
+	boolean validateToken(String token, UserDetails userDetails) {
 		String username = getUsernameFromToken(token);
 		return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
-	}
-	
-	public String generateToken(UserDetails userDetails) {
-		Map<String, Object> claims = new HashMap<String, Object>();
-		claims.put("sub", userDetails.getUsername());
-		claims.put("created", new Date(System.currentTimeMillis()));
-		return Jwts.builder().setClaims(claims)
-				.setExpiration(new Date(System.currentTimeMillis() + expiration * 1000))
-				.signWith(SignatureAlgorithm.HS512, signingKey).compact();
 	}
 
 	public String generateToken(String username, List<String> roles){

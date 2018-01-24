@@ -1,17 +1,19 @@
-package com.timsedam.buildingmanagement.dto.response;
+package com.timsedam.buildingmanagement.dto.request;
 
 import javax.validation.constraints.Min;
 
-public class BidDTO {
+public class BidSendDTO {
 
-	@Min(value = 1, message = "{price.negative}")
+	@Min(value = 1, message = "'price' cannot be a negative value")
 	private double price;
+	
 	private String description;
+	
 	private long report;
 	
-	public BidDTO(){}
+	public BidSendDTO(){}
 	
-	public BidDTO(String description, double price, long report){
+	public BidSendDTO(String description, double price, long report){
 		this.description = description;
 		this.price = price;
 		this.report = report;

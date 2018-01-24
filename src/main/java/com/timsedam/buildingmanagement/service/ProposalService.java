@@ -26,10 +26,6 @@ public class ProposalService {
 	@Autowired
 	private ReportService reportService;
 	
-	public void save(Proposal proposal) {
-		proposalRepository.save(proposal);
-	}
-	
 	public Proposal create(Proposal proposal) throws UserNotResidentException, ReportNotAttachedToBuildingException {
 		if(proposal.getAttachedReport() != null) {
 			// user is not a resident or owner in the building he submitted a proposal to

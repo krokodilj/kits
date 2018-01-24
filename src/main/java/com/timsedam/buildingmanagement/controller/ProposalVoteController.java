@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.timsedam.buildingmanagement.dto.request.ProposalVoteCastDTO;
-import com.timsedam.buildingmanagement.dto.response.ProposalVoteDTO;
 import com.timsedam.buildingmanagement.exceptions.ProposalMissingException;
 import com.timsedam.buildingmanagement.exceptions.UserMissingException;
 import com.timsedam.buildingmanagement.exceptions.UserNotApartmentOwnerException;
