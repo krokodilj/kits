@@ -12,14 +12,13 @@ import com.timsedam.buildingmanagement.model.User;
 
 public class AnnouncementMapper {
 
-    public Announcement toModel(AnnouncementCreateDTO createAnnouncementDTO, Building b,User u){
-        Announcement announcement = new Announcement(
-                createAnnouncementDTO.getContent(),createAnnouncementDTO.getPostedAt(),
-                null,null);
-        announcement.setBuilding(b);
-        announcement.setPoster(u);
-        return announcement;
-    }
+	public Announcement toModel(AnnouncementCreateDTO createAnnouncementDTO, Building b, User u){
+		Announcement announcement = new Announcement(createAnnouncementDTO.getContent(),
+				createAnnouncementDTO.getPostedAt(), null, null);
+		announcement.setBuilding(b);
+	    announcement.setPoster(u);
+	    return announcement;
+	}
 
     public AnnouncementDTO toDto(Announcement announcement){
         AnnouncementDTO announcementDTO = 

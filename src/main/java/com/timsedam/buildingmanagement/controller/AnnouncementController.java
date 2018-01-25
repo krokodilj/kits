@@ -60,7 +60,7 @@ public class AnnouncementController {
         Building building = buildingService.findOne(createAnnouncementDTO.getBuilding());
         User user =  userService.findOneByUsername(principal.getName());
 
-        Announcement announcement = announcementMapper.toModel(createAnnouncementDTO,building,user);
+        Announcement announcement = announcementMapper.toModel(createAnnouncementDTO, building, user);
         announcement = announcementService.create(announcement);
 
         return new ResponseEntity<Long>(announcement.getId(), HttpStatus.CREATED);

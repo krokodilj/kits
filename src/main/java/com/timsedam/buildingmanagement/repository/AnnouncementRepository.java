@@ -9,6 +9,6 @@ import org.springframework.data.repository.query.Param;
 
 public interface AnnouncementRepository extends JpaRepository<Announcement,Long> {
 
-    Page<Announcement>  findAllByBuilding(@Param("building") Building building,Pageable pageable);
+    Page<Announcement> findAllByBuilding(@Param("building") Building building,Pageable pageable);
 
 }

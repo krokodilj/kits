@@ -52,11 +52,11 @@ public class ReportService {
 		reportRepository.setCurrentHolder(currentHolder, id);
 	}
 
-	public void setStatus(String status, long id) {
+	void setStatus(String status, long id) {
 		reportRepository.setStatus(status, id);
 	}
 	
-	public boolean isAttachedToBuilding(Report report, Building building) {
+	boolean isAttachedToBuilding(Report report, Building building) {
 		if(report.getLocation().getId() == building.getId())
 			return true;
 		else

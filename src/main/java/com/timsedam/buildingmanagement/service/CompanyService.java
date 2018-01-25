@@ -22,7 +22,7 @@ public class CompanyService {
 		return userRepository.existsByUsername(username);
 	}
 	
-	public Company save(Company company) throws UserExistsException {
+	public Company create(Company company) throws UserExistsException {
 		if(exists(company.getUsername()))
 			throw new UserExistsException(company.getUsername());
 		

@@ -47,14 +47,14 @@ public class BuildingService {
     		return buildingRepository.save(building);
     }
 
-    public boolean isManager(Building building, User user) {
+    boolean isManager(Building building, User user) {
     	if(building.getManager().getId() == user.getId()) 
     		return true;
     	else
     		return false;
     }
     
-    public boolean isResidentOrApartmentOwner(User user, Building building) {
+    boolean isResidentOrApartmentOwner(User user, Building building) {
     	for(Residence residence : building.getResidences()) {
     		if(residence.getApartmentOwner().getId() == user.getId()) {
     			return true;
@@ -69,7 +69,7 @@ public class BuildingService {
     	return false;
     }
     
-    public boolean isApartmentOwner(User user, Building building) {
+    boolean isApartmentOwner(User user, Building building) {
     	for(Residence residence : building.getResidences()) {
     		if(residence.getApartmentOwner().getId() == user.getId())
     			return true;
@@ -77,7 +77,7 @@ public class BuildingService {
     	return false;
     }
     
-    public boolean isResident(User user, Building building) {
+    boolean isResident(User user, Building building) {
     	for(Residence residence : building.getResidences()) {
     		for(User resident : residence.getResidents()) {
     			if(user.getId() == resident.getId())
