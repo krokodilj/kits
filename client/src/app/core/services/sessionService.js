@@ -6,8 +6,10 @@
 		function sessionService($cookies,$http){
 
 			var self = this;
+			
 			self.userId=null;
 			self.userRole=null;
+
 			self.createSession = createSession;
 			self.destroySession = destroySession;
 
