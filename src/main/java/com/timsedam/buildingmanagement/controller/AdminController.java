@@ -39,7 +39,7 @@ public class AdminController {
 		} 
 		else {
 			User admin = userMapper.toModel(adminRegisterDTO);
-			User savedAdmin = adminService.save(admin);
+			User savedAdmin = adminService.create(admin);
 			
 			return new ResponseEntity<Long>(savedAdmin.getId(), HttpStatus.CREATED);
 		}

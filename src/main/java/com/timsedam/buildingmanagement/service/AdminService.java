@@ -22,7 +22,7 @@ public class AdminService {
 		return userRepository.existsByUsername(username);
 	}
 	
-	public User save(User user) throws UserExistsException {
+	public User create(User user) throws UserExistsException {
 		if(exists(user.getUsername()))
 			throw new UserExistsException(user.getUsername());
 		

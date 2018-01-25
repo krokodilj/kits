@@ -39,7 +39,7 @@ public class CompanyController {
 		}
 		else {
 			Company company = companyMapper.toModel(companyDTO);
-			Company savedCompany = companyService.save(company);
+			Company savedCompany = companyService.create(company);
 			
 			return new ResponseEntity<Long>(savedCompany.getId(), HttpStatus.CREATED);
 		}

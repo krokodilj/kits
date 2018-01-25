@@ -1,5 +1,6 @@
 package com.timsedam.buildingmanagement.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.DiscriminatorColumn;
@@ -40,6 +41,13 @@ public class User {
     @OneToMany(mappedBy = "reportCommented")
     private List<Comment> comments;
     
+    
+	public User() {
+		pictures = new ArrayList<String>();
+		roles = new ArrayList<Role>();
+		comments = new ArrayList<Comment>();
+	}
+
 	public Long getId() {
 		return id;
 	}
