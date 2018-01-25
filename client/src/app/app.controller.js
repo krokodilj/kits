@@ -8,4 +8,4 @@
 		//da moze da se korisi iz html templejta
 	}
 
-});
+})();

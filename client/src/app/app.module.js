@@ -3,6 +3,8 @@
 		.module('kits',[
 			'ngRoute',
 			'ngCookies',
+			'ngMaterial',
+			'ngMessages',
 			'kits.login',
 			'kits.register'
 		])

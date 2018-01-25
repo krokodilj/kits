@@ -1,3 +1,17 @@
-<input type="text" ng-model="vm.user.username" >
-<input type="password" ng-model="vm.user.password" >
-<input type="button" ng-click="vm.login(vm.user)" value="login">
+
+<div layout="row" layout-align="center center">
+<md-content layout-gt-sm="row" layout-padding="">
+  <div>
+    <md-input-container>
+      <label>Username</label>
+      <input ng-model="vm.user.username">
+    </md-input-container>
+
+    <md-input-container>
+      <label>Password</label>
+      <input ng-model="vm.user.password" type="password">
+    </md-input-container>
+  </div>
+</md-content>
+<md-button class="md-raised" ng-click="vm.login(vm.user)" >Login</md-button>
+</div>
