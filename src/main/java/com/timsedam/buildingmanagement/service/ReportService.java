@@ -1,5 +1,16 @@
 package com.timsedam.buildingmanagement.service;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.imageio.ImageIO;
+import javax.servlet.ServletContext;
+import javax.xml.bind.DatatypeConverter;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +28,9 @@ public class ReportService {
 
 	@Autowired
 	private ReportRepository reportRepository;
+	
+	@Autowired
+	ServletContext servletContext;
 
 	public Report findOne(long id) throws ReportMissingException {
 		Report report = reportRepository.findOne(id);
@@ -46,6 +60,23 @@ public class ReportService {
 			}
 		}
 		return false;
+	}
+	
+	public void savePictures(long buildingId, Report report, List<String> pics) throws IOException{
+		List<String> picsUrl = new ArrayList<>();
+		int i = 0;
+		for (String pic : pics) {
+			byte[] imagedata = DatatypeConverter.parseBase64Binary(pic.substring(pic.indexOf(",") + 1));
+			BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(imagedata));
+			String path = servletContext.getRealPath("/") + 
+							"images/"+ String.valueOf(buildingId) +"/reprot/"+ 
+							String.valueOf(report.getId())+"_"+String.valueOf(i)+ ".png";
+			ImageIO.write(bufferedImage, "png", new File(path));
+			picsUrl.add(path);
+			i++;
+		}
+		report.setPictures(picsUrl);
+		reportRepository.save(report);
 	}
 	
 	public void setCurrentHolder(Forward currentHolder, Long id){

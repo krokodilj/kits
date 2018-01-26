@@ -1,5 +1,6 @@
 package com.timsedam.buildingmanagement.controller;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -66,7 +67,7 @@ public class ReportController {
 
 	@PostMapping(consumes = "application/json")
 	public ResponseEntity<?> create(Principal principal, @Valid @RequestBody ReportCreateDTO reportDTO, BindingResult validationResult) 
-			throws BuildingMissingException, UserNotResidentException, UserMissingException {
+			throws BuildingMissingException, UserNotResidentException, UserMissingException, IOException {
 
 		if (validationResult.hasErrors()) {
 			String errorMessage = validationResult.getFieldError().getDefaultMessage();
@@ -77,14 +78,19 @@ public class ReportController {
 		Building building = buildingService.findOne(reportDTO.getBuilding());
 
 		Report report = new Report(reportSender, "OPEN", reportDTO.getDescription(), 
-				building, reportDTO.getPhotos(), new ArrayList<Comment>(), null);
+				building, new ArrayList<String>() , new ArrayList<Comment>(), null);
 		
 		Forward forward = new Forward(null, building.getManager(), report);
 		
 		report.setCurrentHolder(forward);
+
 		report = reportService.create(report);
 		forwardService.save(forward);
+
+		reportService.savePictures(building.getId(), report, reportDTO.getPhotos());
+		
 		return new ResponseEntity<Long>(report.getId(), HttpStatus.CREATED);
+
 	}
 
 	@PostMapping(value = "forward", consumes = "application/json")
