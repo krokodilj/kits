@@ -1,6 +1,6 @@
 (function(){
 	angular
-		.module('kits.login',['service.auth', 'ngMaterial'])
+		.module('kits.login',['service.auth'])
 		.config(['$routeProvider',function($routeProvider){
 			$routeProvider
 			.when('/login',{

@@ -5,7 +5,9 @@
 			'ngCookies',
 			'ngMaterial',
 			'ngMessages',
+			'lfNgMdFileInput',
 			'kits.login',
-			'kits.register'
+			'kits.register',
+			'kits.report'
 		])
 })();
