@@ -29,6 +29,11 @@ pipes.builtAppScriptsDev = function() {
         .pipe(gulp.dest(conf.paths.distDev));
 };
 
+pipes.builtStylesDev = function() {  
+    return gulp.src(conf.paths.styles)
+        .pipe(gulp.dest(conf.paths.styles));
+};
+
 pipes.builtPartialsDev = function(){
 	return gulp.src(conf.paths.partials)
 		.pipe(gulp.dest(conf.paths.distDev));
@@ -41,13 +46,10 @@ pipes.builtIndexDev = function(){
    	var appScripts = pipes.builtAppScriptsDev()
         .pipe(pipes.orderedAppScripts());
 
-    //var appStyles = pipes.builtStylesDev();
-
     return gulp.src(conf.paths.index)
         .pipe(gulp.dest(conf.paths.distDev)) // write first to get relative path for inject
          .pipe(plugins.inject(vendorScripts, {relative: true, name: 'bower'}))
          .pipe(plugins.inject(appScripts, {relative: true}))
-       // .pipe(plugins.inject(appStyles, {relative: true}))
         .pipe(gulp.dest(conf.paths.distDev));
 };
 
@@ -64,7 +66,7 @@ gulp.task('build-dev',function(done){
 gulp.task('watch-dev',function(done){
 	plugins.nodemon({
          script: 'server.js',
-         ext: 'html js',
+         ext: 'html js css',
          watch: ['src/'],
          env: {NODE_ENV : 'development'},
          tasks:['build-dev']
