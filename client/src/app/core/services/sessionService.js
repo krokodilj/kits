@@ -1,7 +1,7 @@
 (function(){
 	angular
 		.module('service.session',[])
-		.service('sessionService',['$cookies','$http',sessionService])
+		.service('sessionService',['$cookies','$http', '$window', sessionService])
 
 		function sessionService($cookies,$http){
 
