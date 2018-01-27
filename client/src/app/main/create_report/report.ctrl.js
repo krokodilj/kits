@@ -53,15 +53,15 @@
     					"description": vm.building,
     					"photos": vm.photos
     				};
-    			    
+    			    /*
     				$http.post('http://localhost:8080/api/auth/login', {
-    					  "password": "ivan",
-    					  "username": "ivan"
+    					  "password": "resident1",
+    					  "username": "resident1"
     					}).then(function(response) {
-
+    						alert(JSON.strinfgify(response))
     					}, function(response) {
-    						toastr.error(response.data, 'Error');
-    				});	
+    						console.log(response);
+    				});	*/
     			}
     		}
 

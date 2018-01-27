@@ -58,7 +58,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers(AUTH_WHITELIST).permitAll()
 				
 				.antMatchers("/api/auth/**", "/api/reports/forward/", "/api/reports/comment/",
-						"/api/reports/acceptBid/")
+						"/api/reports/acceptBid/", "/api/reports/getComments/**")
 				.permitAll()
 
 				.antMatchers("/api/admins/", "/api/companies/", "/api/managers/",  "/api/residents/", "/api/owners/")
