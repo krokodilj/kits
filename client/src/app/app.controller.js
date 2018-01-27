@@ -12,6 +12,11 @@
 		vm.goto = function (page){
 			window.location = page;
 		}
+		
+		vm.logout = function(){
+			authService.logout()
+			window.location = "/";
+		}
 	}
 
 })();
