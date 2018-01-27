@@ -9,7 +9,7 @@
 					controllerAs:"vm"								
 				})
 		}])
-		.controller('LoginController',['authService',function(authService){
+		.controller('LoginController',['authService','$window','toastr',function(authService,$window,toastr){
 			var vm = this;
 
 			vm.user={
@@ -31,8 +31,9 @@
 						if(response.error){
 							vm.loginError.message=response.data
 							vm.loginError.show = true
+							toastr.error("Wrong username or password!", "Login error");
 						}else{
-							//ovde href	
+							$window.location = "#!/report";
 							console.log(response)	
 						}						
 					})
