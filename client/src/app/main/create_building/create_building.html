@@ -1,0 +1,32 @@
+<div layout="row" layout-align="center center">
+<md-content layout-gt-sm="row" layout-padding="">
+  <form name="createBuildingForm" ng-submit="vm.create(vm.building)" novalidate>
+    <md-input-container>
+      <label>City</label>
+      <input ng-model="vm.building.city" required>
+    </md-input-container>
+    <br>
+    <md-input-container>
+      <label>Address</label>
+      <input ng-model="vm.building.address" required>
+    </md-input-container>
+    <br>
+    <md-input-container>
+      <label>Country</label>
+      <input ng-model="vm.building.country" required>
+    </md-input-container>
+    <br>
+    <md-input-container>
+      <label>Number of apartments</label>
+      <input ng-model="vm.building.apartmentCount" type="number" min="1" required>
+    </md-input-container>
+    <br>
+    <md-input-container>
+      <label>Description</label>
+      <textarea ng-model="vm.building.description" required></textarea>
+    </md-input-container>
+    <br>
+    <md-button class="md-raised" type="submit" ng-disabled="createBuildingForm.$invalid">CREATE</md-button>
+  </form>
+</md-content>
+</div>
