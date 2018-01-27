@@ -16,27 +16,31 @@
 
 			function login (data){
 
-				return $http
-					.post('/login',data)
+				var promise = $http
+					.post('http://localhost:8080/api/auth/login',data)
 					.then(function(res){
-						sessionService.createSession()//200
-						return res.data
-					},function(res){
-						console.log(res)
-						return res.data//405a
+						sessionService.createSession(res.data)//200
+						return {data:res.data}
+					},function(err){
+						return {error:true,data:err.data}
 					});
+				return promise
 			}
 
 			function logout(){
-				
+				sessionService.destroySession()
 			}
 
 			function isAuthenticated(){
-
+				return sessionService.userId!=null
 			}
 
 			function isAuthorised(roles){
-				
+				var r=false
+				roles.forEach(function(e){
+					if (sessionService.userRoles.includes(e)) r=true;
+				})				
+				return r
 			}
 		}
 })();
