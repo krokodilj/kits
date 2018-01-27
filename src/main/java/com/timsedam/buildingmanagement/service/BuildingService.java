@@ -86,5 +86,9 @@ public class BuildingService {
     	}
     	return false;
     }
+
+	public List<Building> findAllByManager(long userId) {
+		return buildingRepository.findAllByManagerId(userId);
+	}
    
 }
