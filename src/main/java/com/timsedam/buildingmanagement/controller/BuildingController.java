@@ -5,6 +5,9 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.timsedam.buildingmanagement.exceptions.UserMissingException;
+import com.timsedam.buildingmanagement.model.User;
+import com.timsedam.buildingmanagement.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,10 +38,13 @@ public class BuildingController {
     @Autowired
     private BuildingMapper buildingMapper;
 
+    @Autowired
+	private UserService userService;
+
     @PostMapping(consumes = "application/json")
     public ResponseEntity<?> create(
-            @Valid @RequestBody BuildingCreateDTO buildingCreateDTO, BindingResult validationResult) 
-            		throws BuildingExistsException {
+            @Valid @RequestBody BuildingCreateDTO buildingCreateDTO, BindingResult validationResult)
+			throws BuildingExistsException, UserMissingException {
 
     	if (validationResult.hasErrors()) {
         	String errorMessage = validationResult.getFieldError().getDefaultMessage();
@@ -46,6 +52,8 @@ public class BuildingController {
     	}
     	else {
     		Building building = buildingMapper.toModel(buildingCreateDTO);
+    		User m = userService.findOne((long)buildingCreateDTO.getManagerId());
+    		building.setManager(m);
     		Building savedBuilding = buildingService.create(building);
 
     		return new ResponseEntity<Long>(savedBuilding.getId(), HttpStatus.CREATED);

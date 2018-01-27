@@ -1,6 +1,6 @@
 (function(){
 	angular
-		.module('kits.create_building',['model.service.building'])
+		.module('kits.create_building',['model.service.building','model.service.user'])
 		.config(['$routeProvider',function($routeProvider){
 			$routeProvider
 				.when('/create_building',{
@@ -9,7 +9,8 @@
 					controllerAs: "vm"
 				})
 		}])
-		.controller('CreateBuildingController',['buildingService',function(buildingService){
+		.controller('CreateBuildingController',['buildingService','userService','toastr'
+				,function(buildingService,userService,toastr){
 
 			var vm = this;
 
@@ -18,14 +19,31 @@
 				address:"",
 				country:"",
 				apartmentCount:0,
-				description:""
+				description:"",
+				managerId:undefined
 			}
 
 			vm.create = createBuilding
 
+			userService.getManagers()
+				.then(function(response){
+					if(response.error){
+						toastr.error("Error fetching managers")
+					}else{
+						vm.managers=response.data
+					}
+				})
+
 			function createBuilding(building){
-				alert(JSON.stringify(building))
-				//buildingService.create(building)	
+				
+				buildingService.create(building)
+					.then(function(response){
+						if(response.error){
+							toastr.error("Error creating building")
+						}else{
+							toastr.success("Building successfully created")
+						}
+					})
 			}
 
 		}])

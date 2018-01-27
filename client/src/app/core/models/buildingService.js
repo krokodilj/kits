@@ -6,22 +6,19 @@
 	function buildingService($http){
 
 		return{
-			create : create,
-			remove : remove
+			create : create
 		}
 
-		function create(user){
+		function create(building){
 
-			return $http
-					.post('/user',user)
+			var promise= $http
+					.post('http://localhost:8080/api/buildings/',building)
 					.then(function(res){
-						return res.data
+						return {data:res.data}
+					},function(err){
+						return {error:true,data:err.data}
 					})
-
-		}
-
-		function remove(user){
-
+			return promise
 		}
 
 	}

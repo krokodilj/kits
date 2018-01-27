@@ -2,15 +2,12 @@ package com.timsedam.buildingmanagement.controller;
 
 import javax.validation.Valid;
 
+import com.timsedam.buildingmanagement.dto.response.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.timsedam.buildingmanagement.dto.request.UserRegisterDTO;
 import com.timsedam.buildingmanagement.exceptions.RoleInvalidException;
@@ -18,6 +15,9 @@ import com.timsedam.buildingmanagement.exceptions.UserExistsException;
 import com.timsedam.buildingmanagement.mapper.UserMapper;
 import com.timsedam.buildingmanagement.model.User;
 import com.timsedam.buildingmanagement.service.ManagerService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/managers/")
@@ -44,6 +44,16 @@ public class ManagerController {
 			return new ResponseEntity<Long>(savedManager.getId(), HttpStatus.CREATED);
 		}
 
+	}
+
+	@GetMapping(produces="application/json")
+	public ResponseEntity<List<UserDTO>> get(){
+		List<User> managers = managerService.getAll();
+		List<UserDTO> managerDTOs = new ArrayList<UserDTO>();
+		for (User u: managers ) {
+			managerDTOs.add(userMapper.toDto(u));
+		}
+		return new ResponseEntity<List<UserDTO>>(managerDTOs,HttpStatus.OK);
 	}
 
 	/**

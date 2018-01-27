@@ -26,6 +26,15 @@
       <textarea ng-model="vm.building.description" required></textarea>
     </md-input-container>
     <br>
+    <md-input-container>
+          <label>Manager</label>
+          <md-select ng-model="vm.building.managerId">
+            <md-option ng-repeat="m in vm.managers" ng-value="m.id" required>
+              {{m.username}}
+            </md-option>
+          </md-select>
+    </md-input-container>
+    <br>
     <md-button class="md-raised" type="submit" ng-disabled="createBuildingForm.$invalid">CREATE</md-button>
   </form>
 </md-content>
