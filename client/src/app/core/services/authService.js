@@ -17,7 +17,7 @@
 			function login (data){
 
 				var promise = $http
-					.post('http://localhost:8080/api/auth/login',data)
+					.post('/api/auth/login',data)
 					.then(function(res){
 						sessionService.createSession(res.data)//200
 						return {data:res.data}

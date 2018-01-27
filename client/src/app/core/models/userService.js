@@ -27,7 +27,7 @@
 
 		function getManagers(){
 			var promise = $http
-							.get('http://localhost:8080/api/managers/')
+							.get('/api/managers/')
 							.then(function(response){
 								return {data:response.data}
 							},function(error){
