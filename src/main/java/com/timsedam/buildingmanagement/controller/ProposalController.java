@@ -26,6 +26,7 @@ import com.timsedam.buildingmanagement.exceptions.ReportMissingException;
 import com.timsedam.buildingmanagement.exceptions.ReportNotAttachedToBuildingException;
 import com.timsedam.buildingmanagement.exceptions.UserMissingException;
 import com.timsedam.buildingmanagement.exceptions.UserNotResidentException;
+import com.timsedam.buildingmanagement.exceptions.UserNotResidentOrApartmentOwnerException;
 import com.timsedam.buildingmanagement.mapper.ProposalMapper;
 import com.timsedam.buildingmanagement.model.Building;
 import com.timsedam.buildingmanagement.model.Proposal;
@@ -56,8 +57,9 @@ public class ProposalController {
 	private ProposalMapper proposalMapper;
 	
 	@PostMapping(consumes = "application/json", produces = "application/json")
-	public ResponseEntity<?> create(@Valid @RequestBody ProposalCreateDTO proposalCreateDTO, BindingResult validationResult, Principal principal) 
-			throws UserMissingException, BuildingMissingException, ReportMissingException, UserNotResidentException, ReportNotAttachedToBuildingException {		
+	public ResponseEntity<?> create(@Valid @RequestBody ProposalCreateDTO proposalCreateDTO, BindingResult validationResult, Principal principal)
+			throws UserMissingException, BuildingMissingException, ReportMissingException, 
+			UserNotResidentOrApartmentOwnerException, ReportNotAttachedToBuildingException {		
 		if (validationResult.hasErrors()) {
 			String errorMessage = validationResult.getFieldError().getDefaultMessage();
 			return new ResponseEntity<>(errorMessage, HttpStatus.UNPROCESSABLE_ENTITY);
@@ -121,10 +123,10 @@ public class ProposalController {
 	}
 	
 	/**
-	 * Handles UserNotResidentException that can happen when calling ProposalService.create(proposal)
+	 * Handles UserNotResidentOrApartmentOwnerException that can happen when calling ProposalService.create(proposal)
 	 */
-	@ExceptionHandler(UserNotResidentException.class)
-	public ResponseEntity<String> userNotResidentException(final UserNotResidentException e) {
+	@ExceptionHandler(UserNotResidentOrApartmentOwnerException.class)
+	public ResponseEntity<String> userNotResidentOrApartmentOwnerException(final UserNotResidentOrApartmentOwnerException e) {
 		return new ResponseEntity<String>("User with id: " + e.getUserId() + " is not a Resident or Owner"
 				+ " in Building with id: " + e.getBuildingId(), HttpStatus.UNPROCESSABLE_ENTITY);
 	} 

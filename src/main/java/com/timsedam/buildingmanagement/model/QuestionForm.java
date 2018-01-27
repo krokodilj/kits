@@ -15,7 +15,7 @@ public class QuestionForm {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+	private Long id;
 	
 	@OneToMany(mappedBy = "questionForm")
 	private List<Question> questions;
@@ -25,6 +25,10 @@ public class QuestionForm {
 	
 	@ManyToOne
 	private Building building;
+	
+	private String title;
+	
+	private String content;
 	
 	private QuestionFormStatus status;
 	
@@ -38,22 +42,26 @@ public class QuestionForm {
 		super();
 	}
 
-	public QuestionForm(List<Question> questions, User creator, QuestionFormStatus status, LocalDateTime openedAt,
-			LocalDateTime startedAt, LocalDateTime closedAt) {
+	public QuestionForm(List<Question> questions, User creator, Building building, String title,
+			String content, QuestionFormStatus status, LocalDateTime openedAt, LocalDateTime startedAt,
+			LocalDateTime closedAt) {
 		super();
 		this.questions = questions;
 		this.creator = creator;
+		this.building = building;
+		this.title = title;
+		this.content = content;
 		this.status = status;
 		this.openedAt = openedAt;
 		this.startedAt = startedAt;
 		this.closedAt = closedAt;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -71,6 +79,30 @@ public class QuestionForm {
 
 	public void setCreator(User creator) {
 		this.creator = creator;
+	}
+
+	public Building getBuilding() {
+		return building;
+	}
+
+	public void setBuilding(Building building) {
+		this.building = building;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
 	}
 
 	public QuestionFormStatus getStatus() {
@@ -104,11 +136,5 @@ public class QuestionForm {
 	public void setClosedAt(LocalDateTime closedAt) {
 		this.closedAt = closedAt;
 	}
-
-	@Override
-	public String toString() {
-		return "QuestionForm [id=" + id + ", questions=" + questions + ", creator=" + creator + ", status=" + status
-				+ ", openedAt=" + openedAt + ", startedAt=" + startedAt + ", closedAt=" + closedAt + "]";
-	}
-
+	
 }

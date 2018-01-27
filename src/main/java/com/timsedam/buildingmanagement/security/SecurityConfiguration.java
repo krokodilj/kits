@@ -81,6 +81,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/api/residents/**").hasAuthority("UPDATE_RESIDENT")
 
 				.antMatchers("/api/buildings/").hasAuthority("CREATE_BUILDING")
+				
+				.antMatchers("/api/question_forms/").hasAuthority("CREATE_QUESTIONFORM")
+				
+				.antMatchers("/api/questions/**").hasAuthority("CREATE_QUESTION")
 
 				.antMatchers("/api/residences/").hasAuthority("CREATE_RESIDENCE");
 

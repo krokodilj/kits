@@ -9,22 +9,22 @@ import javax.persistence.OneToMany;
 public class ChoiceQuestion extends Question {
 	
 	@OneToMany(mappedBy = "questionAnswered")
-	private List<OfferedAnswer> offeredAnswers;
+	private List<Answer> offeredAnswers;
 	
 	public ChoiceQuestion() {
 		super();
 	}
 
-	public ChoiceQuestion(List<OfferedAnswer> offeredAnswers) {
+	public ChoiceQuestion(List<Answer> offeredAnswers) {
 		super();
 		this.offeredAnswers = offeredAnswers;
 	}
 
-	public List<OfferedAnswer> getOfferedAnswers() {
+	public List<Answer> getOfferedAnswers() {
 		return offeredAnswers;
 	}
 
-	public void setOfferedAnswers(List<OfferedAnswer> offeredAnswers) {
+	public void setOfferedAnswers(List<Answer> offeredAnswers) {
 		this.offeredAnswers = offeredAnswers;
 	}
 
