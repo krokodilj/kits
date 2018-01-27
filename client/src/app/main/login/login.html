@@ -11,6 +11,8 @@
       <label>Password</label>
       <input ng-model="vm.user.password" type="password">
     </md-input-container>
+    <br>
+    <p ng-show="vm.loginError.show">{{vm.loginError.message}}</p>
   </div>
 </md-content>
 <md-button class="md-raised" ng-click="vm.login(vm.user)" >Login</md-button>
