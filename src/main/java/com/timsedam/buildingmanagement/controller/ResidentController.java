@@ -40,11 +40,6 @@ public class ResidentController {
     @Autowired
     private UserMapper userMapper;
 
-    /**
-     * Register new resident
-     * @param userRegisterDTO
-     * @return resident id
-     */
     @PostMapping
     public ResponseEntity<?> create(@Valid @RequestBody UserRegisterDTO userRegisterDTO, BindingResult validationResult) 
     		throws UserExistsException, RoleInvalidException
@@ -61,17 +56,6 @@ public class ResidentController {
         }
     }
 
-    /**
-     * Set new residence to its new resident
-     * if resident has another residence delete it
-     * @param residentId
-     * @param residenceId
-     * @return
-     * @throws UserExistsException
-     * @throws RoleInvalidException
-     * @throws UserMissingException
-     * @throws ResidenceMissingException
-     */
     @PutMapping(value = "/{residentId}/add_to_residence/{residenceId}")
     public ResponseEntity<?> addBuilding(@PathVariable long residentId, @PathVariable long residenceId) 
     		throws UserExistsException, RoleInvalidException, UserMissingException, ResidenceMissingException {
@@ -79,18 +63,6 @@ public class ResidentController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    /**
-     * Set residence to its new owner,
-     * if residence has owner switch owners
-     * @param residentId
-     * @param residenceId
-     * @return
-     * @throws UserExistsException 
-     * @throws RoleInvalidException 
-     * @throws UserMissingException 
-     * @throws ResidenceMissingException 
-     * @throws ResidenceExistsException 
-     */
     @PutMapping(value = "/{residentId}/add_to_owner/{residenceId}")
     public ResponseEntity<?> addToOwner(@PathVariable long residentId, @PathVariable long residenceId) 
     		throws UserExistsException, RoleInvalidException, UserMissingException, ResidenceMissingException, ResidenceExistsException {
@@ -102,7 +74,6 @@ public class ResidentController {
         residenceService.save(residence);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    
     
     /**
 	 * Handles UserMissingException that can happen when calling:
@@ -131,6 +102,5 @@ public class ResidentController {
 	public ResponseEntity<String> userExistsException(final UserExistsException e) {
 		return new ResponseEntity<String>("Resident with username: " + e.getUsername() + " already exists.", HttpStatus.NOT_FOUND);
 	}
-    
 
 }

@@ -19,6 +19,8 @@ insert into kts_test.permission (id, name) values (8, 'CREATE_PROPOSAL');
 insert into kts_test.permission (id, name) values (9, 'FORWARD_REPORT');
 insert into kts_test.permission (id, name) values (10, 'PROPOSAL_VOTE');
 insert into kts_test.permission (id, name) values (11, 'CREATE_ANNOUNCEMENT');
+insert into kts_test.permission (id, name) values (12, 'CREATE_QUESTIONFORM');
+insert into kts_test.permission (id, name) values (13, 'CREATE_QUESTION');
 
 truncate kts_test.role_permissions; 
 insert into kts_test.role_permissions (role_id, permissions_id) values (1, 1);
@@ -33,6 +35,8 @@ insert into kts_test.role_permissions (role_id, permissions_id) values (2, 9);
 insert into kts_test.role_permissions (role_id, permissions_id) values (3, 2);
 insert into kts_test.role_permissions (role_id, permissions_id) values (3, 8);
 insert into kts_test.role_permissions (role_id, permissions_id) values (3, 9);
+insert into kts_test.role_permissions (role_id, permissions_id) values (3, 12);
+insert into kts_test.role_permissions (role_id, permissions_id) values (3, 13);
 insert into kts_test.role_permissions (role_id, permissions_id) values (4, 3);
 insert into kts_test.role_permissions (role_id, permissions_id) values (4, 8);
 insert into kts_test.role_permissions (role_id, permissions_id) values (4, 9);
@@ -58,15 +62,15 @@ insert into kts_test.user_roles (user_id, roles_id) values (4, 1);
 insert into kts_test.user_roles (user_id, roles_id) values (5, 1);
 
 insert into kts_test.user (id, user_type, email, username, password, pib, location, name, phone_number) values 
-(6, 'COMPANY', 'company1@gmail.com', 'company1', 'company1', '54-577-9306', 'North Carolina', 'Eazzy', '336-478-1098');
+  (6, 'COMPANY', 'company1@gmail.com', 'company1', 'company1', '54-577-9306', 'North Carolina', 'Eazzy', '336-478-1098');
+insert into kts_test.user (id, user_type, email, username, password, pib, location, name, phone_number) values  
+  (7, 'COMPANY', 'company2@gmail.com', 'company2', 'company2', '07-723-4768', 'California', 'Jabberbean', '408-797-7052');
 insert into kts_test.user (id, user_type, email, username, password, pib, location, name, phone_number) values 
-(7, 'COMPANY', 'company2@gmail.com', 'company2', 'company2', '07-723-4768', 'California', 'Jabberbean', '408-797-7052');
+  (8, 'COMPANY', 'company3@gmail.com', 'company3', 'company3', '55-439-5231', 'Florida', 'Brightbean', '561-630-1295');
 insert into kts_test.user (id, user_type, email, username, password, pib, location, name, phone_number) values 
-(8, 'COMPANY', 'company3@gmail.com', 'company3', 'company3', '55-439-5231', 'Florida', 'Brightbean', '561-630-1295');
+  (9, 'COMPANY', 'company4@gmail.com', 'company4', 'company4', '65-952-2982', 'New York', 'Thoughtbeat', '585-582-5869');
 insert into kts_test.user (id, user_type, email, username, password, pib, location, name, phone_number) values 
-(9, 'COMPANY', 'company4@gmail.com', 'company4', 'company4', '65-952-2982', 'New York', 'Thoughtbeat', '585-582-5869');
-insert into kts_test.user (id, user_type, email, username, password, pib, location, name, phone_number) values 
-(10, 'COMPANY', 'company5@gmail.com', 'company5', 'company5', '41-959-1194', 'District of Columbia', 'Gigazoom', '202-496-5590');
+  (10, 'COMPANY', 'company5@gmail.com', 'company5', 'company5', '41-959-1194', 'District of Columbia', 'Gigazoom', '202-496-5590');
 
 insert into kts_test.user_roles (user_id, roles_id) values (6, 2);
 insert into kts_test.user_roles (user_id, roles_id) values (7, 2);
@@ -232,3 +236,14 @@ insert into kts_test.announcement (id, content, posted_at, building_id, poster_i
 
 truncate kts_test.meeting;
 insert into kts_test.meeting (id, location, `record`, starts_at, building_id) values (1, "location", "record", "2019-01-23 14:48:46", 1);
+
+truncate kts_test.question_form;
+insert into kts_test.question_form (id, started_at, status, building_id, creator_id, content, title) values
+  (1, "2018-01-01 14:00:00", 1, 1, 16, "CONTENT", "TITLE");
+  
+truncate kts_test.question;
+insert into kts_test.question (id, dtype, question_text, question_form_id) values (1, "ChoiceQuestion", "QUESTION TEXT", 1);
+
+truncate kts_test.answer;
+insert into kts_test.answer (id, dtype, content, question_answered_id) values (1, "OfferedAnswer", "QUESTION", 1);
+

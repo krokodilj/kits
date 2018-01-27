@@ -11,7 +11,7 @@ public class Answer {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+	private Long id;
 	
 	@ManyToOne
 	private User respondant;
@@ -19,21 +19,25 @@ public class Answer {
 	@ManyToOne
 	private Question questionAnswered;
 	
+	private String content;
+	
 	public Answer() {
 		super();
 	}
 
-	public Answer(User respondant, Question questionAnswered) {
+	public Answer(Long id, User respondant, Question questionAnswered, String content) {
 		super();
+		this.id = id;
 		this.respondant = respondant;
 		this.questionAnswered = questionAnswered;
+		this.content = content;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -43,6 +47,14 @@ public class Answer {
 
 	public void setRespondant(User respondant) {
 		this.respondant = respondant;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
 	}
 
 	public Question getQuestionAnswered() {
@@ -55,7 +67,8 @@ public class Answer {
 
 	@Override
 	public String toString() {
-		return "Answer [id=" + id + ", respondant=" + respondant + ", questionAnswered=" + questionAnswered + "]";
+		return "Answer [id=" + id + ", respondant=" + respondant + ", questionAnswered=" + questionAnswered
+				+ ", content=" + content + "]";
 	}
-	
+
 }

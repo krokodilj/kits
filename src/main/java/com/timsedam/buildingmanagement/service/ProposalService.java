@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.timsedam.buildingmanagement.exceptions.ProposalMissingException;
 import com.timsedam.buildingmanagement.exceptions.ReportNotAttachedToBuildingException;
-import com.timsedam.buildingmanagement.exceptions.UserNotResidentException;
+import com.timsedam.buildingmanagement.exceptions.UserNotResidentOrApartmentOwnerException;
 import com.timsedam.buildingmanagement.model.Building;
 import com.timsedam.buildingmanagement.model.Proposal;
 import com.timsedam.buildingmanagement.model.Report;
@@ -26,14 +26,13 @@ public class ProposalService {
 	@Autowired
 	private ReportService reportService;
 	
-	public Proposal create(Proposal proposal) throws UserNotResidentException, ReportNotAttachedToBuildingException {
+	public Proposal create(Proposal proposal) throws UserNotResidentOrApartmentOwnerException, ReportNotAttachedToBuildingException {
 		if(proposal.getAttachedReport() != null) {
-			// user is not a resident or owner in the building he submitted a proposal to
 			User proposer = proposal.getProposer();
 			Report report = proposal.getAttachedReport();
 			Building building = proposal.getBuilding();
 			if(!buildingService.isResidentOrApartmentOwner(proposer, building))
-				throw new UserNotResidentException(proposer.getId(), building.getId());
+				throw new UserNotResidentOrApartmentOwnerException(proposer.getId(), building.getId());
 			if(!reportService.isAttachedToBuilding(report, building))
 				throw new ReportNotAttachedToBuildingException(report.getId(), building.getId());
 		}
