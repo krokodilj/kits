@@ -23,7 +23,7 @@ public class AuthController {
     @Autowired
     AuthService authService;
 
-    @PostMapping(value = "/login", consumes = "application/json")
+    @PostMapping(value = "/login", consumes = "application/json", produces = "text/plain")
     public ResponseEntity<?> login(@Valid @RequestBody UserLoginDTO userLoginDTO, BindingResult validationResult) throws UserMissingException{
         if (validationResult.hasErrors()) {
     		String errorMessage = validationResult.getFieldError().getDefaultMessage();
