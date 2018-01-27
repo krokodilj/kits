@@ -3,9 +3,9 @@
 		module('kits')
 		.controller('AppController',appController);
 
-	function appController(){
-		//ovde na scope podatke o sesiji
-		//da moze da se korisi iz html templejta
+	function appController($rootScope,authService){
+		$rootScope.isAuthorised=authService.isAuthorised
+		$rootScope.isAuthenticated=authService.isAuthenticated
 	}
 
 })();

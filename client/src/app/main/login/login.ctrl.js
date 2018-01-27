@@ -27,10 +27,14 @@
 				
 			function login(user){
 				authService.login(user).then
-					(function(success){
-						console.log("success")
-					},function(error){
-						console.log("error")
+					(function(response){
+						if(response.error){
+							vm.loginError.message=response.data
+							vm.loginError.show = true
+						}else{
+							//ovde href	
+							console.log(response)	
+						}						
 					})
 			}
 
