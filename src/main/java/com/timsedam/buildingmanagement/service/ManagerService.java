@@ -9,6 +9,9 @@ import com.timsedam.buildingmanagement.model.User;
 import com.timsedam.buildingmanagement.repository.RoleRepository;
 import com.timsedam.buildingmanagement.repository.UserRepository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class ManagerService {
 	
@@ -29,6 +32,15 @@ public class ManagerService {
 		Role role = roleRepository.findOneByName("MANAGER");
 		user.getRoles().add(role);
 		return userRepository.save(user);
+	}
+
+	public List<User> getAll(){
+		ArrayList<Role> r = new ArrayList<Role>();
+		Role ro=new Role();
+		ro.setId((long)3);
+		//ro.setName("MANAGER");
+		r.add(ro);
+		return userRepository.findAllByRoles(r);
 	}
 
 }

@@ -9,6 +9,7 @@
 			'toastr',
 			'kits.login',
 			'kits.register',
-			'kits.report'
+			'kits.report',
+			'kits.create_building'
 		])
 })();

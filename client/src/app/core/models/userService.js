@@ -1,13 +1,14 @@
 (function(){
 	angular
-		.module('model.service',[])
-		.factory('userService',['$http','userService',userService])
+		.module('model.service.user',[])
+		.factory('userService',['$http',userService])
 
 	function userService($http){
 
 		return{
 			create : create,
-			remove : remove
+			remove : remove,
+			getManagers	: getManagers
 		}
 
 		function create(user){
@@ -22,6 +23,17 @@
 
 		function remove(user){
 
+		}
+
+		function getManagers(){
+			var promise = $http
+							.get('http://localhost:8080/api/managers/')
+							.then(function(response){
+								return {data:response.data}
+							},function(error){
+								return { error :true , data :error.data}
+							})
+			return promise
 		}
 
 	}

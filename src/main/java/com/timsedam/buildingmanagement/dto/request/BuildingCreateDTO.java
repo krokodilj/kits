@@ -21,14 +21,18 @@ public class BuildingCreateDTO {
     @NotNull(message = "'description' not provided")
     private String description;
 
+    @NotNull(message = "'manager' not provided")
+    private int managerId;
+
     public BuildingCreateDTO(){}
 
-    public BuildingCreateDTO(String city, String address, String country, int apartmentCount, String description){
+    public BuildingCreateDTO(String city, String address, String country, int apartmentCount, String description,int managerId){
         this.city = city;
         this.address = address;
         this.country = country;
         this.apartmentCount = apartmentCount;
         this.description = description;
+        this.managerId = managerId;
     }
 
 
@@ -70,6 +74,14 @@ public class BuildingCreateDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getManagerId() {
+        return managerId;
+    }
+
+    public void setManagerId(int managerId) {
+        this.managerId = managerId;
     }
 
     @Override

@@ -57,7 +57,7 @@ public class BuildingControllerTest {
     @Test
     public void createBuilding(){
         BuildingCreateDTO buildingCreateDTO = 
-        	new BuildingCreateDTO("sabac", "ps541", "serbia", 123, "zelenazgrada");
+        	new BuildingCreateDTO("sabac", "ps541", "serbia", 123, "zelenazgrada",11);
         
         ResponseEntity<Long> responseEntity = 
         	restTemplate.postForEntity(
@@ -86,7 +86,7 @@ public class BuildingControllerTest {
     @Test
     public void createBuildingUnauthorized(){
         BuildingCreateDTO buildingCreateDTO = 
-        	new BuildingCreateDTO("sabac", "ps541", "macva", 123, "zelenazgrada");
+        	new BuildingCreateDTO("sabac", "ps541", "macva", 123, "zelenazgrada",11);
         
         ResponseEntity responseEntity = 
         	restTemplate.postForEntity(
@@ -104,7 +104,7 @@ public class BuildingControllerTest {
 	@Test
 	public void registerDuplicate() throws Exception {
         BuildingCreateDTO buildingCreateDTO = 
-            	new BuildingCreateDTO("sabac", "ps541", "macva", 123, "zelenazgrada");
+            	new BuildingCreateDTO("sabac", "ps541", "macva", 123, "zelenazgrada",11);
 		
 		ResponseEntity<Long> responseEntityValidRequest = 
 			restTemplate.postForEntity(
@@ -134,7 +134,7 @@ public class BuildingControllerTest {
 	@Test
 	public void registerUsernameMissing() throws Exception {
         BuildingCreateDTO buildingCreateDTO = 
-        	new BuildingCreateDTO(null, "ps541", "macva", 123, "zelenazgrada");
+        	new BuildingCreateDTO(null, "ps541", "macva", 123, "zelenazgrada",11);
 		
 		ResponseEntity<String> responseEntity = 
 				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(buildingCreateDTO, "admin1", "admin1"), String.class);
@@ -150,7 +150,7 @@ public class BuildingControllerTest {
 	@Test
 	public void registerAddressMissing() throws Exception {
         BuildingCreateDTO buildingCreateDTO = 
-        	new BuildingCreateDTO("sabac", null, "macva", 123, "zelenazgrada");
+        	new BuildingCreateDTO("sabac", null, "macva", 123, "zelenazgrada",11);
 		
 		ResponseEntity<String> responseEntity = 
 				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(buildingCreateDTO, "admin1", "admin1"), String.class);
@@ -166,7 +166,7 @@ public class BuildingControllerTest {
 	@Test
 	public void registerContryMissing() throws Exception {
         BuildingCreateDTO buildingCreateDTO = 
-        	new BuildingCreateDTO("sabac", "ps541", null, 123, "zelenazgrada");
+        	new BuildingCreateDTO("sabac", "ps541", null, 123, "zelenazgrada",11);
 		
 		ResponseEntity<String> responseEntity = 
 				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(buildingCreateDTO, "admin1", "admin1"), String.class);
@@ -182,7 +182,7 @@ public class BuildingControllerTest {
 	@Test
 	public void registerApartmentCountNegative() throws Exception {
         BuildingCreateDTO buildingCreateDTO = 
-        	new BuildingCreateDTO("sabac", "ps541", "macva", -1, "zelenazgrada");
+        	new BuildingCreateDTO("sabac", "ps541", "macva", -1, "zelenazgrada",11);
 		
 		ResponseEntity<String> responseEntity = 
 				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(buildingCreateDTO, "admin1", "admin1"), String.class);
@@ -198,7 +198,7 @@ public class BuildingControllerTest {
 	@Test
 	public void registerDescriptionMissing() throws Exception {
         BuildingCreateDTO buildingCreateDTO = 
-        	new BuildingCreateDTO("sabac", "ps541", "macva", 123, null);
+        	new BuildingCreateDTO("sabac", "ps541", "macva", 123, null,11);
 		
 		ResponseEntity<String> responseEntity = 
 				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(buildingCreateDTO, "admin1", "admin1"), String.class);
