@@ -1,2 +1,34 @@
-<lf-ng-md-file-input accept="image/*" lf-files="files08" lf-option="optoin08" lf-placeholder="Pick Image" lf-browse-label="Search" lf-remove-label="Delete" multiple drag preview ng-disabled="disabled06"></lf-ng-md-file-input>
- 
+<div layout="row">
+    <div flex="20">
+
+    </div>
+    <div flex="70">
+        <h1>Create Report</h1>
+
+        <div layout="row">
+            <md-input-container flex="30">
+                <label>Building</label>
+                <md-select name="type" ng-model="vm.building" required>
+                    <md-option value="app">Application</md-option>
+                    <md-option value="web">Website</md-option>
+                </md-select>
+            </md-input-container>
+
+            <md-input-container flex="70">
+                <label>Description</label>
+                <input required name="clientName" ng-model="vm.description">
+                <div ng-messages="projectForm.clientName.$error">
+                    <div ng-message="required">This is required.</div>
+                </div>
+            </md-input-container>
+        </div>
+
+        <lf-ng-md-file-input lf-files='files' accept="image/*" lf-placeholder="Pick Image" lf-browse-label="Search" lf-remove-label="Delete" multiple
+            drag preview ></lf-ng-md-file-input>
+        <hr/><br/>
+        <md-button class="md-raised" ng-click="vm.sendReport()">Send Report</md-button>
+    </div>
+    <div flex hide-sm hide-xs>
+
+    </div>
+</div>

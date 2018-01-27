@@ -1,20 +1,26 @@
 package com.timsedam.buildingmanagement.dto.response;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import com.timsedam.buildingmanagement.model.Comment;
-import com.timsedam.buildingmanagement.model.Role;
 
 public class UserDTO {
 	
 	private Long id;
 	private String username;
 	private String email;
-	private ArrayList<String> pictures;   
-    private Role role;
-    private List<Comment> comments;
+	private List<String> pictures;   
+	private List<String> roles; 
     
+	public UserDTO(){}
+	
+	public UserDTO(Long id, String username, String email, List<String> pictures, List<String> roles) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.email = email;
+		this.pictures = pictures;
+		this.roles = roles;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -39,34 +45,21 @@ public class UserDTO {
 		this.email = email;
 	}
 
-	public ArrayList<String> getPictures() {
+	public List<String> getPictures() {
 		return pictures;
 	}
 
-	public void setPictures(ArrayList<String> pictures) {
+	public List<String> getRoles() {
+		return roles;
+	}
+
+	public void setPictures(List<String> pictures) {
 		this.pictures = pictures;
 	}
 
-	public Role getRole() {
-		return role;
+	public void setRoles(List<String> roles) {
+		this.roles = roles;
 	}
-
-	public void setRole(Role role) {
-		this.role = role;
-	}
-
-	public List<Comment> getComments() {
-		return comments;
-	}
-
-	public void setComments(List<Comment> comments) {
-		this.comments = comments;
-	}
-
-	@Override
-	public String toString() {
-		return "UserDTO [id=" + id + ", username=" + username + ", email=" + email + ", pictures=" + pictures
-				+ ", role=" + role + ", comments=" + comments + "]";
-	}
+	
 
 }

@@ -3,6 +3,7 @@ var app            = express();
 var methodOverride = require('method-override');
 
 var port = process.env.PORT || 8081; // set our port
+
 var staticdir = process.env.NODE_ENV === 'production' ? 'dist.prod' : 'dist.dev'; // get static files dir
 
 

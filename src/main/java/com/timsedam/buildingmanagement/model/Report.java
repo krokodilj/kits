@@ -26,14 +26,15 @@ public class Report {
 	@Lob
 	private String description;
 
+	@ManyToOne
+	private Building location;
+	
+	@Lob
 	@ElementCollection
 	private List<String> pictures;
 	
 	@ManyToOne
 	private User sender;
-	
-	@ManyToOne
-	private Building location;
 	
 	@OneToMany(mappedBy = "reportCommented", fetch = FetchType.LAZY)
 	private List<Comment> comments;

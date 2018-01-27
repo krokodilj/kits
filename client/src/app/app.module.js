@@ -6,6 +6,7 @@
 			'ngMaterial',
 			'ngMessages',
 			'lfNgMdFileInput',
+			'toastr',
 			'kits.login',
 			'kits.register',
 			'kits.report'

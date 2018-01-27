@@ -1,5 +1,7 @@
 package com.timsedam.buildingmanagement.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,10 @@ public class CommentService {
 	
 	public Comment save(Comment comment) {
 		return commentRepository.save(comment);
+	}
+
+	public List<Comment> findAllByReport(long reportId) {
+		return commentRepository.findAllByReportCommentedId(reportId);
 	}
 	
 }
