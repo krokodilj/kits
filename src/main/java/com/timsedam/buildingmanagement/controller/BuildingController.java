@@ -74,6 +74,20 @@ public class BuildingController {
         BuildingDTO buildingDTO = buildingMapper.toDto(building);
         return new ResponseEntity<BuildingDTO>(buildingDTO, HttpStatus.OK);
     }
+    
+    @GetMapping(value = "getManagerBuildings/{userId}", produces = "application/json")
+    public ResponseEntity<?> getManagerBuildings(@PathVariable long userId){
+    	List<Building> buildings = buildingService.findAllByManager(userId);
+        List<BuildingDTO> buildingsDTO = buildingMapper.toDto(buildings);
+        return new ResponseEntity<List<BuildingDTO>>(buildingsDTO, HttpStatus.OK);
+    }
+    
+    @GetMapping(value = "getUserBuildings/{userId}", produces = "application/json")
+    public ResponseEntity<?> getUserBuildings(@PathVariable long userId){
+    	List<Building> buildings = buildingService.findAllByManager(userId);
+        List<BuildingDTO> buildingsDTO = buildingMapper.toDto(buildings);
+        return new ResponseEntity<List<BuildingDTO>>(buildingsDTO, HttpStatus.OK);
+    }
 
 	/**
 	 * Handles BuildingExistsException that can happen when calling BuildingService.save(building)
