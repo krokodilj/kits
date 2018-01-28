@@ -16,6 +16,8 @@
 			'kits.manager_meetings',
 			'kits.building_reports',
 			'kits.buildings',
-			'kits.building'
+			'kits.building',
+			'kits.display_report',
+			'kits.buildings'
 		])
 })();

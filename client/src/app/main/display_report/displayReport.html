@@ -1,0 +1,39 @@
+<div layout="row">
+<md-card ng-repeat="image in vm.report.pictures">
+     <md-card-title>
+     	<md-card-title-media>
+            <div class="md-media-lg card-media"><img data-ng-src="{{image}}" alt="&nbsp;No Images" data-err-src="assets/no-image.jpg"/></div>
+        </md-card-title-media>
+   	</md-card-title>
+</md-card>
+</div>
+<md-button class="md-warn md-raised md-hue-2" ng-show="ctrl.hasRole('COMPANY')">Send Bid</md-button>
+<div ng-cloak layout="column"><md-card>
+    <md-card-title>
+      <md-card-title-text>
+        <span class="md-headline">Report Details</span>
+      </md-card-title-text>
+    </md-card-title>
+	<md-card-content>
+          <label>Description: {{vm.report.description}}</label><br>
+          <label>Status: {{vm.report.status}}</label><br>
+          <label>Current holder: {{vm.report.currentHolder.forwardedTo.username}}</label>
+        </md-card-content>
+  </md-card>
+ </div>
+<div ng-cloak layout="column"><md-card>
+    <md-card-title>
+      <md-card-title-text>
+        <span class="md-headline">Building Details</span>
+      </md-card-title-text>
+    </md-card-title>
+	<md-card-content>
+          <label>Address: {{vm.report.location.address}}</label><br>
+          <label>City: {{vm.report.location.city}}</label><br>
+          <label>Current holder: {{vm.report.currentHolder.forwardedTo.username}}</label><br>
+          <label>Country: {{vm.report.location.country}}</label><br>
+          <label>Apartment Count: {{vm.report.location.apartmentCount}}; </label>
+          <label>Residences Count: {{vm.report.location.residences.length}}</label><br>
+        </md-card-content>
+  </md-card>
+ </div>

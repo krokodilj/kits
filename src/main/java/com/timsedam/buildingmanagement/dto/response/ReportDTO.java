@@ -7,25 +7,23 @@ public class ReportDTO {
 	private Long id;
 	private String status;
 	private String description;
-	private Long location;
+	private BuildingDTO location;
 	private List<String> pictures;
 	private Long senderId;
-	private Long currentHolder;
+	private ForwardDTO currentHolder;
 	private List<CommentDTO> comments;
 	
 	public ReportDTO(){}
 	
-	public ReportDTO(Long id, String status, String description, Long location, 
-			List<String> pictures, Long senderId, Long currentHolder, 
+	public ReportDTO(Long id, String status, String description, 
+			List<String> pictures, Long senderId, 
 			List<CommentDTO> comments) {
 		super();
 		this.id = id;
 		this.status = status;
 		this.description = description;
-		this.location = location;
 		this.pictures = pictures;
 		this.senderId = senderId;
-		this.currentHolder = currentHolder;
 		this.comments = comments;
 	}
 
@@ -53,11 +51,11 @@ public class ReportDTO {
 		this.description = description;
 	}
 
-	public Long getLocation() {
+	public BuildingDTO getLocation() {
 		return location;
 	}
 
-	public void setLocation(Long location) {
+	public void setLocation(BuildingDTO location) {
 		this.location = location;
 	}
 
@@ -77,11 +75,11 @@ public class ReportDTO {
 		this.senderId = senderId;
 	}
 
-	public Long getCurrentHolder() {
+	public ForwardDTO getCurrentHolder() {
 		return currentHolder;
 	}
 
-	public void setCurrentHolder(Long currentHolder) {
+	public void setCurrentHolder(ForwardDTO currentHolder) {
 		this.currentHolder = currentHolder;
 	}
 
