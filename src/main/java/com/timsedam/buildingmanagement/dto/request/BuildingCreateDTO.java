@@ -3,6 +3,7 @@ package com.timsedam.buildingmanagement.dto.request;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 public class BuildingCreateDTO {
 
@@ -23,6 +24,8 @@ public class BuildingCreateDTO {
 
     @NotNull(message = "'manager' not provided")
     private int managerId;
+
+    private List<String> pictures;
 
     public BuildingCreateDTO(){}
 
@@ -82,6 +85,14 @@ public class BuildingCreateDTO {
 
     public void setManagerId(int managerId) {
         this.managerId = managerId;
+    }
+
+    public List<String> getPictures() {
+        return pictures;
+    }
+
+    public void setPictures(List<String> pictures) {
+        this.pictures = pictures;
     }
 
     @Override
