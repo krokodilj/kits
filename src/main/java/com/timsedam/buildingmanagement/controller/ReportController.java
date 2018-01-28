@@ -26,6 +26,7 @@ import com.timsedam.buildingmanagement.dto.request.CommentCreateDTO;
 import com.timsedam.buildingmanagement.dto.request.ForwardCreateDTO;
 import com.timsedam.buildingmanagement.dto.request.ReportCreateDTO;
 import com.timsedam.buildingmanagement.dto.response.CommentDTO;
+import com.timsedam.buildingmanagement.dto.response.ReportDTO;
 import com.timsedam.buildingmanagement.exceptions.BidMissingException;
 import com.timsedam.buildingmanagement.exceptions.BuildingMissingException;
 import com.timsedam.buildingmanagement.exceptions.InvalidStatusException;
@@ -34,6 +35,7 @@ import com.timsedam.buildingmanagement.exceptions.UserMissingException;
 import com.timsedam.buildingmanagement.exceptions.UserNotReportHolderException;
 import com.timsedam.buildingmanagement.exceptions.UserNotResidentException;
 import com.timsedam.buildingmanagement.mapper.CommentMapper;
+import com.timsedam.buildingmanagement.mapper.ReportMapper;
 import com.timsedam.buildingmanagement.model.Bid;
 import com.timsedam.buildingmanagement.model.Building;
 import com.timsedam.buildingmanagement.model.Comment;
@@ -72,7 +74,10 @@ public class ReportController {
 	
 	@Autowired
     private CommentMapper commentMapper;
-
+	
+	@Autowired
+    private ReportMapper reportMapper;
+   
 	@PostMapping(consumes = "application/json", produces = "text/plain")
 	public ResponseEntity<?> create(Principal principal, @Valid @RequestBody ReportCreateDTO reportDTO,
 			BindingResult validationResult)
@@ -174,6 +179,14 @@ public class ReportController {
         
 		List<CommentDTO> commentsDTO = commentMapper.toDto(comments);
         return new ResponseEntity<List<CommentDTO>>(commentsDTO, HttpStatus.OK);
+    }
+	
+	@GetMapping(value = "getUserReports/{buildingId}", produces = "application/json")
+    public ResponseEntity<?> getUserReports(@PathVariable Long buildingId) throws ReportMissingException{
+		List<Report> reports = reportService.findAllByLocationId(buildingId);
+        
+		List<ReportDTO> reportsDTO = reportMapper.toDto(reports);
+        return new ResponseEntity<List<ReportDTO>>(reportsDTO, HttpStatus.OK);
     }
 
 	/**

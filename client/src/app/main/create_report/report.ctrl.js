@@ -10,9 +10,7 @@
                 })
         }])
         .controller('ReportController', ['reportService','$scope','toastr',
-                                         '$http', 
-                                         function (reportService,$scope, toastr, 
-                                        		 $http) {
+                                         function (reportService,$scope, toastr) {
             var vm = this;
             $scope.files = [];
             vm.photos = [];
