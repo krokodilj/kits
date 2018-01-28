@@ -75,9 +75,10 @@ public class BuildingController {
         return new ResponseEntity<BuildingDTO>(buildingDTO, HttpStatus.OK);
     }
     
-    @GetMapping(value = "getManagerBuildings/{userId}", produces = "application/json")
-    public ResponseEntity<?> getManagerBuildings(@PathVariable long userId){
-    	List<Building> buildings = buildingService.findAllByManager(userId);
+    @GetMapping(value = "getManagerBuildings/{username}", produces = "application/json")
+    public ResponseEntity<?> getManagerBuildings(@PathVariable String username) throws UserMissingException {
+    	User user = userService.findOneByUsername(username);
+    	List<Building> buildings = buildingService.findAllByManager(user.getId());
         List<BuildingDTO> buildingsDTO = buildingMapper.toDto(buildings);
         return new ResponseEntity<List<BuildingDTO>>(buildingsDTO, HttpStatus.OK);
     }

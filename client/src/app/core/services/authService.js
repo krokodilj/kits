@@ -38,7 +38,8 @@
 			function isAuthorised(roles){
 				var r=false
 				roles.forEach(function(e){
-					if (sessionService.userRoles.includes(e)) r=true;
+					if(sessionService.userRoles)
+						if(sessionService.userRoles.includes(e)) r=true;
 				})				
 				return r
 			}

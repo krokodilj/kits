@@ -44,3 +44,4 @@ mvnw.cmd
 /client/bower_components
 /client/dist.dev
 /client/dist.prod
+/client/package-lock.json

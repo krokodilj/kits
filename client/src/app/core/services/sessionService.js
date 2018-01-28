@@ -8,7 +8,7 @@
 			var self = this;
 			
 			self.userId=null;
-			self.userRole=null;
+			self.userRoles=null;
 
 			self.createSession = createSession;
 			self.destroySession = destroySession;

@@ -1,0 +1,49 @@
+<h1>Create Meeting</h1>
+<form name="createMeetingForm" ng-submit="vm.createMeeting()" novalidate>
+	<div layout="row">
+	    <md-input-container flex="100">
+	      <label>Building</label>
+	      <md-select name="type" ng-model="vm.building" required>
+	        <md-option ng-repeat="item in vm.buildings" value="{{item.id}}">{{item.address}} - {{item.city}}</md-option>
+	      </md-select>
+	    </md-input-container>
+	</div>
+	<div layout="row">
+	    <md-input-container flex="30">
+	      <label>Date</label>
+	        <md-datepicker name="createMeetingForm.date" ng-model="vm.date" md-placeholder="Date" md-min-date="vm.minDate" required flex></md-datepicker>
+	        <div ng-messages="createMeetingForm.date.$error">
+	          <div ng-message="required">This is required.</div>
+	        </div>
+	    </md-input-container>
+	    <md-input-container flex="25">
+	        <label>Hours</label>
+	        <md-select name="createMeetingForm.hour" ng-model="vm.hour" required>
+	          <md-option ng-repeat="hour in vm.range(0, 24)" ng-value="hour">{{hour}}</md-option>
+	        </md-select>
+	        <div ng-messages="createMeetingForm.hour.$error">
+	          <div ng-message="required">This is required.</div>
+	        </div>
+	     </md-input-container>
+	     <md-input-container>
+	        <label>Minutes</label>
+	        <md-select name="createMeetingForm.minute" ng-model="vm.minute" required>
+	          <md-option ng-repeat="minute in vm.range(0, 60, 10)" ng-value="minute">{{minute}}</md-option>
+	        </md-select>
+	        <div ng-messages="createMeetingForm.minute.$error">
+	          <div ng-message="required">This is required.</div>
+	        </div>
+	     </md-input-container>
+	</div>
+	<div layout="row">
+	    <md-input-container flex>
+	      <label>Location</label>
+	        <input name="createMeetingForm.location" ng-model="vm.location" required>
+	        <div ng-messages="createMeetingForm.location.$error">
+	          <div ng-message="required">This is required.</div>
+	        </div>
+	    </md-input-container>
+	</div>
+	<md-button class="md-raised" type="submit" ng-disabled="createMeetingForm.$invalid">CREATE</md-button>
+</form>
+

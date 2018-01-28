@@ -39,8 +39,12 @@ public class MeetingService {
 			return meeting;
 	}
 	
-	public List<Meeting> getAllByBuildingId(Long buildingId) {
-		return meetingRepository.findAllByBuildingId(buildingId);
-	}
+  public List<Meeting> getAllByBuildingId(Long buildingId) {
+    return meetingRepository.findAllByBuildingId(buildingId);
+  }
+
+  public List<Meeting> getAllByManagerId(Long managerId) {
+    return meetingRepository.findAllByManagerId(managerId);
+  }
 	
 }
