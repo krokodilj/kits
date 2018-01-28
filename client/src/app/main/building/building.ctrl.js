@@ -18,6 +18,8 @@
 
 				var vm = this
 
+				vm.selectedResidence= -1
+				vm.selectResidence = selectResidence
 				buildingService.getOne($routeParams.building_id)
 					.then(function(response){
 						if(response.error){
@@ -26,7 +28,7 @@
 							vm.building=response.data
 							getManager(vm.building.manager)
 							getResidences(vm.building.id)
-
+							getResidents(vm.building.id)
 						}
 					})
 
@@ -52,6 +54,22 @@
 
 							}
 						})
+				}
+
+				function getResidents(building_id){
+					userService.getAllByBuilding(building_id)
+						.then(function(response){
+							if(response.error){
+								toastr.error("Unable to fetch residents")
+							}else{
+								vm.building.residents=response.data
+
+							}
+						})
+				}
+				
+				function selectResidence(residence) {
+					vm.selectedResidence=residence
 				}
 
 		}])
