@@ -1,0 +1,18 @@
+<md-content class="md-padding" layout="row" layout-wrap>
+<md-card ng-repeat="b in vm.buildings">
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline">{{b.country}}</span>
+            <span class="md-subhead">{{b.city}}</span>
+            <span class="md-subhead">{{b.address}}</span>
+          </md-card-title-text>
+          <md-card-title-media>
+            <div class="md-media-lg card-media"></div>
+          </md-card-title-media>
+        </md-card-title>
+        <md-card-actions layout="row" layout-align="end center">
+          <md-button ng-href="/#!/building/{{b.id}}" >Show full info</md-button>
+        </md-card-actions>
+</md-card>
+
+</md-content>

@@ -10,6 +10,7 @@
 			'kits.login',
 			'kits.register',
 			'kits.report',
-			'kits.create_building'
+			'kits.create_building',
+			'kits.buildings'
 		])
 })();
