@@ -30,7 +30,7 @@
 				var userData = parseJwt(data)
 				self.userId=userData.sub;
 				self.userRoles=userData.roles;
-				$http.defaults.headers.common={'X-Auth-Token':cookie}
+				$http.defaults.headers.common={'X-Auth-Token':data}
 			}
 
 			function destroySession(){
