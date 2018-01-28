@@ -105,7 +105,8 @@ public class BuildingController {
     	}
     	List<Building> buildings =  new ArrayList<Building>(b.values());
     	List<BuildingDTO> buildingsDTO = buildingMapper.toDto(buildings);
-        return new ResponseEntity<List<BuildingDTO>>(buildingsDTO, HttpStatus.OK);
+      
+      return new ResponseEntity<List<BuildingDTO>>(buildingsDTO, HttpStatus.OK);
     }
 
 	/**
