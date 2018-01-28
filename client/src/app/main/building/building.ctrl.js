@@ -18,8 +18,10 @@
 
 				var vm = this
 
+
 				vm.selectedResidence= -1
 				vm.selectResidence = selectResidence
+
 				buildingService.getOne($routeParams.building_id)
 					.then(function(response){
 						if(response.error){
@@ -71,6 +73,5 @@
 				function selectResidence(residence) {
 					vm.selectedResidence=residence
 				}
-
 		}])
 })();
