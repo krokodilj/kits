@@ -25,7 +25,6 @@ import com.timsedam.buildingmanagement.exceptions.ProposalMissingException;
 import com.timsedam.buildingmanagement.exceptions.ReportMissingException;
 import com.timsedam.buildingmanagement.exceptions.ReportNotAttachedToBuildingException;
 import com.timsedam.buildingmanagement.exceptions.UserMissingException;
-import com.timsedam.buildingmanagement.exceptions.UserNotResidentException;
 import com.timsedam.buildingmanagement.exceptions.UserNotResidentOrApartmentOwnerException;
 import com.timsedam.buildingmanagement.mapper.ProposalMapper;
 import com.timsedam.buildingmanagement.model.Building;
@@ -91,8 +90,8 @@ public class ProposalController {
 		return new ResponseEntity<ProposalDTO>(responseData, HttpStatus.OK);
 	}
 	
-	@GetMapping(produces = "application/json")
-	public ResponseEntity<List<ProposalDTO>> getAllByBuildingId(@RequestParam Long buildingId) {
+	@GetMapping(produces = "application/json", params = "building_id")
+	public ResponseEntity<List<ProposalDTO>> getAllByBuildingId(@RequestParam("building_id") Long buildingId) {
 		List<Proposal> proposals = proposalService.findAllByBuildingId(buildingId);
 		List<ProposalDTO> dtos = proposalMapper.toDto(proposals);
 		return new ResponseEntity<List<ProposalDTO>>(dtos, HttpStatus.OK);

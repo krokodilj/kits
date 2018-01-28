@@ -91,5 +91,4 @@ public class ReportDTO {
 		this.comments = comments;
 	}
 	
-	
 }

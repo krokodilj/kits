@@ -190,7 +190,7 @@ public class ProposalControllerTest {
 	public void getProposalsByBuildingId() throws Exception {
 		
 		ResponseEntity<ProposalDTO[]> responseEntity = restTemplate.exchange(
-				"/api/proposals?buildingId=1", HttpMethod.GET, getRequestEntity(null, "resident1", "resident1"), ProposalDTO[].class);
+				"/api/proposals?building_id=1", HttpMethod.GET, getRequestEntity(null, "resident1", "resident1"), ProposalDTO[].class);
 		ProposalDTO[] data = responseEntity.getBody();
 		
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
