@@ -13,7 +13,13 @@
 			md-selected-nav-item="currentNavItem" 
 			nav-bar-aria-label="navigation links"
 			ng-show="isAuthenticated()">
-      
+          
+          <md-nav-item 
+            md-nav-click="ctrl.goto('/#!/buildings')" 
+            name="buildings" 
+            >
+            Buildings
+          </md-nav-item>
       	  <md-nav-item md-nav-click="ctrl.goto('/#!/report')" name="report">
       	  	Report
       	  </md-nav-item>
@@ -38,6 +44,15 @@
           			Create Report
         		</md-list-item>
         	</md-list>
+        <md-list flex ng-show="currentNavItem=='buildings'">
+            <md-subheader class="md-no-sticky"></md-subheader>
+            <md-list-item  ng-click="ctrl.goto('/#!/buildings')">
+                Buildings
+            </md-list-item>
+            <md-list-item  ng-click="ctrl.goto('/#!/create_building')">
+                Create Building
+            </md-list-item>
+        </md-list>
       
     		
     		</div>
