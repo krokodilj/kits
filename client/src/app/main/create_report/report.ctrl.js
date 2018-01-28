@@ -1,6 +1,6 @@
 (function () {
     angular
-        .module('kits.report', ['service.auth'])
+        .module('kits.report', ['model.service.report'])
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider
                 .when('/report', {
@@ -9,12 +9,24 @@
                     controllerAs: "vm"
                 })
         }])
-        .controller('ReportController', ['$scope','toastr','$http', function ($scope, toastr, $http) {
+        .controller('ReportController', ['reportService','$scope','toastr',
+                                         '$http', 
+                                         function (reportService,$scope, toastr, 
+                                        		 $http) {
             var vm = this;
             $scope.files = [];
             vm.photos = [];
             vm.description = "";
             vm.building = 0;
+            
+            reportService.getBuildings()
+			.then(function(response){
+				if(response.error){
+					toastr.error("Error fetching buildings")
+				}else{
+					vm.buildings=response.data
+				}
+			})
 
             $scope.$watch('files.length', function (newVal, oldVal) {
                 vm.photos = [];
@@ -24,7 +36,6 @@
 
                     reader.onloadend = function (evt) {
                         $scope.$apply(function(){
-                        	alert(evt.target.result);
                             vm.photos.push(evt.target.result);
                         });
                     };
@@ -50,18 +61,22 @@
    
     				var data =  { 
     					"building": vm.building,
-    					"description": vm.building,
+    					"description": vm.description,
     					"photos": vm.photos
     				};
-    			    /*
-    				$http.post('http://localhost:8080/api/auth/login', {
-    					  "password": "resident1",
-    					  "username": "resident1"
-    					}).then(function(response) {
-    						alert(JSON.strinfgify(response))
-    					}, function(response) {
-    						console.log(response);
-    				});	*/
+    			    
+    				reportService.sendReport(data)
+    				.then(function(response){
+    					if(response.error){
+    						toastr.error("Error sending report")
+    					}else{
+    						toastr.success("Report is succesfully sent.");
+    						vm.photos = [];
+    			            vm.description = "";
+    			            $scope.files = [];
+    						//redirect
+    					}
+    				})
     			}
     		}
 

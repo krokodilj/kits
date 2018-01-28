@@ -4,8 +4,7 @@
  	<md-input-container flex="30">
 		<label>Building</label>
     	<md-select name="type" ng-model="vm.building" required>
-     		<md-option value="app">Application</md-option>
-       		<md-option value="web">Website</md-option>
+     		<md-option ng-repeat="item in vm.buildings" value="{{item.id}}">{{item.address}} - {{item.city}}</md-option>
   		</md-select>
     </md-input-container>
 
@@ -20,7 +19,7 @@
 
 <lf-ng-md-file-input lf-files='files' accept="image/*" 
 	lf-placeholder="Pick Image" lf-browse-label="Search" 
-		lf-remove-label="Delete" multiple drag preview ></lf-ng-md-file-input>
+		lf-remove-label="Delete" ng-clik="vm.uploadStart()" multiple drag preview ></lf-ng-md-file-input>
 
 <hr/><br/>
 <md-button class="md-raised" ng-click="vm.sendReport()">Send Report</md-button>
