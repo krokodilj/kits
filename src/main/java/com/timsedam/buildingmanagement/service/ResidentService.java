@@ -10,6 +10,8 @@ import com.timsedam.buildingmanagement.model.User;
 import com.timsedam.buildingmanagement.repository.RoleRepository;
 import com.timsedam.buildingmanagement.repository.UserRepository;
 
+import java.util.List;
+
 @Service
 public class ResidentService {
 	
@@ -38,6 +40,10 @@ public class ResidentService {
 			throw new UserMissingException(id);
 		else
 			return resident;
+	}
+
+	public List<User> findAllByBuildingId(Long building_id){
+		return userRepository.findAllByBuilding(building_id);
 	}
 
 }

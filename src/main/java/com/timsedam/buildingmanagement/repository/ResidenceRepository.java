@@ -15,4 +15,5 @@ public interface ResidenceRepository extends JpaRepository<Residence, Long>{
 	@Query("SELECT r FROM Residence as r join r.residents as rr where ?1=rr.id")
 	List<Residence> findAllByResidentId(Long residentId);
 
+	List<Residence> findAllByBuildingId(long buildingId);
 }

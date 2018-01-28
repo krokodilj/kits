@@ -2,17 +2,12 @@ package com.timsedam.buildingmanagement.controller;
 
 import javax.validation.Valid;
 
+import com.timsedam.buildingmanagement.dto.response.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.timsedam.buildingmanagement.dto.request.UserRegisterDTO;
 import com.timsedam.buildingmanagement.exceptions.ResidenceExistsException;
@@ -26,10 +21,13 @@ import com.timsedam.buildingmanagement.model.User;
 import com.timsedam.buildingmanagement.service.ResidenceService;
 import com.timsedam.buildingmanagement.service.ResidentService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @RestController
 @RequestMapping(value = "/api/residents/")
-public class ResidentController {
+public class 	ResidentController {
 	
 	@Autowired
 	private ResidentService residentService;
@@ -39,6 +37,17 @@ public class ResidentController {
 	
     @Autowired
     private UserMapper userMapper;
+
+    @GetMapping(value="/by_building/{buildingId}" , produces="application/json")
+	public ResponseEntity<List<UserDTO>> getByBuilding(@PathVariable long buildingId){
+
+    	List<User> residents = residentService.findAllByBuildingId(buildingId);
+    	List<UserDTO> userDTOS = new ArrayList<UserDTO>();
+    	for(User u :residents){
+    		userDTOS.add(userMapper.toDto(u));
+		}
+    	return new ResponseEntity<List<UserDTO>>(userDTOS,HttpStatus.OK);
+	}
 
     @PostMapping
     public ResponseEntity<?> create(@Valid @RequestBody UserRegisterDTO userRegisterDTO, BindingResult validationResult) 
