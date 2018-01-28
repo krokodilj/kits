@@ -1,4 +1,4 @@
-(function(){
+(function(){ 
 	angular
 		.module('kits.building',['model.service.building','model.service.user'])
 		.config(['$routeProvider',function($routeProvider){
