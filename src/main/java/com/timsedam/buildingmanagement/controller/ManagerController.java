@@ -3,6 +3,8 @@ package com.timsedam.buildingmanagement.controller;
 import javax.validation.Valid;
 
 import com.timsedam.buildingmanagement.dto.response.UserDTO;
+import com.timsedam.buildingmanagement.exceptions.UserMissingException;
+import com.timsedam.buildingmanagement.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,9 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/managers/")
 public class ManagerController {
+
+	@Autowired
+	private UserService userService;
 
 	@Autowired
 	private ManagerService managerService;
@@ -54,6 +59,13 @@ public class ManagerController {
 			managerDTOs.add(userMapper.toDto(u));
 		}
 		return new ResponseEntity<List<UserDTO>>(managerDTOs,HttpStatus.OK);
+	}
+
+	@GetMapping(value = "/{manager_id}", produces="application/json")
+	public ResponseEntity<UserDTO> getOne(@PathVariable Long manager_id) throws UserMissingException {
+		User user = userService.findOne(manager_id);
+		UserDTO userDto = userMapper.toDto(user);
+		return new ResponseEntity<UserDTO>(userDto,HttpStatus.OK);
 	}
 
 	/**

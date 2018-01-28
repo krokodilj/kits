@@ -65,4 +65,5 @@ public class ResidenceService {
 		return residenceRepository.findAllByResidentId(userId);
 	}
 
+	public List<Residence> findAllByBuildingId(long buildingId){ return residenceRepository.findAllByBuildingId(buildingId);}
 }

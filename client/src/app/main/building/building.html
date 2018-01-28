@@ -1,1 +1,32 @@
-{{vm.building}}
+<h1 >Building information</h1>
+<div layout="row">
+	<img src="https://upload.wikimedia.org/wikipedia/commons/4/40/Earth%27s_Moon_from_NOAA.jpg" with="200px" height="200px">
+	<div>
+		<table>
+			<tr><td>Country:</td><td>{{vm.building.country}}</td></tr>
+			<tr><td>City:</td><td>{{vm.building.city}}</td></tr>
+			<tr><td>Address:</td><td>{{vm.building.address}}</td></tr>
+		</table>
+	</div>
+	<md-divider></md-divider>
+	<div>
+		<h4>Building Manager:</h4>
+		<br>
+		<table>
+			<tr><td>Name:</td><td>{{vm.building.manager.username}}</td></tr>
+			<tr><td>Email:</td><td>{{vm.building.manager.email}}</td></tr>
+		</table>
+	</div>
+</div>
+<md-divider></md-divider>
+<div layout="row">
+	<div layout="column" flex="40">
+		<h3 layout-align="center"> Residences </h3>
+	</div>
+	<div layout="column" flex>
+		<h3 layout-align="center">Residents</h3>
+	</div>
+</div>
+
+
+
