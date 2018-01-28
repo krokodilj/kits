@@ -11,6 +11,7 @@
 			'kits.register',
 			'kits.report',
 			'kits.create_building',
-			'kits.buildings'
+			'kits.buildings',
+			'kits.building'
 		])
 })();

@@ -7,7 +7,8 @@
 
 		return{
 			create : create,
-			getAll : getAll
+			getAll : getAll,
+			getOne : getOne
 		}
 
 		function create(building){
@@ -30,6 +31,18 @@
 							},function(err){
 								return {error : true , data : err.data }
 							})
+			return promise
+		}
+
+		function getOne(building_id){
+			var promise = $http
+							.get('/api/buildings/'+building_id)
+							.then(function(res){
+								return {data:res.data}
+							},function(err){
+								return {error : true , data : err.data }
+							})
+
 			return promise
 		}
 
