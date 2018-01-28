@@ -1,0 +1,11 @@
+<h1>Manager Meetings</h1>
+<md-content class="md-padding" layout="row" layout-wrap>
+  <md-card ng-repeat="m in vm.meetings">
+     <md-card-title>
+       <md-card-title-text>
+         <span class="md-headline">Location: {{m.location}}</span>
+         <span class="md-subhead">Starts at: {{vm.parseDateTime(m.startsAt)}}</span>
+       </md-card-title-text>
+     </md-card-title>
+  </md-card>
+</md-content>

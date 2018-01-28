@@ -3,7 +3,7 @@
 		module('kits')
 		.controller('AppController',appController);
 
-	function appController($rootScope,authService){
+	function appController($rootScope, authService, sessionService){
 		$rootScope.isAuthorised=authService.isAuthorised
 		$rootScope.isAuthenticated=authService.isAuthenticated
 		
@@ -16,6 +16,10 @@
 		vm.logout = function(){
 			authService.logout()
 			window.location = "/";
+		}
+		
+		vm.hasRole = function(role) {
+			return authService.isAuthorised([role]);
 		}
 	}
 

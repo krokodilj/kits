@@ -1,74 +1,93 @@
 <!DOCTYPE html>
 <html ng-app="kits">
-	<head>
-		<title>kits</title>
+  <head>
+    <title>kits</title>
 
-		<!-- bower:css -->
-  		<!-- endinject -->
+    <!-- bower:css -->
+      <!-- endinject -->
 </head>
 
-	<body ng-controller="AppController as ctrl">
-		
-		<md-nav-bar md-no-ink-bar="disableInkBar" 
-			md-selected-nav-item="currentNavItem" 
-			nav-bar-aria-label="navigation links"
-			ng-show="isAuthenticated()">
+  <body ng-controller="AppController as ctrl">
+    
+    <md-nav-bar md-no-ink-bar="disableInkBar" 
+      md-selected-nav-item="currentNavItem" 
+      nav-bar-aria-label="navigation links"
+      ng-show="isAuthenticated()">
           
-          <md-nav-item 
-            md-nav-click="ctrl.goto('/#!/buildings')" 
-            name="buildings" 
-            >
+          <md-nav-item ng-show="ctrl.hasRole('ADMIN')" md-nav-click="ctrl.goto('/#!/buildings')" name="buildings">
             Buildings
           </md-nav-item>
-      	  <md-nav-item md-nav-click="ctrl.goto('/#!/report')" name="report">
-      	  	Report
-      	  </md-nav-item>
+          <md-nav-item ng-show="ctrl.hasRole('MANAGER')" md-nav-click="ctrl.goto('/#!/manager_buildings')" name="buildings">
+            Buildings
+          </md-nav-item>
+          
+          <md-nav-item md-nav-click="ctrl.goto('/#!/report')" name="report">
+            Report
+          </md-nav-item>
+          
+          <md-nav-item ng-show="ctrl.hasRole('MANAGER')" md-nav-click="ctrl.goto('/#!/manager_meetings')" name="manager_meetings">
+            Meeting
+          </md-nav-item>
+          
           <md-nav-item md-nav-click="ctrl.goto('page2')" name="page2">
-          	Page Two
+            Page Two
           </md-nav-item>
           <md-nav-item md-nav-click="ctrl.logout()" name="logout" right>
-          	Logout
-      	  </md-nav-item>
+            Logout
+          </md-nav-item>
       
-    	</md-nav-bar>
+      </md-nav-bar>
     
-		<div layout="row">
-    		<div flex="20">
-    		
-    		<md-list flex ng-show="currentNavItem=='report'">
-        		<md-subheader class="md-no-sticky"></md-subheader>
-        		<md-list-item  ng-click="null">
-          			Reports
-        		</md-list-item>
-        		<md-list-item  ng-click="null">
-          			Create Report
-        		</md-list-item>
-        	</md-list>
+    <div layout="row">
+        <div flex="20">
+        
+        <md-list flex ng-show="currentNavItem=='report'">
+            <md-subheader class="md-no-sticky"></md-subheader>
+            <md-list-item  ng-click="null">
+                Reports
+            </md-list-item>
+            <md-list-item  ng-click="null">
+                Create Report
+            </md-list-item>
+          </md-list>
         <md-list flex ng-show="currentNavItem=='buildings'">
             <md-subheader class="md-no-sticky"></md-subheader>
-            <md-list-item  ng-click="ctrl.goto('/#!/buildings')">
+            <md-list-item ng-show="ctrl.hasRole('ADMIN')"  ng-click="ctrl.goto('/#!/buildings')">
                 Buildings
             </md-list-item>
-            <md-list-item  ng-click="ctrl.goto('/#!/create_building')">
+            <md-list-item ng-show="ctrl.hasRole('MANAGER')"  ng-click="ctrl.goto('/#!/manager_buildings')">
+                Managed Buildings
+            </md-list-item>
+            
+            <md-list-item ng-show="ctrl.hasRole('ADMIN')"  ng-click="ctrl.goto('/#!/create_building')">
                 Create Building
             </md-list-item>
         </md-list>
-      
-    		
-    		</div>
-    		<div flex="5"></div>
-    		<div flex="70">
-				<div ng-view></div>
-			</div>
-			<div flex hide-sm hide-xs></div>
-    	</div>
+        
+        <md-list flex ng-show="currentNavItem=='manager_meetings'">
+            <md-subheader class="md-no-sticky"></md-subheader>
+            <md-list-item ng-show="ctrl.hasRole('MANAGER')"  ng-click="ctrl.goto('/#!/manager_meetings')">
+                Meetings
+            </md-list-item>
+            <md-list-item ng-show="ctrl.hasRole('MANAGER')"  ng-click="ctrl.goto('/#!/create_meeting')">
+                Create Meeting
+            </md-list-item>
+        </md-list>
+        
+        </div>
+        <div flex="5"></div>
+        <div flex="70">
+        <div ng-view></div>
+      </div>
+      <div flex hide-sm hide-xs></div>
+      </div>
 
-	    <!-- bower:js -->
-		<!-- endinject -->
-		<!-- inject:js -->
-		<!-- endinject -->
-	 
+      <!-- bower:js -->
+    <!-- endinject -->
+    <!-- inject:js -->
+    <!-- endinject -->
+   
 
-	</body>
+  </body>
 
 </html>

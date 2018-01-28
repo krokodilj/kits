@@ -69,14 +69,24 @@ public class MeetingController {
 		return new ResponseEntity<MeetingDTO>(responseData, HttpStatus.OK);
 	}
 	
-	@GetMapping(produces = "application/json")
-	public ResponseEntity<List<MeetingDTO>> getAllByBuildingId(@RequestParam Long buildingId) {	
+	@GetMapping(produces = "application/json", params = "building_id")
+	public ResponseEntity<List<MeetingDTO>> getAllByBuildingId(@RequestParam("building_id") Long buildingId) {	
 		List<Meeting> meetings = meetingService.getAllByBuildingId(buildingId);
 
 		List<MeetingDTO> responseData = meetingMapper.toDto(meetings);
 		return new ResponseEntity<List<MeetingDTO>>(responseData, HttpStatus.OK);
 		
 	}
+	
+	 @GetMapping(produces = "application/json", params = "manager_username")
+	 public ResponseEntity<List<MeetingDTO>> getAllByManagerUsername(@RequestParam("manager_username") String managerUsername) throws UserMissingException {
+	   User manager = userService.findOneByUsername(managerUsername);
+	   List<Meeting> meetings = meetingService.getAllByManagerId(manager.getId());
+
+	   List<MeetingDTO> responseData = meetingMapper.toDto(meetings);
+	   return new ResponseEntity<List<MeetingDTO>>(responseData, HttpStatus.OK);
+	    
+	 }
 	
 	/**
 	 * Handles UserMissingException that can happen when calling UserService.findOne(userId)

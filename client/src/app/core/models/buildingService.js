@@ -1,12 +1,13 @@
 (function(){
 	angular
 		.module('model.service.building',[])
-		.factory('buildingService',['$http',buildingService])
+		.factory('buildingService',['$http', buildingService])
 
 	function buildingService($http){
 
 		return{
 			create : create,
+			getAllForManager: getAllForManager,
 			getAll : getAll
 		}
 
@@ -21,7 +22,18 @@
 					})
 			return promise
 		}
-
+		
+		function getAllForManager(username) {
+			var promise = $http
+					.get('/api/buildings/getManagerBuildings/' + username)
+					.then(function(res) {
+						return {data: res.data};
+					}, function(err) {
+						return {error: true, data: err.data};
+					})
+			return promise;
+		}
+		
 		function getAll(){
 			var promise = $http
 							.get('/api/buildings/')

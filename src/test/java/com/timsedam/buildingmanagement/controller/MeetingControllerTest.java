@@ -149,7 +149,7 @@ public class MeetingControllerTest {
 	public void getMeetingsByBuildingId() throws Exception {
 		
 		ResponseEntity<MeetingDTO[]> responseEntity = 
-				restTemplate.exchange("/api/meetings?buildingId=6", HttpMethod.GET, getRequestEntity(null, "manager1", "manager1"), MeetingDTO[].class);
+				restTemplate.exchange("/api/meetings?building_id=6", HttpMethod.GET, getRequestEntity(null, "manager1", "manager1"), MeetingDTO[].class);
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
 	
@@ -161,7 +161,7 @@ public class MeetingControllerTest {
 	public void getMeetingsByBuildingIdInvalidBuildId() throws Exception {
 		
 		ResponseEntity<MeetingDTO[]> responseEntity = 
-			restTemplate.exchange("/api/meetings?buildingId=123", HttpMethod.GET, getRequestEntity(null, "manager1", "manager1"), MeetingDTO[].class);
+			restTemplate.exchange("/api/meetings?building_id=123", HttpMethod.GET, getRequestEntity(null, "manager1", "manager1"), MeetingDTO[].class);
 		
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 		assertEquals(responseEntity.getBody().length, 0);
