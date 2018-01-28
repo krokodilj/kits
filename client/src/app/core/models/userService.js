@@ -8,7 +8,8 @@
 		return{
 			create : create,
 			remove : remove,
-			getManagers	: getManagers
+			getManagers	: getManagers,
+			getOne : getOne
 		}
 
 		function create(user){
@@ -36,6 +37,16 @@
 			return promise
 		}
 
+		function getOne(user_id){
+			var promise = $http
+							.get('/api/managers/'+user_id)
+							.then(function(response){
+								return {data:response.data}
+							},function(error){
+								return { error :true , data :error.data}
+							})
+			return promise
+		}
 	}
 
 })();
