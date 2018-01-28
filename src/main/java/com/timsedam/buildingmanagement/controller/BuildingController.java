@@ -1,13 +1,13 @@
 package com.timsedam.buildingmanagement.controller;
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
-import com.timsedam.buildingmanagement.exceptions.UserMissingException;
-import com.timsedam.buildingmanagement.model.User;
-import com.timsedam.buildingmanagement.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +24,14 @@ import com.timsedam.buildingmanagement.dto.request.BuildingCreateDTO;
 import com.timsedam.buildingmanagement.dto.response.BuildingDTO;
 import com.timsedam.buildingmanagement.exceptions.BuildingExistsException;
 import com.timsedam.buildingmanagement.exceptions.BuildingMissingException;
+import com.timsedam.buildingmanagement.exceptions.UserMissingException;
 import com.timsedam.buildingmanagement.mapper.BuildingMapper;
 import com.timsedam.buildingmanagement.model.Building;
+import com.timsedam.buildingmanagement.model.Residence;
+import com.timsedam.buildingmanagement.model.User;
 import com.timsedam.buildingmanagement.service.BuildingService;
+import com.timsedam.buildingmanagement.service.ResidenceService;
+import com.timsedam.buildingmanagement.service.UserService;
 
 @RestController
 @RequestMapping(value = "/api/buildings/")
@@ -40,6 +45,9 @@ public class BuildingController {
 
     @Autowired
 	private UserService userService;
+    
+    @Autowired
+	private ResidenceService residenceService;
 
     @PostMapping(consumes = "application/json")
     public ResponseEntity<?> create(
@@ -81,13 +89,25 @@ public class BuildingController {
         List<BuildingDTO> buildingsDTO = buildingMapper.toDto(buildings);
         return new ResponseEntity<List<BuildingDTO>>(buildingsDTO, HttpStatus.OK);
     }
-    /*
-    @GetMapping(value = "getUserBuildings/{userId}", produces = "application/json")
-    public ResponseEntity<?> getUserBuildings(@PathVariable long userId){
-    	List<Building> buildings = userService.findAllByManager(userId);
-        List<BuildingDTO> buildingsDTO = buildingMapper.toDto(buildings);
-        return new ResponseEntity<List<BuildingDTO>>(buildingsDTO, HttpStatus.OK);
-    }*/
+    
+    @GetMapping(value = "getUserBuildings/{username}", produces = "application/json")
+    public ResponseEntity<?> getUserBuildings(@PathVariable String username) throws UserMissingException{
+    	User u = userService.findOneByUsername(username);
+    	List<Residence> ownerResidences = residenceService.findAllByOwnerId(u.getId());
+    	List<Residence> residentResidences = residenceService.findAllByResidentId(u.getId());
+        
+    	Map<Long, Building> b = new HashMap<Long, Building>();
+    	for (Residence residence : ownerResidences) {
+    	    b.put(residence.getBuilding().getId(), residence.getBuilding());
+    	}
+    	for (Residence residence : residentResidences) {
+    	    b.put(residence.getBuilding().getId(), residence.getBuilding());
+    	}
+    	List<Building> buildings =  new ArrayList<Building>(b.values());
+    	List<BuildingDTO> buildingsDTO = buildingMapper.toDto(buildings);
+
+      return new ResponseEntity<List<BuildingDTO>>(buildingsDTO, HttpStatus.OK);
+    }
 
 	/**
 	 * Handles BuildingExistsException that can happen when calling BuildingService.save(building)
