@@ -188,6 +188,14 @@ public class ReportController {
 		List<ReportDTO> reportsDTO = reportMapper.toDto(reports);
         return new ResponseEntity<List<ReportDTO>>(reportsDTO, HttpStatus.OK);
     }
+	
+	@GetMapping(value = "getReport/{reportId}", produces = "application/json")
+    public ResponseEntity<?> getReport(@PathVariable Long reportId) throws ReportMissingException{
+		Report report = reportService.findOne(reportId);
+        
+		ReportDTO reportDTO = reportMapper.toDto(report);
+        return new ResponseEntity<ReportDTO>(reportDTO, HttpStatus.OK);
+    }
 
 	/**
 	 * Handles UserNotResidentException that can happen when calling
