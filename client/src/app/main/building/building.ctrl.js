@@ -1,6 +1,9 @@
 (function(){ 
 	angular
-		.module('kits.building',['model.service.building','model.service.user'])
+		.module('kits.building',[
+			'model.service.building',
+			'model.service.user',
+			'model.service.residence'])
 		.config(['$routeProvider',function($routeProvider){
 			$routeProvider
 				.when('/building/:building_id',{
@@ -9,8 +12,9 @@
 					controllerAs : 'vm'
 				})
 		}])
-		.controller('BuildingController',['$routeParams','buildingService','userService','toastr',
-			function($routeParams,buildingService,userService,toastr){
+		.controller('BuildingController',['$routeParams','buildingService','userService',
+			'residenceService','toastr',
+			function($routeParams,buildingService,userService,residenceService,toastr){
 
 				var vm = this
 
@@ -21,6 +25,7 @@
 						}else{
 							vm.building=response.data
 							getManager(vm.building.manager)
+							getResidences(vm.building.id)
 
 						}
 					})
@@ -29,9 +34,21 @@
 					userService.getOne(managerId)
 						.then(function(response){
 							if(response.error){
-							toastr.error("Unable to fetch building manager")
+								toastr.error("Unable to fetch building manager")
 							}else{
 								vm.building.manager=response.data
+
+							}
+						})
+				}
+
+				function getResidences(building_id){
+					residenceService.getByBuilding(building_id)
+						.then(function(response){
+							if(response.error){
+								toastr.error("Unable to fetch residences")
+							}else{
+								vm.building.residences=response.data
 
 							}
 						})

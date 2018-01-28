@@ -25,6 +25,9 @@ import com.timsedam.buildingmanagement.model.Residence;
 import com.timsedam.buildingmanagement.service.BuildingService;
 import com.timsedam.buildingmanagement.service.ResidenceService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/api/residences/")
 public class ResidenceController {
@@ -60,6 +63,16 @@ public class ResidenceController {
         ResidenceDTO residenceDTO = residenceMapper.toDto(residence);
         return new ResponseEntity<ResidenceDTO>(residenceDTO, HttpStatus.OK);
     }
+
+	@GetMapping(value = "/by_building/{id}")
+	public ResponseEntity<List<ResidenceDTO>> getByBuilding(@PathVariable long id) throws ResidenceMissingException{
+		List<Residence> residences = residenceService.findAllByBuildingId(id);
+		List<ResidenceDTO> residenceDTOS = new ArrayList<ResidenceDTO>();
+		for (Residence r: residences ) {
+			residenceDTOS.add(residenceMapper.toDto(r));
+		}
+		return new ResponseEntity<List<ResidenceDTO>>(residenceDTOS, HttpStatus.OK);
+	}
     
 	/**
 	 * Handles BuildingMissingException that can happen when calling buildingService.findOne(buildingId)
