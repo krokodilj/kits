@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.timsedam.buildingmanagement.exceptions.UserMissingException;
+import com.timsedam.buildingmanagement.model.Building;
 import com.timsedam.buildingmanagement.model.Permission;
 import com.timsedam.buildingmanagement.model.Role;
 import com.timsedam.buildingmanagement.model.User;

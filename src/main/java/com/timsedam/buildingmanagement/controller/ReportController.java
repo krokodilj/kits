@@ -73,7 +73,7 @@ public class ReportController {
 	@Autowired
     private CommentMapper commentMapper;
 
-	@PostMapping(consumes = "application/json")
+	@PostMapping(consumes = "application/json", produces = "text/plain")
 	public ResponseEntity<?> create(Principal principal, @Valid @RequestBody ReportCreateDTO reportDTO,
 			BindingResult validationResult)
 			throws BuildingMissingException, UserNotResidentException, UserMissingException, IOException {
@@ -96,7 +96,7 @@ public class ReportController {
 		report = reportService.create(report);
 		forwardService.save(forward);
 
-		return new ResponseEntity<Long>(report.getId(), HttpStatus.CREATED);
+		return new ResponseEntity<String>(String.valueOf(report.getId()), HttpStatus.CREATED);
 
 	}
 

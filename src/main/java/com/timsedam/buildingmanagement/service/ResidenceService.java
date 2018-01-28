@@ -1,5 +1,7 @@
 package com.timsedam.buildingmanagement.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,5 +56,13 @@ public class ResidenceService {
         residence.getResidents().add(resident);
         residenceRepository.save(residence);
     }
+
+	public List<Residence> findAllByOwnerId(long userId) {
+		return residenceRepository.findAllByApartmentOwnerId(userId);
+	}
+
+	public List<Residence> findAllByResidentId(long userId) {
+		return residenceRepository.findAllByResidentId(userId);
+	}
 
 }

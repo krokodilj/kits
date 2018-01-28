@@ -112,6 +112,7 @@ insert into kts_prod.user (id, user_type, email, username, password) values (34,
 insert into kts_prod.user (id, user_type, email, username, password) values (35, 'USER', 'resident20@gmail.com', 'resident20', 'resident20');
 
 insert into kts_prod.user_roles (user_id, roles_id) values (16, 4);
+insert into kts_prod.user_roles (user_id, roles_id) values (16, 5);
 insert into kts_prod.user_roles (user_id, roles_id) values (17, 4);
 insert into kts_prod.user_roles (user_id, roles_id) values (18, 4);
 insert into kts_prod.user_roles (user_id, roles_id) values (19, 4);
@@ -146,9 +147,9 @@ insert into kts_prod.user_roles (user_id, roles_id) values (40, 5);
 
 
 truncate kts_prod.building;
-insert into kts_prod.building (id, address, apartment_count, city, country, description, manager_id) values (1, 'address', 5, 'city', 'country', 'description', 11);
-insert into kts_prod.building (id, address, apartment_count, city, country, description, manager_id) values (2, 'address', 5, 'city', 'country', 'description', 12);
-insert into kts_prod.building (id, address, apartment_count, city, country, description, manager_id) values (3, 'address', 5, 'city', 'country', 'description', 13);
+insert into kts_prod.building (id, address, apartment_count, city, country, description, manager_id) values (1, 'Miše Dimitrijevića 3c', 5, 'Novi Sad', 'Srbija', 'description', 11);
+insert into kts_prod.building (id, address, apartment_count, city, country, description, manager_id) values (2, 'Stojana Obradovića', 5, 'Užice', 'Srbija', 'description', 12);
+insert into kts_prod.building (id, address, apartment_count, city, country, description, manager_id) values (3, 'Liman 4', 5, 'Novi Sad', 'Srbija', 'description', 13);
 insert into kts_prod.building (id, address, apartment_count, city, country, description, manager_id) values (4, 'address', 5, 'city', 'country', 'description', 14);
 insert into kts_prod.building (id, address, apartment_count, city, country, description, manager_id) values (5, 'address', 5, 'city', 'country', 'description', 15);
 
@@ -158,7 +159,7 @@ insert into kts_prod.residence (id, apartment_number, floor_number, apartment_ow
 insert into kts_prod.residence (id, apartment_number, floor_number, apartment_owner_id, building_id) values (2, 2, 1, 36, 1);
 insert into kts_prod.residence (id, apartment_number, floor_number, apartment_owner_id, building_id) values (3, 3, 2, 36, 1);
 insert into kts_prod.residence (id, apartment_number, floor_number, apartment_owner_id, building_id) values (4, 4, 2, 36, 1);
-insert into kts_prod.residence (id, apartment_number, floor_number, apartment_owner_id, building_id) values (5, 1, 1, 37, 2);
+insert into kts_prod.residence (id, apartment_number, floor_number, apartment_owner_id, building_id) values (5, 1, 1, 16, 2);
 insert into kts_prod.residence (id, apartment_number, floor_number, apartment_owner_id, building_id) values (6, 2, 1, 37, 2);
 insert into kts_prod.residence (id, apartment_number, floor_number, apartment_owner_id, building_id) values (7, 3, 2, 37, 2);
 insert into kts_prod.residence (id, apartment_number, floor_number, apartment_owner_id, building_id) values (8, 4, 2, 37, 2);

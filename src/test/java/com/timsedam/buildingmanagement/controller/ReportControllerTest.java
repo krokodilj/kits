@@ -76,10 +76,10 @@ public class ReportControllerTest {
 	public void create() throws Exception {
 		ReportCreateDTO validReportDTO = new ReportCreateDTO("kvar", 1, new ArrayList<String>());
 
-		ResponseEntity<Long> responseEntity = 
-			restTemplate.postForEntity(URL_PREFIX, getRequestEntity(validReportDTO, "resident1", "resident1"), Long.class);
+		ResponseEntity<String> responseEntity = 
+			restTemplate.postForEntity(URL_PREFIX, getRequestEntity(validReportDTO, "resident1", "resident1"), String.class);
 
-		Long reportId = responseEntity.getBody();
+		Long reportId = Long.valueOf(responseEntity.getBody());
 		Report report = reportRepository.findOne(reportId);
 		
 		assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
@@ -98,10 +98,10 @@ public class ReportControllerTest {
 	public void ownerCreate() throws Exception {
 		ReportCreateDTO validReportDTO = new ReportCreateDTO("kvar", 1, new ArrayList<String>());
 
-		ResponseEntity<Long> responseEntity = 
-				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(validReportDTO, "owner1", "owner1"), Long.class);
+		ResponseEntity<String> responseEntity = 
+				restTemplate.postForEntity(URL_PREFIX, getRequestEntity(validReportDTO, "owner1", "owner1"), String.class);
 
-		Long id = responseEntity.getBody();
+		Long id = Long.valueOf(responseEntity.getBody());
 		Report report = reportRepository.findOne(id);
 		
 		assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
