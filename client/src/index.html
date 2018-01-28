@@ -24,11 +24,12 @@
           <md-nav-item ng-show="ctrl.hasRole('MANAGER')" md-nav-click="ctrl.goto('/#!/manager_meetings')" name="manager_meetings">
             Meeting
           </md-nav-item>
-
-		  <md-nav-item md-nav-click="ctrl.goto('/#!/building_reports')" name="building_reports">
+		      <md-nav-item md-nav-click="ctrl.goto('/#!/building_reports')" name="building_reports">
       	  	Report
       	  </md-nav-item>
-      	  
+          <md-nav-item ng-show="ctrl.hasRole('RESIDENT')" md-nav-click="ctrl.goto('/#!/building_proposals')" name="building_proposals">
+            Proposals
+          </md-nav-item>
           <md-nav-item md-nav-click="ctrl.logout()" name="logout" right>
             Logout
           </md-nav-item>
@@ -58,6 +59,16 @@
             
             <md-list-item ng-show="ctrl.hasRole('ADMIN')"  ng-click="ctrl.goto('/#!/create_building')">
                 Create Building
+            </md-list-item>
+        </md-list>
+        
+        <md-list flex ng-show="currentNavItem=='building_proposals'">
+            <md-subheader class="md-no-sticky"></md-subheader>
+            <md-list-item ng-show="ctrl.hasRole('RESIDENT')"  ng-click="ctrl.goto('/#!/building_proposals')">
+                Proposals
+            </md-list-item>
+            <md-list-item ng-show="ctrl.hasRole('RESIDENT')" ng-click="ctrl.goto('/#!/create_proposal')">
+                Create Proposal
             </md-list-item>
         </md-list>
         

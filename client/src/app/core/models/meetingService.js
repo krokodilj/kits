@@ -36,15 +36,12 @@
 		}
 		
 		function getAllForManager(username) {
-			console.log("SENDIN");
 			var promise = $http
 			.get('/api/meetings?manager_username=' + username).then(
 				function(res){
-					console.log("succ");
 					return {data: res.data};
 				},
 				function(err){
-					console.log("err");
 					return {error: true, data: err.data};
 				})
 				return promise;

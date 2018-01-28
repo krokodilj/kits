@@ -1,0 +1,25 @@
+<h1>Proposals for Buildings you live in</h1>
+<md-content class="md-padding" layout="row" layout-wrap>
+	<md-card ng-repeat="p in vm.proposals">
+	   <md-card-title>
+	     <md-card-title-text>
+	       <span class="md-headline">proposal: {{p.id}}</span>
+	       <span class="md-subhead">Content: {{p.content}}</span>
+	       <span class="md-subhead">Suggested at: {{vm.parseDateTime(p.suggestedAt)}}</span>
+         <span class="md-subhead">Building: {{p.building.id}} at address: {{p.building.address}}, {{p.building.city}}, {{p.building.country}}</span>
+         <span class="md-headline"> Status: 
+              <span ng-style="p.status === 'REJECTED' && {'color': 'red'} || 
+                              p.status === 'OPEN' && {'color': 'orange'} ||
+                              p.status === 'ACCEPTED' && {'color': 'green'}">
+                      
+                  {{p.status}}
+              </span>
+         </span>
+	     </md-card-title-text>
+	     <md-card-title-media>
+	       <div class="md-media-lg card-media"></div>
+	     </md-card-title-media>
+	   </md-card-title>
+	</md-card>
+</md-content>
+

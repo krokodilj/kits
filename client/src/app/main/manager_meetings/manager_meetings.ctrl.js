@@ -31,11 +31,9 @@
 			})
 			
 			function parseDateTime(array) {
-				var string = "";
-				date = array[2] + "." +  array[1] +  "." + array[0];
-				time = " " + array[3] + ":" + array[4];
+				let date = array[2] + "." +  array[1] +  "." + array[0];
+				let time = " " + array[3] + ":" + array[4];
 				return date + time;
 			}
-
 		}])
 })()
