@@ -9,8 +9,8 @@
 					controllerAs: "vm"
 				})
 		}])
-		.controller('CreateBuildingController',['buildingService','userService','toastr'
-				,function(buildingService,userService,toastr){
+		.controller('CreateBuildingController',['buildingService','userService','toastr','$scope'
+				,function(buildingService,userService,toastr,$scope){
 
 			var vm = this;
 
@@ -34,6 +34,24 @@
 					}
 				})
 
+			$scope.$watch('files.length', function (newVal, oldVal) {
+                vm.building.pictures = [];
+                
+                angular.forEach($scope.files, function (obj) {
+                    var reader = new FileReader();
+
+                    reader.onloadend = function (evt) {
+                        $scope.$apply(function(){
+                            vm.building.pictures.push(evt.target.result);
+                        });
+                    };
+
+                    if (!obj.isRemote) {
+                        reader.readAsDataURL(obj.lfFile); 
+                    }
+                });
+            });
+
 			function createBuilding(building){
 				
 				buildingService.create(building)
@@ -42,6 +60,7 @@
 							toastr.error("Error creating building")
 						}else{
 							toastr.success("Building successfully created")
+							vm.building={}
 						}
 					})
 			}

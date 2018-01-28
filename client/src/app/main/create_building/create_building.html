@@ -37,5 +37,10 @@
     <br>
     <md-button class="md-raised" type="submit" ng-disabled="createBuildingForm.$invalid">CREATE</md-button>
   </form>
+  <md-divider></md-divider>
+  <lf-ng-md-file-input lf-files='files' accept="image/*" 
+  lf-placeholder="Pick Image" lf-browse-label="Search" 
+    lf-remove-label="Delete" ng-clik="vm.uploadStart()" multiple drag preview ></lf-ng-md-file-input>
+
 </md-content>
 </div>

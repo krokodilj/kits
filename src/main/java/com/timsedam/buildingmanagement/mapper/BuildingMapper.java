@@ -22,7 +22,8 @@ public class BuildingMapper {
     	building.setCity(cb.getCity());
     	building.setCountry(cb.getCountry());
     	building.setDescription(cb.getDescription());
-    	
+    	building.setPictures(cb.getPictures());
+
     	return building;
     }
     
