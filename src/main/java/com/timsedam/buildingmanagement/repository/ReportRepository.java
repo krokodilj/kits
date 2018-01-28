@@ -1,5 +1,7 @@
 package com.timsedam.buildingmanagement.repository;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,5 +22,7 @@ public interface ReportRepository extends JpaRepository<Report, Long>{
 	@Modifying(clearAutomatically = true)
 	@Query("update Report r set r.status = ?1 where r.id = ?2")
 	void setStatus(String status, long id);
+
+	List<Report> findAllByLocationId(Long locationId);
 
 }

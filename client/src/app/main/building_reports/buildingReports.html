@@ -1,0 +1,31 @@
+<h1>Building's reports</h1>
+
+ <div layout="row">
+ 	<md-input-container flex="30">
+		<label>Building</label>
+    	<md-select name="type" ng-model="vm.building" required>
+     		<md-option ng-repeat="item in vm.buildings" 
+     		value="{{item.id}}"
+     		ng-click="vm.getRep(item.id)">{{item.address}} - {{item.city}}</md-option>
+  		</md-select>
+    </md-input-container>
+
+</div>
+<br/>
+
+<md-content class="md-padding" layout="row" layout-wrap>
+<md-card ng-repeat="r in vm.reports">
+        <md-card-title>
+          
+          <md-card-title-media>
+            <div class="md-media-lg card-media"><img data-ng-src="{{r.pictures[0]}}" alt="&nbsp;No Images" data-err-src="assets/no-image.jpg"/></div>
+          </md-card-title-media>
+        </md-card-title>
+        <md-card-content><span class="md-headline">{{r.status}}</span><br/>
+            <span class="md-subhead">{{r.description}}</span></md-card-content>
+        <md-card-actions layout="row" layout-align="end center">
+          <md-button ng-href="/#!/show_report/{{r.id}}" >Show full info</md-button>
+        </md-card-actions>
+</md-card>
+
+</md-content>

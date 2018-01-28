@@ -1,5 +1,7 @@
 package com.timsedam.buildingmanagement.service;
 
+import java.util.List;
+
 import javax.servlet.ServletContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +68,10 @@ public class ReportService {
 			return true;
 		else
 			return false;
+	}
+
+	public List<Report> findAllByLocationId(Long locationId) {
+		return reportRepository.findAllByLocationId(locationId);
 	}
 
 }

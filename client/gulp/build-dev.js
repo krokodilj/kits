@@ -53,13 +53,18 @@ pipes.builtIndexDev = function(){
         .pipe(gulp.dest(conf.paths.distDev));
 };
 
+pipes.builtAssetsDev = function() {  
+    return gulp.src(conf.paths.assets)
+        .pipe(gulp.dest('dist.dev/assets'));
+};
+
 gulp.task('clean-dev', function(done) {
     del(conf.paths.distDev);
     done();
 });
 
 gulp.task('build-dev',function(done){
-	es.merge(pipes.builtIndexDev(), pipes.builtPartialsDev());
+	es.merge(pipes.builtIndexDev(), pipes.builtPartialsDev(), pipes.builtAssetsDev());
 	done();
 });
 

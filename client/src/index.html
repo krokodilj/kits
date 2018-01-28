@@ -21,35 +21,32 @@
             Buildings
           </md-nav-item>
           
-          <md-nav-item md-nav-click="ctrl.goto('/#!/report')" name="report">
-            Report
-          </md-nav-item>
-          
           <md-nav-item ng-show="ctrl.hasRole('MANAGER')" md-nav-click="ctrl.goto('/#!/manager_meetings')" name="manager_meetings">
             Meeting
           </md-nav-item>
-          
-          <md-nav-item md-nav-click="ctrl.goto('page2')" name="page2">
-            Page Two
-          </md-nav-item>
+
+		  <md-nav-item md-nav-click="ctrl.goto('/#!/building_reports')" name="building_reports">
+      	  	Report
+      	  </md-nav-item>
+      	  
           <md-nav-item md-nav-click="ctrl.logout()" name="logout" right>
             Logout
           </md-nav-item>
       
       </md-nav-bar>
-    
+
     <div layout="row">
         <div flex="20">
         
-        <md-list flex ng-show="currentNavItem=='report'">
-            <md-subheader class="md-no-sticky"></md-subheader>
-            <md-list-item  ng-click="null">
-                Reports
-            </md-list-item>
-            <md-list-item  ng-click="null">
-                Create Report
-            </md-list-item>
-          </md-list>
+        <md-list flex ng-show="currentNavItem=='building_reports'">
+        	<md-subheader class="md-no-sticky"></md-subheader>
+        	<md-list-item  ng-click="ctrl.goto('/#!/building_reports')">
+          		Reports
+        	</md-list-item>
+        	<md-list-item  ng-click="ctrl.goto('/#!/report')">
+          		Create Report
+        	</md-list-item>
+        </md-list>
         <md-list flex ng-show="currentNavItem=='buildings'">
             <md-subheader class="md-no-sticky"></md-subheader>
             <md-list-item ng-show="ctrl.hasRole('ADMIN')"  ng-click="ctrl.goto('/#!/buildings')">
@@ -82,7 +79,7 @@
       <div flex hide-sm hide-xs></div>
       </div>
 
-      <!-- bower:js -->
+    <!-- bower:js -->
     <!-- endinject -->
     <!-- inject:js -->
     <!-- endinject -->

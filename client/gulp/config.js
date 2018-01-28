@@ -5,6 +5,7 @@ exports.paths= {
     styles: ['./src/app/**/*.css', './app/**/*.scss'],
     index: './src/index.html',
     partials: ['./src/**/*.html', '!./src/index.html'],
+    assets:['./src/assets/**'],
     distDev: './dist.dev',
     distProd: './dist.prod',
     distScriptsProd: './dist.prod/scripts',
