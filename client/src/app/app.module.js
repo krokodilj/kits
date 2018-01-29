@@ -15,6 +15,7 @@
 			'kits.create_proposal',
 			'kits.manager_buildings',
 			'kits.manager_meetings',
+			'kits.manager_proposals',
 			'kits.building_reports',
 			'kits.building_proposals',
 			'kits.buildings',

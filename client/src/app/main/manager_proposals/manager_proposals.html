@@ -1,4 +1,4 @@
-<h1>Proposals for Buildings you live in</h1>
+<h1>Proposals for Buildings you manage</h1>
  <div layout="row">
   <md-input-container flex="100">
     <label>Proposal Status</label>
@@ -37,5 +37,9 @@
         
       </md-card-actions>
     </md-card-content>
+    <md-card-footer>
+    	<md-button ng-click="vm.acceptProposal(p.id)" class="md-raised md-primary">Accept</md-button>
+    	<md-button ng-click="vm.rejectProposal(p.id)" class="md-raised md-warn">Reject</md-button>
+    </md-card-footer>
   </md-card>
 </md-content>

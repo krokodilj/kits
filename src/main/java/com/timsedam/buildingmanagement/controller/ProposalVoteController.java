@@ -58,6 +58,7 @@ public class ProposalVoteController {
 	public ResponseEntity<?> cast(@Valid @RequestBody ProposalVoteCastDTO proposalVoteCastDTO, 
 			BindingResult validationResult, Principal principal) 
 					throws UserMissingException, ProposalMissingException, UserNotApartmentOwnerException, UserAlreadyVotedException {
+		
 		if (validationResult.hasErrors()) {
 			String errorMessage = validationResult.getFieldError().getDefaultMessage();
 			return new ResponseEntity<>(errorMessage, HttpStatus.UNPROCESSABLE_ENTITY);

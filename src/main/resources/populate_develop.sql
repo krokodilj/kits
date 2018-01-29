@@ -30,7 +30,7 @@ insert into kts_prod.role_permissions (role_id, permissions_id) values (1, 6);
 insert into kts_prod.role_permissions (role_id, permissions_id) values (1, 7);
 insert into kts_prod.role_permissions (role_id, permissions_id) values (1, 8);
 insert into kts_prod.role_permissions (role_id, permissions_id) values (1, 9);
-insert into kts_test.role_permissions (role_id, permissions_id) values (1, 14);
+insert into kts_prod.role_permissions (role_id, permissions_id) values (1, 14);
 insert into kts_prod.role_permissions (role_id, permissions_id) values (2, 4);
 insert into kts_prod.role_permissions (role_id, permissions_id) values (2, 8);
 insert into kts_prod.role_permissions (role_id, permissions_id) values (2, 9);
@@ -151,8 +151,8 @@ insert into kts_prod.user_roles (user_id, roles_id) values (40, 5);
 
 
 truncate kts_prod.building;
-insert into kts_prod.building (id, address, apartment_count, city, country, description, manager_id) values (1, 'Miše Dimitrijevića 3c', 5, 'Novi Sad', 'Srbija', 'description', 11);
-insert into kts_prod.building (id, address, apartment_count, city, country, description, manager_id) values (2, 'Stojana Obradovića', 5, 'Užice', 'Srbija', 'description', 12);
+insert into kts_prod.building (id, address, apartment_count, city, country, description, manager_id) values (1, 'Mise Dimitrijevica 3c', 5, 'Novi Sad', 'Srbija', 'description', 11);
+insert into kts_prod.building (id, address, apartment_count, city, country, description, manager_id) values (2, 'Stojana Obradovica', 5, 'Uzice', 'Srbija', 'description', 12);
 insert into kts_prod.building (id, address, apartment_count, city, country, description, manager_id) values (3, 'Liman 4', 5, 'Novi Sad', 'Srbija', 'description', 13);
 insert into kts_prod.building (id, address, apartment_count, city, country, description, manager_id) values (4, 'address', 5, 'city', 'country', 'description', 14);
 insert into kts_prod.building (id, address, apartment_count, city, country, description, manager_id) values (5, 'address', 5, 'city', 'country', 'description', 15);
@@ -240,7 +240,8 @@ insert into kts_prod.announcement (id, content, posted_at, building_id, poster_i
 insert into kts_prod.announcement (id, content, posted_at, building_id, poster_id) values (4, "announcement", "2018-01-23 14:48:46", 4, 34);
 
 truncate kts_prod.meeting;
-insert into kts_prod.meeting (id, location, `record`, starts_at, building_id) values (1, "location", "record", "2019-01-23 14:48:46", 1);
+insert into kts_prod.meeting (id, location, `record`, starts_at, building_id) values (1, "apartment #15", "record", "2018-01-29 00:00:00", 1);
+insert into kts_prod.meeting (id, location, `record`, starts_at, building_id) values (2, "coffee shop", "record", "2018-01-29 01:00:00", 1);
 
 truncate kts_prod.question_form;
 insert into kts_prod.question_form (id, started_at, status, building_id, creator_id, content, title) values
