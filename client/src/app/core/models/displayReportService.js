@@ -8,7 +8,8 @@
 		return{
 			getReport : getReport,
 			getAllByBuilding: getAllByBuilding,
-			forward: forward
+			forward: forward,
+			postComment: postComment
 		}
 
 		function getReport(reportId){
@@ -37,6 +38,17 @@
 		function forward(data){
 			var promise = $http
 							.post('/api/reports/forward/',data)
+							.then(function(response){
+								return {data:response.data}
+							},function(error){
+								return { error :true , data :error.data}
+							})
+			return promise	
+		}
+		
+		function postComment(data){
+			var promise = $http
+							.post('/api/reports/comment/',data)
 							.then(function(response){
 								return {data:response.data}
 							},function(error){

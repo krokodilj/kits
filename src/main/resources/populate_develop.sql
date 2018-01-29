@@ -30,6 +30,7 @@ insert into kts_prod.role_permissions (role_id, permissions_id) values (1, 6);
 insert into kts_prod.role_permissions (role_id, permissions_id) values (1, 7);
 insert into kts_prod.role_permissions (role_id, permissions_id) values (1, 8);
 insert into kts_prod.role_permissions (role_id, permissions_id) values (1, 9);
+insert into kts_test.role_permissions (role_id, permissions_id) values (1, 14);
 insert into kts_prod.role_permissions (role_id, permissions_id) values (2, 4);
 insert into kts_prod.role_permissions (role_id, permissions_id) values (2, 8);
 insert into kts_prod.role_permissions (role_id, permissions_id) values (2, 9);

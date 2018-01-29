@@ -9,6 +9,8 @@ public class CommentDTO {
 	private UserDTO commenter;
 	private LocalDateTime postedAt;
 	
+	public CommentDTO(){}
+	
 	public CommentDTO(long id, String data, UserDTO commenter, LocalDateTime postedAt) {
 		super();
 		this.id = id;
