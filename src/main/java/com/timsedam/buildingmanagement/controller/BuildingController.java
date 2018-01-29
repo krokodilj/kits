@@ -104,6 +104,11 @@ public class BuildingController {
     	for (Residence residence : residentResidences) {
     	    b.put(residence.getBuilding().getId(), residence.getBuilding());
     	}
+    	List<Building> manager_buildings = buildingService.findAllByManager(u.getId());
+    	for (Building building : manager_buildings) {
+    	    b.put(building.getId(), building);
+    	}
+    	
     	List<Building> buildings =  new ArrayList<Building>(b.values());
     	List<BuildingDTO> buildingsDTO = buildingMapper.toDto(buildings);
       

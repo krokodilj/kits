@@ -28,6 +28,7 @@ import com.timsedam.buildingmanagement.dto.request.ForwardCreateDTO;
 import com.timsedam.buildingmanagement.dto.request.ReportCreateDTO;
 import com.timsedam.buildingmanagement.dto.response.CommentDTO;
 import com.timsedam.buildingmanagement.dto.response.ReportDTO;
+import com.timsedam.buildingmanagement.dto.response.UserDTO;
 import com.timsedam.buildingmanagement.exceptions.BidMissingException;
 import com.timsedam.buildingmanagement.exceptions.BuildingMissingException;
 import com.timsedam.buildingmanagement.exceptions.InvalidStatusException;
@@ -37,6 +38,7 @@ import com.timsedam.buildingmanagement.exceptions.UserNotReportHolderException;
 import com.timsedam.buildingmanagement.exceptions.UserNotResidentException;
 import com.timsedam.buildingmanagement.mapper.CommentMapper;
 import com.timsedam.buildingmanagement.mapper.ReportMapper;
+import com.timsedam.buildingmanagement.mapper.UserMapper;
 import com.timsedam.buildingmanagement.model.Bid;
 import com.timsedam.buildingmanagement.model.Building;
 import com.timsedam.buildingmanagement.model.Comment;
@@ -49,6 +51,7 @@ import com.timsedam.buildingmanagement.service.BuildingService;
 import com.timsedam.buildingmanagement.service.CommentService;
 import com.timsedam.buildingmanagement.service.ForwardService;
 import com.timsedam.buildingmanagement.service.ReportService;
+import com.timsedam.buildingmanagement.service.ResidentService;
 import com.timsedam.buildingmanagement.service.UserService;
 
 @RestController
@@ -74,10 +77,16 @@ public class ReportController {
 	private BidService bidService;
 	
 	@Autowired
+	private ResidentService residentService;
+	
+	@Autowired
     private CommentMapper commentMapper;
 	
 	@Autowired
     private ReportMapper reportMapper;
+	
+	@Autowired
+    private UserMapper userMapper;
    
 	@PostMapping(consumes = "application/json", produces = "text/plain")
 	public ResponseEntity<?> create(Principal principal, @Valid @RequestBody ReportCreateDTO reportDTO,
@@ -106,7 +115,7 @@ public class ReportController {
 
 	}
 
-	@PostMapping(value = "forward", consumes = "application/json")
+	@PostMapping(value = "forward", consumes = "application/json", produces="text/plain")
 	public ResponseEntity<?> forward(Principal principal, @Valid @RequestBody ForwardCreateDTO forwardCreateDTO,
 			BindingResult validationResult)
 			throws UserMissingException, ReportMissingException, UserNotReportHolderException {
@@ -124,7 +133,7 @@ public class ReportController {
 		forward = forwardService.create(forward);
 
 		reportService.setCurrentHolder(forward, report.getId());
-		return new ResponseEntity<>(forward.getId(), HttpStatus.OK);
+		return new ResponseEntity<>(String.valueOf(forward.getId()), HttpStatus.OK);
 	}
 
 	@PostMapping(value = "comment", consumes = "application/json")
@@ -197,6 +206,16 @@ public class ReportController {
 		ReportDTO reportDTO = reportMapper.toDto(report);
         return new ResponseEntity<ReportDTO>(reportDTO, HttpStatus.OK);
     }
+	
+	@GetMapping(value="/by_building/{buildingId}" , produces="application/json")
+	public ResponseEntity<List<UserDTO>> getByBuilding(@PathVariable long buildingId){
+    	List<User> residents = residentService.findAllByBuildingId(buildingId);
+    	List<UserDTO> userDTOS = new ArrayList<UserDTO>();
+    	for(User u :residents){
+    		userDTOS.add(userMapper.toDto(u));
+		}
+    	return new ResponseEntity<List<UserDTO>>(userDTOS,HttpStatus.OK);
+	}
 
 	/**
 	 * Handles UserNotResidentException that can happen when calling
