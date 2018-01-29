@@ -40,6 +40,7 @@ insert into kts_test.role_permissions (role_id, permissions_id) values (3, 13);
 insert into kts_test.role_permissions (role_id, permissions_id) values (4, 3);
 insert into kts_test.role_permissions (role_id, permissions_id) values (4, 8);
 insert into kts_test.role_permissions (role_id, permissions_id) values (4, 9);
+insert into kts_prod.role_permissions (role_id, permissions_id) values (4, 10);
 insert into kts_test.role_permissions (role_id, permissions_id) values (4, 11);
 insert into kts_test.role_permissions (role_id, permissions_id) values (5, 3);
 insert into kts_test.role_permissions (role_id, permissions_id) values (5, 8);

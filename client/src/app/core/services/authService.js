@@ -19,7 +19,7 @@
 				var promise = $http
 					.post('/api/auth/login',data)
 					.then(function(res){
-						sessionService.createSession(res.data)//200
+						sessionService.createSession(res.data)
 						return {data:res.data}
 					},function(err){
 						return {error:true,data:err.data}

@@ -1,6 +1,8 @@
 package com.timsedam.buildingmanagement.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -9,16 +11,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.timsedam.buildingmanagement.dto.request.ProposalVoteCastDTO;
+import com.timsedam.buildingmanagement.dto.response.BuildingDTO;
+import com.timsedam.buildingmanagement.dto.response.ProposalVoteDTO;
 import com.timsedam.buildingmanagement.exceptions.ProposalMissingException;
+import com.timsedam.buildingmanagement.exceptions.UserAlreadyVotedException;
 import com.timsedam.buildingmanagement.exceptions.UserMissingException;
 import com.timsedam.buildingmanagement.exceptions.UserNotApartmentOwnerException;
 import com.timsedam.buildingmanagement.mapper.ProposalVoteMapper;
+import com.timsedam.buildingmanagement.model.Building;
 import com.timsedam.buildingmanagement.model.Proposal;
 import com.timsedam.buildingmanagement.model.ProposalVote;
 import com.timsedam.buildingmanagement.model.User;
@@ -49,8 +57,7 @@ public class ProposalVoteController {
 	@PostMapping(consumes = "application/json", produces = "application/json")
 	public ResponseEntity<?> cast(@Valid @RequestBody ProposalVoteCastDTO proposalVoteCastDTO, 
 			BindingResult validationResult, Principal principal) 
-					throws UserMissingException, ProposalMissingException, UserNotApartmentOwnerException {
-		
+					throws UserMissingException, ProposalMissingException, UserNotApartmentOwnerException, UserAlreadyVotedException {
 		if (validationResult.hasErrors()) {
 			String errorMessage = validationResult.getFieldError().getDefaultMessage();
 			return new ResponseEntity<>(errorMessage, HttpStatus.UNPROCESSABLE_ENTITY);
@@ -64,6 +71,13 @@ public class ProposalVoteController {
 		
 		return new ResponseEntity<Long>(proposalVote.getId(), HttpStatus.CREATED);
 	}
+	
+	@GetMapping(value = "/{proposalId}", produces = "application/json")
+    public ResponseEntity<?> getManagerBuildings(@PathVariable Long proposalId) throws UserMissingException {
+    	ArrayList<ProposalVote> votes = proposalVoteService.findAllByProposalId(proposalId);
+    	ArrayList<ProposalVoteDTO> dtos = proposalVoteMapper.toDto(votes);
+        return new ResponseEntity<List<ProposalVoteDTO>>(dtos, HttpStatus.OK);
+    }
 	
 	/**
 	 * Handles UserMissingException that can happen when calling UserServce.findByName(username)
@@ -88,6 +102,15 @@ public class ProposalVoteController {
 	public ResponseEntity<String> userNotApartmentOwnerException(final UserNotApartmentOwnerException e) {
 		return new ResponseEntity<String>("User with id: " + e.getUserId() + " is not an ApartmentOwner "
 				+ "in Building with id: " + e.getBuildingId(), HttpStatus.NOT_FOUND);
+	}
+	
+	/**
+	 * Handles UserAlreadyVotedException that can happen when calling ProposalVoteService.create(vote)
+	 */
+	@ExceptionHandler(UserAlreadyVotedException.class)
+	public ResponseEntity<String> userAlreadyVotedException(final UserAlreadyVotedException e) {
+		return new ResponseEntity<String>("User with id: " + e.getVoterId() +
+				" already voted for Proposal with id: " + e.getProposalId(), HttpStatus.CONFLICT);
 	}
 
 }
