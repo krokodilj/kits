@@ -33,6 +33,7 @@
 							toastr.error("Error creating residence")
 						}else{
 							vm.residence={}
+							toastr.success("Residence successfully created")
 							$location.path('/residence/'+response.data)
 						}
 					})

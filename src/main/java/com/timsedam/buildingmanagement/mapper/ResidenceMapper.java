@@ -19,8 +19,11 @@ public class ResidenceMapper {
     }
 
     public ResidenceDTO toDto(Residence r){
+        Long owner=null;
+        if(r.getApartmentOwner()!=null)
+            owner=r.getApartmentOwner().getId();
         ResidenceDTO residenceDTO = new ResidenceDTO(r.getId(), r.getBuilding().getId(), r.getFloorNumber(),
-        		r.getApartmentNumber(), null, r.getApartmentOwner().getId());
+        		r.getApartmentNumber(), null, owner);
 
         //residents
         if(r.getResidents() != null){
