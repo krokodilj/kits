@@ -155,13 +155,13 @@ public class ReportController {
 		return new ResponseEntity<CommentDTO>(comm, HttpStatus.OK);
 	}
 
-	@PostMapping(value = "bid", consumes = "application/json")
+	@PostMapping(value = "bid", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<?> sendBid(Principal principal, @Valid @RequestBody BidSendDTO bidSendDTO,
 			BindingResult validationResult) throws UserMissingException, ReportMissingException {
 
 		if (validationResult.hasErrors()) {
 			String errorMessage = validationResult.getFieldError().getDefaultMessage();
-			return new ResponseEntity<String>(errorMessage, HttpStatus.UNPROCESSABLE_ENTITY);
+			return new ResponseEntity<ResponseDTO>(new ResponseDTO(errorMessage), HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 
 		Company company = (Company) userService.findOneByUsername(principal.getName());
@@ -170,7 +170,7 @@ public class ReportController {
 		Bid bid = new Bid(bidSendDTO.getDescription(), bidSendDTO.getPrice(), company, report, "OPEN");
 		bidService.save(bid);
 
-		return new ResponseEntity<Long>(bid.getId(), HttpStatus.OK);
+		return new ResponseEntity<ResponseDTO>(new ResponseDTO(String.valueOf(bid.getId())), HttpStatus.OK);
 	}
 
 	@PostMapping(value = "acceptBid", consumes = "application/json")

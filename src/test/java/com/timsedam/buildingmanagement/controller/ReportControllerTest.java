@@ -288,15 +288,15 @@ public class ReportControllerTest {
 		Report report = reportRepository.findOne(report_id);
 		List<Bid> bids = bidRepository.findByReportBid(report);
 		
-		ResponseEntity<String> responseEntity = 
-			restTemplate.postForEntity(URL_PREFIX + "bid/", getRequestEntity(validDTO, "company1", "company1"), String.class);
+		ResponseEntity<ResponseDTO> responseEntity = 
+			restTemplate.postForEntity(URL_PREFIX + "bid/", getRequestEntity(validDTO, "company1", "company1"), ResponseDTO.class);
 		
 		List<Bid> newBids = bidRepository.findByReportBid(report);
 		
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 		assertEquals(newBids.size(), bids.size() + 1);
 		
-		bidRepository.delete(Long.parseLong(responseEntity.getBody()));
+		bidRepository.delete(Long.parseLong(responseEntity.getBody().getResponse()));
 	}
 	
 	/**
