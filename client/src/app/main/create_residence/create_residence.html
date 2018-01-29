@@ -1,0 +1,27 @@
+<div layout="row" layout-align="center center">
+<md-content layout-gt-sm="column" layout-padding="">
+	<form name="createResidenceForm" ng-submit="vm.create(vm.residence)" novalidate>
+		<md-input-container>
+	      <label>Building</label>
+	      <md-select ng-model="vm.residence.building">
+            <md-option ng-repeat="b in vm.buildings" ng-value="b.id" required>
+              id: {{b.id}} |
+              {{b.address}}
+            </md-option>
+          </md-select>
+	    </md-input-container>
+	    <br>
+	    <md-input-container>
+	      <label>Apartment Number</label>
+	      <input ng-model="vm.residence.apartmentNumber" required>
+	    </md-input-container>
+	    <br>
+	    <md-input-container>
+	      <label>Floor Number</label>
+	      <input ng-model="vm.residence.floorNumber" required>
+	    </md-input-container>
+	    <br>
+	    <md-button class="md-raised" type="submit" ng-disabled="createResidenceForm.$invalid">CREATE</md-button>
+	</form>
+</md-content>
+</div>

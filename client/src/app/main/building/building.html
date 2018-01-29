@@ -30,6 +30,10 @@
 				ng-click="vm.selectResidence(r)">
 				Apartment Number : {{r.apartmentNumber}}	
 	            Floor:{{r.floorNumber}}
+	            <md-button 
+	            	style="background-color: lightblue ;min-width:3% ; min-height : 20px"  
+	           		ng-href="/#!/residence/{{r.id}}"> 
+	        	</md-button>
         	</md-list-item>
 		</md-list>
 		</md-content>
@@ -44,6 +48,7 @@
 				ng-style="{ 'background-color':  vm.selectedResidence.residents.includes(r.id) ? 'lightblue' : 'default'}"
 				ng-repeat="r in vm.building.residents" 
 				ng-click="1==1">
+				<img data-ng-src="{{r.pictures[0]}}" width="30px" height="30px "  alt="&nbsp;" >
 				Username : {{r.username}}	
         	</md-list-item>
 		</md-list>

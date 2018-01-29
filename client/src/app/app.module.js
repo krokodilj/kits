@@ -22,6 +22,8 @@
 			'kits.building',
 			'kits.display_report',
 			'kits.buildings',
-			'kits.users'
+			'kits.users',
+			'kits.create_residence',
+			'kits.residence'
 		])
 })();
