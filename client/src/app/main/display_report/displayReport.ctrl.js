@@ -135,6 +135,66 @@
 					        
 					      }
 			    };
+			    
+			    vm.sendBid = function ($event) {
+					var parentEl = angular.element(document.body);
+						$mdDialog.show({
+						  parent: parentEl,
+					      targetEvent: $event,
+					      template:
+					           '<md-dialog aria-label="List dialog">' +
+					           '  <md-dialog-content>'+
+					           '    <md-input-container class="md-block" flex-gt-sm>'+
+					           '		<label>Price</label>'+
+					           ' 		<input ng-model="price">'+
+					           '	</md-input-container>'+
+					           '    <md-input-container class="md-block" flex-gt-sm>'+
+					           '		<label>Description</label>'+
+					           ' 		<input ng-model="description">'+
+					           '	</md-input-container>'+
+					           '  </md-dialog-content>' +
+					           '  <md-dialog-actions>' +
+					           '    <md-button ng-click="sendBid()" class="md-primary">' +
+					           '      Send Bid' +
+					           '    </md-button>' +
+					           '    <md-button ng-click="closeDialog()" class="md-primary">' +
+					           '      Close Dialog' +
+					           '    </md-button>' +
+					           '  </md-dialog-actions>' +
+					           '</md-dialog>',
+					      locals: {
+					        price: $scope.price,
+					        description: $scope.description
+					      },
+					         controller: DialogController
+					      });
+					       
+					      function DialogController($scope, displayReportService, $mdDialog) {
+					        $scope.sendBid = function() {
+					          if($scope.price!=undefined && $scope.description!=undefined){
+					        	  var data =  { 
+					    					"price": $scope.price,
+					    					"description": $scope.description,
+					    					"report": vm.report.id
+					    				};
+					        	  alert(JSON.stringify(data))
+					        	  displayReportService.sendBid(data)
+									.then(function(resp){
+										if(resp.error){
+											toastr.error("Error while sending bid")
+										}else{
+											toastr.success("Bid is succesfully sent.");
+											$mdDialog.hide();
+										}
+									})
+					          }
+					        }
+					        $scope.closeDialog = function() {
+						          $mdDialog.hide();
+						        }
+					        
+					      }
+			    };
 
 		}])
 })();

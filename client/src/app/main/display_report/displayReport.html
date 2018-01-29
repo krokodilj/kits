@@ -8,7 +8,7 @@
 </md-card>
 </div>
 <md-button class="md-accent md-raised md-hue-1" ng-show="vm.isHolder()" ng-click="vm.forwardReport($event)">Forward Report</md-button>
-<md-button class="md-warn md-raised md-hue-2" ng-show="ctrl.hasRole('COMPANY')">Send Bid</md-button>
+<md-button class="md-warn md-raised md-hue-2" ng-show="ctrl.hasRole('COMPANY')" ng-click="vm.sendBid($event)">Send Bid</md-button>
 <div ng-cloak layout="column"><md-card>
     <md-card-title>
       <md-card-title-text>
