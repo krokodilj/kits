@@ -239,7 +239,8 @@ insert into kts_test.announcement (id, content, posted_at, building_id, poster_i
 insert into kts_test.announcement (id, content, posted_at, building_id, poster_id) values (4, "announcement", "2018-01-23 14:48:46", 4, 34);
 
 truncate kts_test.meeting;
-insert into kts_test.meeting (id, location, `record`, starts_at, building_id) values (1, "location", "record", "2019-01-23 14:48:46", 1);
+insert into kts_test.meeting (id, location, `record`, starts_at, building_id) values (1, "apartment #15", "record", "2018-01-29 00:00:00", 1);
+insert into kts_test.meeting (id, location, `record`, starts_at, building_id) values (2, "coffee shop", "record", "2018-01-29 01:00:00", 1);
 
 truncate kts_test.question_form;
 insert into kts_test.question_form (id, started_at, status, building_id, creator_id, content, title) values

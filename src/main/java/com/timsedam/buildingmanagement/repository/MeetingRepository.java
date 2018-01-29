@@ -1,5 +1,6 @@
 package com.timsedam.buildingmanagement.repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,5 +14,5 @@ public interface MeetingRepository extends JpaRepository<Meeting, Long> {
 	
 	@Query("SELECT m FROM Meeting as m join m.building as b join b.manager as manager where manager.id=?1") 
 	public List<Meeting> findAllByManagerId(Long managerId);
-
+	
 }

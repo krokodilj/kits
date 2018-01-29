@@ -26,7 +26,8 @@ public class ProposalVoteService {
 	private BuildingService buildingService;
 	
 	public ProposalVote create(ProposalVote vote, Proposal proposal) throws UserNotApartmentOwnerException, UserAlreadyVotedException {
-		if(!buildingService.isResidentOrApartmentOwner(vote.getVoter(), proposal.getBuilding()))
+		if(!(buildingService.isManager(proposal.getBuilding(), vote.getVoter()) ||
+			 buildingService.isResidentOrApartmentOwner(vote.getVoter(), proposal.getBuilding())))
 			throw new UserNotApartmentOwnerException(vote.getVoter().getId(), proposal.getBuilding().getId());
 		if(alreadyVoted(vote.getVoter(), proposal))
 			throw new UserAlreadyVotedException(vote.getVoter().getId(), proposal.getId());

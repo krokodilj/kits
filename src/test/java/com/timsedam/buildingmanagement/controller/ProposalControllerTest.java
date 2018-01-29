@@ -183,14 +183,14 @@ public class ProposalControllerTest {
     }
 	
 	/**
-	 * GET request to "/api/proposals?buildingId=1"
+	 * GET request to "/api/proposals?buildingId=1&proposal_status=OPEN"
 	 * Expected: ProposalDTO Array is returned, HTTP Status 200 OK
 	 */
 	@Test
-	public void getProposalsByBuildingId() throws Exception {
+	public void getProposalsByBuildingIdAndProposalStatus() throws Exception {
 		
 		ResponseEntity<ProposalDTO[]> responseEntity = restTemplate.exchange(
-				"/api/proposals?building_id=1", HttpMethod.GET, getRequestEntity(null, "resident1", "resident1"), ProposalDTO[].class);
+				"/api/proposals?building_id=1&proposal_status=OPEN", HttpMethod.GET, getRequestEntity(null, "resident1", "resident1"), ProposalDTO[].class);
 		ProposalDTO[] data = responseEntity.getBody();
 		
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());

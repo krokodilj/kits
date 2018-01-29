@@ -10,12 +10,14 @@ import com.timsedam.buildingmanagement.exceptions.ReportNotAttachedToBuildingExc
 import com.timsedam.buildingmanagement.exceptions.UserNotResidentOrApartmentOwnerException;
 import com.timsedam.buildingmanagement.model.Building;
 import com.timsedam.buildingmanagement.model.Proposal;
+import com.timsedam.buildingmanagement.model.ProposalStatus;
 import com.timsedam.buildingmanagement.model.Report;
 import com.timsedam.buildingmanagement.model.User;
 import com.timsedam.buildingmanagement.repository.ProposalRepository;
 
 @Service
 public class ProposalService {
+	
 	
 	@Autowired
 	private ProposalRepository proposalRepository;
@@ -25,6 +27,10 @@ public class ProposalService {
 	
 	@Autowired
 	private ReportService reportService;
+	
+	public void save(Proposal proposal) {
+		proposalRepository.save(proposal);
+	}
 	
 	public Proposal create(Proposal proposal) throws UserNotResidentOrApartmentOwnerException, ReportNotAttachedToBuildingException {
 		if(proposal.getAttachedReport() != null) {
@@ -47,8 +53,8 @@ public class ProposalService {
 			return proposal;
 	}
 	
-	public List<Proposal> findAllByBuildingId(Long buildingId) {
-		return proposalRepository.findAllByBuildingId(buildingId);
+	public List<Proposal> findAllByBuildingAndProposalStatus(Long buildingId, ProposalStatus proposalStatus) {
+		return proposalRepository.findAllByBuildingIdAndStatus(buildingId, proposalStatus);
 	}
 
 }

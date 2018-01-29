@@ -1,15 +1,15 @@
 (function(){
 	angular
-		.module('kits.building_proposals', ['model.service.proposal', 'model.service.building','service.session'])
+		.module('kits.manager_proposals', ['model.service.proposal', 'model.service.building', 'service.session'])
 		.config(['$routeProvider', function($routeProvider){
 			$routeProvider
-				.when('/building_proposals',{
-					templateUrl:'./app/main/building_proposals/building_proposals.html',
-					controller: 'BuildingProposalsController',
+				.when('/manager_proposals',{
+					templateUrl:'./app/main/manager_proposals/manager_proposals.html',
+					controller: 'ManagerProposalsController',
 					controllerAs: 'vm'
 				})
 		}])
-		.controller('BuildingProposalsController', ['proposalService', 'buildingService', 'toastr', 'sessionService',
+		.controller('ManagerProposalsController', ['proposalService', 'buildingService', 'toastr', 'sessionService',
 			function(proposalService, buildingService, toastr, sessionService) {
 
 			var vm = this;
@@ -20,10 +20,12 @@
 			vm.username = sessionService.userId;
 			
 			vm.parseDateTime = parseDateTime;
-			vm.getUserBuildings = getUserBuildings;
+			vm.getUserManagerBuildings = getUserManagerBuildings;
 			vm.getProposals = getProposals;
 			vm.proposalUpvote = proposalUpvote;
 			vm.proposalDownvote = proposalDownvote;
+			vm.acceptProposal = acceptProposal;
+			vm.rejectProposal = rejectPropsoal;
 			vm.refreshVotes = refreshVotes;
 			
 			getProposals(vm.username, "OPEN");
@@ -31,11 +33,11 @@
 			
 			function getProposals(username, proposalStatus) {
 				vm.proposals = [];
-				vm.getUserBuildings(username, proposalStatus);
+				vm.getUserManagerBuildings(username, proposalStatus);
 			}
 
-			function getUserBuildings(username, proposalStatus) {
-				buildingService.getAllForUser(username).then(function(response) {
+			function getUserManagerBuildings(username, proposalStatus) {
+				buildingService.getAllForManager(username).then(function(response) {
 					if(response.error) {
 						toastr.error("Unable to fetch buildings")
 					}
@@ -127,6 +129,30 @@
 				let date = array[2] + "." +  array[1] +  "." + array[0];
 				let time = " " + array[3] + ":" + array[4];
 				return date + time;
+			}
+			
+			function acceptProposal(proposalId) {
+				proposalService.acceptProposal(proposalId).then(function(response){ 
+					if(response.error) {
+						toastr.error("Proposal cannot be accepted. No active Meeting.");
+					}
+					else {
+						toastr.success("Proposal accepted!");
+						vm.getProposals(vm.username, vm.proposalStatus);
+					}
+				})
+			}
+			
+			function rejectPropsoal(proposalId) {
+				proposalService.rejectProposal(proposalId).then(function(response){ 
+					if(response.error) {
+						toastr.error("Proposal cannot be rejected. No active Meeting.");
+					}
+					else {
+						toastr.success("Proposal rejected!");
+						vm.getProposals(vm.username, vm.proposalStatus);
+					}
+				})
 			}
 			
 		}])

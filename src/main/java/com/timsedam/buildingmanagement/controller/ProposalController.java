@@ -28,10 +28,13 @@ import com.timsedam.buildingmanagement.exceptions.UserMissingException;
 import com.timsedam.buildingmanagement.exceptions.UserNotResidentOrApartmentOwnerException;
 import com.timsedam.buildingmanagement.mapper.ProposalMapper;
 import com.timsedam.buildingmanagement.model.Building;
+import com.timsedam.buildingmanagement.model.Meeting;
 import com.timsedam.buildingmanagement.model.Proposal;
+import com.timsedam.buildingmanagement.model.ProposalStatus;
 import com.timsedam.buildingmanagement.model.Report;
 import com.timsedam.buildingmanagement.model.User;
 import com.timsedam.buildingmanagement.service.BuildingService;
+import com.timsedam.buildingmanagement.service.MeetingService;
 import com.timsedam.buildingmanagement.service.ProposalService;
 import com.timsedam.buildingmanagement.service.ReportService;
 import com.timsedam.buildingmanagement.service.UserService;
@@ -54,6 +57,9 @@ public class ProposalController {
 	
 	@Autowired
 	private ProposalMapper proposalMapper;
+	
+	@Autowired
+	private MeetingService meetingService;
 	
 	@PostMapping(consumes = "application/json", produces = "application/json")
 	public ResponseEntity<?> create(@Valid @RequestBody ProposalCreateDTO proposalCreateDTO, BindingResult validationResult, Principal principal)
@@ -90,11 +96,44 @@ public class ProposalController {
 		return new ResponseEntity<ProposalDTO>(responseData, HttpStatus.OK);
 	}
 	
-	@GetMapping(produces = "application/json", params = "building_id")
-	public ResponseEntity<List<ProposalDTO>> getAllByBuildingId(@RequestParam("building_id") Long buildingId) {
-		List<Proposal> proposals = proposalService.findAllByBuildingId(buildingId);
+	@GetMapping(produces = "application/json")
+	public ResponseEntity<List<ProposalDTO>> getAllByBuildingIdAndStatus(@RequestParam("building_id") Long buildingId,
+			@RequestParam("proposal_status") String proposalStatus) {
+		List<Proposal> proposals = proposalService.findAllByBuildingAndProposalStatus(buildingId, ProposalStatus.valueOf(proposalStatus));
 		List<ProposalDTO> dtos = proposalMapper.toDto(proposals);
 		return new ResponseEntity<List<ProposalDTO>>(dtos, HttpStatus.OK);
+	}
+	
+	@PostMapping(value = "{proposalId}/accept")
+	public ResponseEntity<?> accept(@PathVariable Long proposalId) throws ProposalMissingException {
+		Proposal proposal = proposalService.findOne(proposalId);
+		Meeting activeMeeting = meetingService.findActive(proposal.getBuilding().getId());
+		
+		if(activeMeeting == null)
+			return new ResponseEntity(HttpStatus.NOT_FOUND);
+		
+		proposal.setStatus(ProposalStatus.ACCEPTED);
+		proposal.setMeeting(activeMeeting);
+		proposalService.save(proposal);
+		activeMeeting.getAcceptedProposals().add(proposal);
+		meetingService.save(activeMeeting);
+		return new ResponseEntity(HttpStatus.OK);
+	}
+	
+	@PostMapping(value = "{proposalId}/reject")
+	public ResponseEntity<?> reject(@PathVariable Long proposalId) throws ProposalMissingException {
+		Proposal proposal = proposalService.findOne(proposalId);
+		Meeting activeMeeting = meetingService.findActive(proposal.getBuilding().getId());
+		
+		if(activeMeeting == null)
+			return new ResponseEntity(HttpStatus.NOT_FOUND);
+		
+		proposal.setStatus(ProposalStatus.REJECTED);
+		proposal.setMeeting(activeMeeting);
+		proposalService.save(proposal);
+		activeMeeting.getAcceptedProposals().add(proposal);
+		meetingService.save(activeMeeting);
+		return new ResponseEntity(HttpStatus.OK);
 	}
 	
 	/**
