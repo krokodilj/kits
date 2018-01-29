@@ -1,0 +1,54 @@
+<br><br>
+<div layout="row" layout-align="center center">
+
+	<form name='registerForm' ng-submit="vm.register(vm.user,vm.type)" novalidate>
+		<md-radio-group ng-model="vm.type" layout="row" required>	
+	      <md-radio-button value="admins" class="md-primary">Admin</md-radio-button>
+	      <md-radio-button value="managers"> Manager </md-radio-button>
+	      <md-radio-button value="residents">Resident</md-radio-button>
+	      <md-radio-button value="companies">Company</md-radio-button>
+	    </md-radio-group>
+
+		<md-input-container>
+	      <label>Username</label>
+	      <input ng-model="vm.user.username" required>
+	    </md-input-container>
+	    
+	    <md-input-container>
+	      <label>Password</label>
+	      <input ng-model="vm.user.password" type="password" required>
+	    </md-input-container>
+		
+	    <md-input-container>
+	      <label>Email</label>
+	      <input ng-model="vm.user.email" required>
+	    </md-input-container>
+
+	    <md-input-container ng-show="vm.type=='companies'">
+	      <label>Name</label>
+	      <input ng-model="vm.user.name" ng-required="vm.type=='companies'">
+	    </md-input-container>
+
+	    <md-input-container ng-show="vm.type=='companies'">
+	      <label>PIB</label>
+	      <input ng-model="vm.user.pib" ng-required="vm.type=='companies'">
+	    </md-input-container>
+
+	    <md-input-container ng-show="vm.type=='companies'">
+	      <label>Location</label>
+	      <input ng-model="vm.user.location">
+	    </md-input-container>
+
+	    <md-input-container ng-show="vm.type=='companies'">
+	      <label>Phone</label>
+	      <input ng-model="vm.user.phoneNumber" ng-required="vm.type=='companies'">
+	    </md-input-container>
+	    
+	    <md-button class="md-raised" type="submit" ng-disabled="registerForm.$invalid">Register</md-button>
+	</form>
+</div>	
+	 <lf-ng-md-file-input lf-files='files' accept="image/*" 
+  lf-placeholder="Pick Image" lf-browse-label="Search" 
+    lf-remove-label="Delete" ng-clik="vm.uploadStart()" multiple drag preview ></lf-ng-md-file-input>
+
+

@@ -13,14 +13,16 @@
 			getAllByBuilding : getAllByBuilding
 		}
 
-		function create(user){
+		function create(user,type){
 
-			return $http
-					.post('/user',user)
+			var promise =  $http
+					.post('/api/'+type+'/',user)
 					.then(function(res){
-						return res.data
+						return {data:res.data}
+					},function(error){
+						return { error :true , data :error.data}
 					})
-
+			return promise
 		}
 
 		function remove(user){
