@@ -1,0 +1,61 @@
+<h1 >Residence information</h1>
+<md-divider></md-divider>
+<div layout="row">
+	<table>
+		<tr><td>Id</td><td>{{vm.residence.id}}</td></tr>
+		<tr><td>Apartment Number</td><td>{{vm.residence.apartmentNumber}}</td></tr>
+		<tr><td>Floor Number</td><td>{{vm.residence.floorNumber}}</td></tr>
+		<tr><td>Address</td><td>{{vm.residence.building.address}}</td></tr>
+		<tr><td>City</td><td>{{vm.residence.building.city}}</td></tr>
+	</table>
+	<md-divider></md-divider>
+	<md-card>
+        <md-card-title>
+          <md-card-title-media>
+          	Owner : {{vm.residence.appartmentOwner.username}}
+            <div class="md-media-lg card-media"><img data-ng-src="{{vm.residence.appartmentOwner.pictures[0]}}"  alt="&nbsp;No Images" ></div>
+          </md-card-title-media>
+        </md-card-title>
+	</md-card>
+
+	<md-divider></md-divider>
+
+	<md-content>
+		<md-list class="md-dense">
+			<md-list-item class="md-2-line" 
+				ng-repeat="r in vm.residence.residentss" 
+				ng-show="vm.residence.residents.includes(r.id)"
+				ng-click="3==3">
+				<img data-ng-src="{{r.pictures[0]}}" width="30px" height="30px "  alt="&nbsp;" >
+				Username : {{r.username}}
+        	</md-list-item>
+		</md-list>
+	</md-content>
+</div>
+<md-divider></md-divider>
+<div layout="row">
+	<div layout="column" flex="50">
+		<h4>Add new Resident</h4>
+		<md-input-container>
+	          <label>resident</label>
+	          <md-select ng-model="vm.new_resident">
+	            <md-option ng-repeat="r in vm.residents" ng-value="r" required>
+	              {{r.username}}
+	            </md-option>
+	          </md-select>
+	    </md-input-container>
+	    <md-button ng-click="vm.addResident(vm.new_resident)">ADD</md-button>
+	</div>
+	<div layout="column" flex="50">
+		<h4>Add Owner</h4>
+		<md-input-container>
+	          <label>resident</label>
+	          <md-select ng-model="vm.new_owner">
+	            <md-option ng-repeat="r in vm.residents" ng-value="r" required>
+	              {{r.username}}
+	            </md-option>
+	          </md-select>
+	    </md-input-container>
+	    <md-button ng-click="vm.addOwner(vm.new_owner)">ADD</md-button>
+	</div>
+</div>
