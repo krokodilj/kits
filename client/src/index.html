@@ -17,6 +17,9 @@
           <md-nav-item ng-show="ctrl.hasRole('ADMIN')" md-nav-click="ctrl.goto('/#!/buildings')" name="buildings">
             Buildings
           </md-nav-item>
+           <md-nav-item ng-show="ctrl.hasRole('ADMIN')" md-nav-click="ctrl.goto('/#!/users')" name="users">
+            Users
+          </md-nav-item>
           <md-nav-item ng-show="ctrl.hasRole('MANAGER')" md-nav-click="ctrl.goto('/#!/manager_buildings')" name="buildings">
             Buildings
           </md-nav-item>
@@ -60,6 +63,15 @@
             <md-list-item ng-show="ctrl.hasRole('ADMIN')"  ng-click="ctrl.goto('/#!/create_building')">
                 Create Building
             </md-list-item>
+        </md-list>
+
+        <md-list flex ng-show="currentNavItem=='users'">
+          <md-list-item ng-click="ctrl.goto('/#!/users')">
+              Users
+          </md-list-item>
+          <md-list-item ng-click="ctrl.goto('/#!/register')">
+              Register Users
+          </md-list-item>
         </md-list>
         
         <md-list flex ng-show="currentNavItem=='building_proposals'">

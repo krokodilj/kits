@@ -56,7 +56,7 @@
 						if(response.error){
 							toastr.error("Error fetching managers")
 						}else{
-							vm.managers=response.data
+							vm.companies=response.data
 						}
 					})
 			}
