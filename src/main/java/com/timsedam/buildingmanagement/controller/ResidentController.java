@@ -83,6 +83,17 @@ public class 	ResidentController {
         residenceService.save(residence);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping(produces = "application/json")
+    public ResponseEntity<List<UserDTO>> getAll(){
+
+        List<User> residents = residentService.getAll();
+        List<UserDTO> userDTOS = new ArrayList<UserDTO>();
+        for(User u : residents)
+            userDTOS.add(userMapper.toDto(u));
+
+        return new ResponseEntity<List<UserDTO>>(userDTOS,HttpStatus.OK);
+    }
     
     /**
 	 * Handles UserMissingException that can happen when calling:

@@ -20,6 +20,7 @@
 			'kits.buildings',
 			'kits.building',
 			'kits.display_report',
-			'kits.buildings'
+			'kits.buildings',
+			'kits.users'
 		])
 })();

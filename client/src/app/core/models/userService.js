@@ -10,7 +10,10 @@
 			remove : remove,
 			getManagers	: getManagers,
 			getOne : getOne,
-			getAllByBuilding : getAllByBuilding
+			getAllByBuilding : getAllByBuilding,
+			getResidents : getResidents,
+			getAdmins : getAdmins,
+			getCompanies : getCompanies
 		}
 
 		function create(user,type){
@@ -60,6 +63,39 @@
 								return { error :true , data :error.data}
 							})
 			return promise	
+		}
+
+		function getAdmins(){
+			var promise = $http
+							.get('/api/admins/')
+							.then(function(response){
+								return {data:response.data}
+							},function(error){
+								return { error :true , data :error.data}
+							})
+			return promise
+		}
+
+		function getResidents(){
+			var promise = $http
+							.get('/api/residents/')
+							.then(function(response){
+								return {data:response.data}
+							},function(error){
+								return { error :true , data :error.data}
+							})
+			return promise
+		}
+
+		function getCompanies(){
+			var promise = $http
+							.get('/api/companies/')
+							.then(function(response){
+								return {data:response.data}
+							},function(error){
+								return { error :true , data :error.data}
+							})
+			return promise
 		}
 	}
 })();

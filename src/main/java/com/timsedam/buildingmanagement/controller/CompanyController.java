@@ -2,15 +2,12 @@ package com.timsedam.buildingmanagement.controller;
 
 import javax.validation.Valid;
 
+import com.timsedam.buildingmanagement.dto.response.CompanyDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.timsedam.buildingmanagement.dto.request.CompanyCreateDTO;
 import com.timsedam.buildingmanagement.exceptions.RoleInvalidException;
@@ -18,6 +15,9 @@ import com.timsedam.buildingmanagement.exceptions.UserExistsException;
 import com.timsedam.buildingmanagement.mapper.CompanyMapper;
 import com.timsedam.buildingmanagement.model.Company;
 import com.timsedam.buildingmanagement.service.CompanyService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping(value="/api/companies/")
@@ -28,7 +28,7 @@ public class CompanyController {
 		
 	@Autowired
 	private CompanyMapper companyMapper;
-		
+
 	@PostMapping(consumes = "application/json", produces = "application/json")
 	public ResponseEntity<?> create(@Valid @RequestBody CompanyCreateDTO companyDTO, BindingResult validationResult)
 			throws ClassNotFoundException, UserExistsException, RoleInvalidException {
@@ -45,6 +45,17 @@ public class CompanyController {
 		}
 		
 	}
+	@GetMapping(produces = "application/json")
+	public ResponseEntity<List<CompanyDTO>> getAll(){
+
+		List<Company> companies = companyService.getAll();
+		List<CompanyDTO> userDTOS = new ArrayList<CompanyDTO>();
+		for(Company u : companies)
+			userDTOS.add(companyMapper.toDto(u));
+
+		return new ResponseEntity<List<CompanyDTO>>(userDTOS,HttpStatus.OK);
+	}
+
 	
 	/**
 	 * Handles UserExistsException that can happen when calling CompanyService.save(company)

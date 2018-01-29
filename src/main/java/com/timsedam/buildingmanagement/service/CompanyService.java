@@ -1,5 +1,6 @@
 package com.timsedam.buildingmanagement.service;
 
+import com.timsedam.buildingmanagement.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +10,9 @@ import com.timsedam.buildingmanagement.model.Role;
 import com.timsedam.buildingmanagement.repository.RoleRepository;
 import com.timsedam.buildingmanagement.repository.UserRepository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class CompanyService {
 	
@@ -17,6 +21,9 @@ public class CompanyService {
 	
 	@Autowired
 	private RoleRepository roleRepository;
+
+	@Autowired
+	private CompanyRepository companyRepository;
 	
 	private boolean exists(String username) {
 		return userRepository.existsByUsername(username);
@@ -29,6 +36,14 @@ public class CompanyService {
 		Role role = roleRepository.findOneByName("COMPANY");
 		company.getRoles().add(role);
 		return userRepository.save(company);
+	}
+
+	public List<Company> getAll(){
+		ArrayList<Role> r = new ArrayList<Role>();
+		Role ro=new Role();
+		ro.setId((long) 2);
+		r.add(ro);
+		return companyRepository.findAllByRoles(r);
 	}
 
 }
