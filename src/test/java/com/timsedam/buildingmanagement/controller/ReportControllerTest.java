@@ -23,6 +23,8 @@ import com.timsedam.buildingmanagement.dto.request.CommentCreateDTO;
 import com.timsedam.buildingmanagement.dto.request.ForwardCreateDTO;
 import com.timsedam.buildingmanagement.dto.request.ReportCreateDTO;
 import com.timsedam.buildingmanagement.dto.request.UserLoginDTO;
+import com.timsedam.buildingmanagement.dto.response.CommentDTO;
+import com.timsedam.buildingmanagement.dto.response.ResponseDTO;
 import com.timsedam.buildingmanagement.model.Bid;
 import com.timsedam.buildingmanagement.model.Comment;
 import com.timsedam.buildingmanagement.model.Forward;
@@ -227,10 +229,10 @@ public class ReportControllerTest {
 		
 		CommentCreateDTO validDTO = new CommentCreateDTO(data, report);
 
-		ResponseEntity<Long> responseEntity = 
-			restTemplate.postForEntity(URL_PREFIX + "comment/", getRequestEntity(validDTO, "resident1", "resident1"), Long.class);
+		ResponseEntity<CommentDTO> responseEntity = 
+			restTemplate.postForEntity(URL_PREFIX + "comment/", getRequestEntity(validDTO, "resident1", "resident1"), CommentDTO.class);
 
-		Long commentId = responseEntity.getBody();
+		Long commentId = responseEntity.getBody().getId();
 		Comment comment = commentRepository.findOne(commentId);
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 		assertEquals(data, comment.getData());
@@ -263,11 +265,11 @@ public class ReportControllerTest {
 
 		CommentCreateDTO badDTO = new CommentCreateDTO(null, 1);
 
-		ResponseEntity<String> responseEntity = 
-			restTemplate.postForEntity(URL_PREFIX + "comment/", getRequestEntity(badDTO, "resident1", "resident1"), String.class);
+		ResponseEntity<ResponseDTO> responseEntity = 
+			restTemplate.postForEntity(URL_PREFIX + "comment/", getRequestEntity(badDTO, "resident1", "resident1"), ResponseDTO.class);
 
 		assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
-		assertEquals("'data' not provided", responseEntity.getBody());
+		assertEquals("'data' not provided", responseEntity.getBody().getResponse());
 	}
 	
 	

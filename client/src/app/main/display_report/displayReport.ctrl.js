@@ -21,6 +21,7 @@
 					toastr, sessionService, $mdDialog){
 
 				var vm = this;
+				vm.comment="";
 				
 				displayReportService.getReport($routeParams.reportId)
 				.then(function(response){
@@ -28,7 +29,6 @@
 						toastr.error("Error fetching report")
 					}else{
 						vm.report=response.data;
-						
 						displayReportService.getAllByBuilding(vm.report.location.id)
 						.then(function(resp){
 							if(resp.error){
@@ -42,6 +42,12 @@
 					}
 				})
 				
+				vm.parseDateTime = function (array) {
+					let date = array[2] + "." +  array[1] +  "." + array[0];
+					let time = " " + array[3] + ":" + array[4];
+					return date + time;
+				}
+				
 				vm.isHolder = function(){
 					if(sessionService.userId == vm.report.currentHolder.forwardedTo.username)
 						return true;
@@ -49,12 +55,31 @@
 						return false;
 				}
 				
+				vm.postComment = function(){
+					var data =  { 
+	    				"data": vm.comment,
+	    				"report": vm.report.id
+	    			};
+					
+					displayReportService.postComment(data)
+					.then(function(resp){
+						if(resp.error){
+							toastr.error("Comment isn't sent")
+						}else{
+							vm.report.comments.push(resp.data);
+							toastr.success("Comment is succesfully posted.");
+							vm.comment = "";
+						}
+					})
+					
+				}
+				
 				vm.forwardReport = function ($event) {
-					       var parentEl = angular.element(document.body);
-					       $mdDialog.show({
-					         parent: parentEl,
-					         targetEvent: $event,
-					         template:
+					var parentEl = angular.element(document.body);
+						$mdDialog.show({
+						  parent: parentEl,
+					      targetEvent: $event,
+					      template:
 					           '<md-dialog aria-label="List dialog">' +
 					           '  <md-dialog-content>'+
 					           '    <md-select ng-model="d" required>'+
@@ -72,10 +97,10 @@
 					           '    </md-button>' +
 					           '  </md-dialog-actions>' +
 					           '</md-dialog>',
-					         locals: {
-					           items: $scope.items,
-					           d: $scope.d
-					         },
+					      locals: {
+					        items: $scope.items,
+					        d: $scope.d
+					      },
 					         controller: DialogController
 					      });
 					       
@@ -107,6 +132,7 @@
 					        $scope.closeDialog = function() {
 						          $mdDialog.hide();
 						        }
+					        
 					      }
 			    };
 

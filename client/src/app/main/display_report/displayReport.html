@@ -37,3 +37,21 @@
         </md-card-content>
   </md-card>
  </div>
+
+<div ng-cloak layout="column">
+	<textarea ng-model="vm.comment" matInput placeholder="Leave a comment">
+</textarea></div>
+<md-button class="md-raised md-warn" ng-click="vm.postComment()">Post Comment</md-button>
+<h2>Comments</h2>
+<div ng-cloak layout="column" ng-repeat="comm in vm.report.comments"><md-card>
+    <md-card-title>
+      <md-card-title-text>
+        <span class="md-headline">{{comm.commenter.username}}</span>
+        <span class="md-subhead">{{vm.parseDateTime(comm.postedAt)}}</span>
+      </md-card-title-text>
+    </md-card-title>
+	<md-card-content>
+          <label>{{comm.data}}</label><br>
+        </md-card-content>
+  </md-card>
+ </div>

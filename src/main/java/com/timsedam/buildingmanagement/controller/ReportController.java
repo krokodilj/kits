@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.timsedam.buildingmanagement.dto.request.BidAcceptDTO;
@@ -28,6 +27,7 @@ import com.timsedam.buildingmanagement.dto.request.ForwardCreateDTO;
 import com.timsedam.buildingmanagement.dto.request.ReportCreateDTO;
 import com.timsedam.buildingmanagement.dto.response.CommentDTO;
 import com.timsedam.buildingmanagement.dto.response.ReportDTO;
+import com.timsedam.buildingmanagement.dto.response.ResponseDTO;
 import com.timsedam.buildingmanagement.dto.response.UserDTO;
 import com.timsedam.buildingmanagement.exceptions.BidMissingException;
 import com.timsedam.buildingmanagement.exceptions.BuildingMissingException;
@@ -136,13 +136,13 @@ public class ReportController {
 		return new ResponseEntity<>(String.valueOf(forward.getId()), HttpStatus.OK);
 	}
 
-	@PostMapping(value = "comment", consumes = "application/json")
+	@PostMapping(value = "comment", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<?> comment(Principal principal, @Valid @RequestBody CommentCreateDTO commentDTO,
 			BindingResult validationResult) throws UserMissingException, ReportMissingException {
 
 		if (validationResult.hasErrors()) {
 			String errorMessage = validationResult.getFieldError().getDefaultMessage();
-			return new ResponseEntity<String>(errorMessage, HttpStatus.UNPROCESSABLE_ENTITY);
+			return new ResponseEntity<ResponseDTO>(new ResponseDTO(errorMessage), HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 
 		User commenter = userService.findOneByUsername(principal.getName());
@@ -151,7 +151,8 @@ public class ReportController {
 		Comment comment = new Comment(commentDTO.getData(), commenter, report, LocalDateTime.now());
 		comment = commentService.save(comment);
 
-		return new ResponseEntity<>(comment.getId(), HttpStatus.OK);
+		CommentDTO comm = commentMapper.toDto(comment);
+		return new ResponseEntity<CommentDTO>(comm, HttpStatus.OK);
 	}
 
 	@PostMapping(value = "bid", consumes = "application/json")

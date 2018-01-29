@@ -27,7 +27,7 @@ public class ReportMapper {
 	public ReportDTO toDto(Report r){
 		ReportDTO reportDTO = new ReportDTO(r.getId(), r.getStatus(), 
 				r.getDescription(), 
-				r.getPictures(), r.getSender().getId(), null);
+				r.getPictures(), r.getSender().getId(), new ArrayList<CommentDTO>());
 
 		BuildingDTO buildingDTO = buidldingMapper.toDto(r.getLocation());
 		reportDTO.setLocation(buildingDTO);
