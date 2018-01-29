@@ -19,6 +19,8 @@
 			vm.username = sessionService.userId;
 			
 			vm.parseDateTime = parseDateTime;
+			vm.proposalUpvote = proposalUpvote;
+			vm.proposalDownvote = proposalDownvote;
 			
 			getProposals(vm.username, getUserBuildings);
 			
@@ -57,10 +59,46 @@
 					else {
 						var proposals = response.data.map(function(prop) {
 							prop.building = building;
+							
+							//get votes for a proposal
+							proposalService.getVotes(prop.id).then(function(response){
+								var totalVotes = 0;
+								response.data.map(function(response) {
+									if(response.vote == "FOR")
+										totalVotes += 1;
+									else
+										totalVotes -= 1;
+								})
+								prop.votes = totalVotes;
+							})
 							return prop;
 						})
 						vm.proposals = vm.proposals.concat(proposals);
 						console.log(vm.proposals);
+					}
+				})
+			}
+			
+			function proposalUpvote(proposalId) {
+				var proposalVote = {proposalId: proposalId, value: "FOR"};
+				proposalService.vote(proposalVote).then(function(response){ 
+					if(response.error) {
+						toastr.error("You already casted your vote for this Proposal.")
+					}
+					else {
+						toastr.success("Your Vote has been recorded.")
+					}
+				})
+			}
+			
+			function proposalDownvote(proposalId) {
+				var proposalVote = {proposalId: proposalId, value: "AGAINST"};
+				proposalService.vote(proposalVote).then(function(response){ 
+					if(response.error) {
+						toastr.error("You already casted your vote for this Proposal.")
+					}
+					else {
+						toastr.success("Your Vote has been recorded.")
 					}
 				})
 			}

@@ -75,9 +75,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				
 				.antMatchers("/api/meetings/").hasAuthority("CREATE_MEETING")
 				
-				.antMatchers("/api/proposals/").hasAnyAuthority("CREATE_PROPOSAL")
+				.antMatchers("/api/proposals/").hasAuthority("CREATE_PROPOSAL")
 				
-				.antMatchers("/api/proposal_votes/").hasAnyAuthority("PROPOSAL_VOTE")
+				.antMatchers("/api/proposal_votes/").hasAuthority("PROPOSAL_VOTE")
 
 				.antMatchers("/api/residents/**").hasAuthority("UPDATE_RESIDENT")
 

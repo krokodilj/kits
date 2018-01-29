@@ -1,5 +1,7 @@
 package com.timsedam.buildingmanagement.mapper;
 
+import java.util.ArrayList;
+
 import org.springframework.stereotype.Component;
 
 import com.timsedam.buildingmanagement.dto.request.ProposalVoteCastDTO;
@@ -26,6 +28,14 @@ public class ProposalVoteMapper {
 		proposalVoteDTO.setVote(proposalVote.getVote());
 		
 		return proposalVoteDTO;
+	}
+	
+	public ArrayList<ProposalVoteDTO> toDto(ArrayList<ProposalVote> votes) {
+		ArrayList<ProposalVoteDTO> dtos = new ArrayList<ProposalVoteDTO>();
+		for(ProposalVote vote : votes) {
+			dtos.add(toDto(vote));
+		}
+		return dtos;
 	}
 
 }
