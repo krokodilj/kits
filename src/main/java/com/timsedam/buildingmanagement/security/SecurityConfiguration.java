@@ -58,7 +58,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers(AUTH_WHITELIST).permitAll()
 				
 				.antMatchers("/api/auth/**", "/api/reports/forward/", "/api/reports/comment/",
-						"/api/reports/acceptBid/", "/api/reports/getComments/**" , 
+						"/api/reports/acceptBid/", "/api/reports/by_building/**", "/api/reports/getComments/**" , 
 						"/api/buildings/getUserBuildings/**")
 				.permitAll()
 
@@ -82,6 +82,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/api/residents/**").hasAuthority("UPDATE_RESIDENT")
 
 				.antMatchers("/api/buildings/").hasAuthority("CREATE_BUILDING")
+				
+				.antMatchers("/api/buildings/").hasAuthority("GET_BUILDINGS")
 				
 				.antMatchers("/api/question_forms/").hasAuthority("CREATE_QUESTIONFORM")
 				
