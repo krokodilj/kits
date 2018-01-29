@@ -2,6 +2,7 @@ package com.timsedam.buildingmanagement.mapper;
 
 import java.util.ArrayList;
 
+import com.timsedam.buildingmanagement.dto.response.CompanyDTO;
 import org.springframework.stereotype.Component;
 
 import com.timsedam.buildingmanagement.dto.request.CompanyCreateDTO;
@@ -26,6 +27,19 @@ public class CompanyMapper {
 		company.setPhoneNumber(dto.getPhoneNumber());
 		
 		return company;
+	}
+
+	public CompanyDTO toDto(Company company){
+		CompanyDTO dto = new CompanyDTO();
+		dto.setId(company.getId());
+		dto.setUsername(company.getUsername());
+		dto.setEmail(company.getEmail());
+		dto.setPictures(company.getPictures());
+		dto.setName(company.getName());
+		dto.setEmail(company.getEmail());
+		dto.setPIB(company.getPIB());
+		dto.setPhoneNumber(company.getPhoneNumber());
+		return dto;
 	}
 
 }

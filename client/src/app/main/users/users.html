@@ -1,0 +1,88 @@
+<br><br>
+<md-radio-group ng-model="vm.type" layout="row" required>	
+    <md-radio-button value="admins" class="md-primary">Admin</md-radio-button>
+    <md-radio-button value="managers"> Manager </md-radio-button>
+    <md-radio-button value="residents">Resident</md-radio-button>
+    <md-radio-button value="companies">Company</md-radio-button>
+</md-radio-group>
+
+<div ng-show="vm.type=='admins'">
+	<h1>Admins</h1>
+	<md-divider></md-divider>
+	<md-content class="md-padding" layout="row" layout-wrap >
+	<md-card ng-repeat="a in vm.admins">
+	        <md-card-title>
+	          <md-card-title-media>
+	            <div class="md-media-lg card-media"><img data-ng-src="{{a.pictures[0]}}"  alt="&nbsp;No Images" ></div>
+	          </md-card-title-media>
+	        </md-card-title>
+	        <br>
+	        <md-card-content>
+	          <span class="md-headline">{{a.username}}</span>
+	            <span class="md-subhead">{{a.email}}</span>
+	        </md-card-content>
+	</md-card>
+	</md-content>
+</div>
+
+<div ng-show="vm.type=='managers'">
+	<h1>Managers</h1>
+	<md-divider></md-divider>
+	<md-content class="md-padding" layout="row" layout-wrap >
+	<md-card ng-repeat="m in vm.managers">
+	        <md-card-title>
+	          <md-card-title-media>
+	            <div class="md-media-lg card-media"><img data-ng-src="{{m.pictures[0]}}"  alt="&nbsp;No Images" ></div>
+	          </md-card-title-media>
+	        </md-card-title>
+	        <br>
+	        <md-card-content>
+	          <span class="md-headline">{{m.username}}</span>
+	            <span class="md-subhead">{{m.email}}</span>
+	        </md-card-content>
+	</md-card>
+	</md-content>
+</div>
+
+<div ng-show="vm.type=='residents'">
+	<h1>Residents</h1>
+	<md-divider></md-divider>
+	<md-content class="md-padding" layout="row" layout-wrap >
+
+	<md-card ng-repeat="m in vm.residents">
+	        <md-card-title>
+	          <md-card-title-media>
+	            <div class="md-media-lg card-media"><img data-ng-src="{{m.pictures[0]}}"  alt="&nbsp;No Images" ></div>
+	          </md-card-title-media>
+	        </md-card-title>
+	        <br>
+	        <md-card-content>
+	          <span class="md-headline">{{m.username}}</span>
+	            <span class="md-subhead">{{m.email}}</span>
+	        </md-card-content>
+	</md-card>
+	</md-content>
+</div>
+
+<div ng-show="vm.type=='companies'">
+	<h1>Companies</h1>
+	<md-divider></md-divider>
+	<md-content class="md-padding" layout="row" layout-wrap >
+
+	<md-card ng-repeat="c in vm.companies">
+	        <md-card-title>
+	          <md-card-title-media>
+	            <div class="md-media-lg card-media"><img data-ng-src="{{c.pictures[0]}}"  alt="&nbsp;No Images" ></div>
+	          </md-card-title-media>
+	        </md-card-title>
+	        <br>
+	        <md-card-content>
+	            <table>
+	            	<tr><td>Name : </td><td>{{c.name}}</td></tr>
+	            	<tr><td>Pib : </td><td>{{c.pib}}</td></tr>
+	            	<tr><td>Phone : </td><td>{{c.phoneNumber}}</td></tr>
+	            </table>
+	        </md-card-content>
+	</md-card>
+	</md-content>
+</div>

@@ -9,7 +9,8 @@
 			create : create,
 			getAllForManager: getAllForManager,
 			getOne : getOne,
-			getAllForUser: getAllForUser
+			getAllForUser: getAllForUser,
+			getAll : getAll
 		}
 
 		function create(building){

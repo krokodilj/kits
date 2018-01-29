@@ -10,6 +10,7 @@ import com.timsedam.buildingmanagement.model.User;
 import com.timsedam.buildingmanagement.repository.RoleRepository;
 import com.timsedam.buildingmanagement.repository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -44,6 +45,14 @@ public class ResidentService {
 
 	public List<User> findAllByBuildingId(Long building_id){
 		return userRepository.findAllByBuilding(building_id);
+	}
+
+	public List<User> getAll(){
+		ArrayList<Role> r = new ArrayList<Role>();
+		Role ro=new Role();
+		ro.setId((long)4);
+		r.add(ro);
+		return userRepository.findAllByRoles(r);
 	}
 
 }
